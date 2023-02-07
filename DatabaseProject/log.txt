@@ -1,0 +1,95 @@
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 11:34:52.950
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 11:35:11.425
+2023-01-25 11:35:53.434 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 11:36:06.308
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 14:07:19.030
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 14:12:19.747
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 15:01:42.131
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 15:02:34.869
+2023-01-25 15:02:43.107 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration Failed, No Changes Made/Saved...
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 15:02:48.706
+2023-01-25 15:03:02.061 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 15:03:12.397
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 15:04:54.360
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 16:58:46.684
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 16:59:17.757
+2023-01-25 16:59:27.957 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration Failed, No Changes Made/Saved...
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 17:00:08.797
+2023-01-25 17:00:12.713 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration Failed, No Changes Made/Saved...
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 17:00:17.548
+2023-01-25 17:00:26.284 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration Failed, No Changes Made/Saved...
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 17:11:07.653
+2023-01-25 17:11:23.154 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration Failed, No Changes Made/Saved...
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 17:22:19.789
+2023-01-25 17:22:24.089 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration Failed, No Changes Made/Saved...
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-25 17:22:30.189
+2023-01-25 17:22:35.979 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration Failed, No Changes Made/Saved...
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-28 07:29:51.070
+2023-01-28 07:29:59.129 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration Failed, No Changes Made/Saved...
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-28 09:49:05.769
+2023-01-28 09:49:36.091 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+2023-01-28 09:49:45.641 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration Failed, No Changes Made/Saved...
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 11:51:31.700
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 11:52:27.258
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:08:23.520
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:13:25.625
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:14:08.140
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:32:36.836
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:43:20.663
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:44:53.329
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:44:57.827
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:45:11.062
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:46:21.496
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:46:24.733
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:47:11.509
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:48:12.346
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:48:15.809
+*--------------START LOGGING--------------
+*Separate Session For: 2023-01-29 18:48:19.576
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-01 15:00:19.828
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-01 15:00:30.251
+2023-02-01 15:02:49.808 - (USER)cquez1 -> LOGIN FAILED: Invalid Name Entered
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-01 15:10:05.459
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-01 15:10:32.888
+2023-02-01 15:11:08.672 - (ADMIN)cguti1 -> LOGIN SUCCESS: Login Success
+2023-02-01 15:11:20.609 - (ADMIN)cguti1 -> PASSWORD CHANGE SUCCESS: Password Changed Successfully
+2023-02-01 15:11:33.029 - (ADMIN)cguti1 -> LOGIN SUCCESS: Login Success
+2023-02-01 15:52:23.093 - (ADMIN)cguti1 -> LOGOUT SUCCESS: Logged Out Successfully
