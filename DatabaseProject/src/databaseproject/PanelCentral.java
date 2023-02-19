@@ -40,7 +40,7 @@ public class PanelCentral extends JFrame {
 	public PanelAdminCentral panelAdminCentral;
 	public PanelAdminAddUser panelAdminAddUser;
 	public PanelAdminDisplayUsers panelAdminDisplayUsers;
-	public PanelInitialConfiguration panelInitialConfiguration;
+	public ConfigurationPanel panelInitialConfiguration;
 	public ProgramLogs programLogs;
 	
 	//-----------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ public class PanelCentral extends JFrame {
 		this.panelAdminCentral = new PanelAdminCentral(this.administratorFunctions, this);
 		this.panelAdminAddUser = new PanelAdminAddUser(this.administratorFunctions, this);
 		this.panelAdminDisplayUsers = new PanelAdminDisplayUsers(this.administratorFunctions, this);
-		this.panelInitialConfiguration = new PanelInitialConfiguration(this.administratorFunctions, this);
+		this.panelInitialConfiguration = new ConfigurationPanel(this.administratorFunctions, this);
 		
 		// Add panels to the current frame
 		this.add(this.panelLogin);

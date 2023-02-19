@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
 class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
-
+	
 	public AdministratorFunctions administratorFunctions;
 	public PanelCentral panelCentral;
 	public ProgramLogs programLogs;
@@ -136,6 +136,9 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 				if(this.adminFirstName != null
 				&& this.adminLastName != null 
 				&& this.adminPassword != null) {
+					System.out.println(this.adminFirstName);
+					System.out.println(this.adminLastName);
+					System.out.println(this.adminPassword);
 					this.saveConfigurationChanges();
 					result = true;
 				}
@@ -159,13 +162,17 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 		this.administratorFunctions.configurationOperations.createAdministrativePassphrase(this.getAdminPassphrase());			
 		this.administratorFunctions.csvOperations.overwriteConfigFile();
 		
-		this.administratorFunctions.createNewEmployee(this.adminFirstName, this.adminLastName, this.panelCentral.ADMIN, this.adminPassword);
-		this.administratorFunctions.csvOperations.overwriteAdminFile();
-		
-		this.programLogs.logCurrentEvent("ADMIN", 
-				"INITIAL_CONFIG", this.programLogs.INITIAL_CONFIGUARTION_SUCCESS);
-		
-		JOptionPane.showMessageDialog(null, "Configuration Success...\nNow You Can Customize Your Database", "SUCCESS!!!", JOptionPane.ERROR_MESSAGE);
+		// Create the new admin here
+		boolean isAdminCreated = this.administratorFunctions.createNewAdmin(this.adminFirstName, this.adminLastName);
+		if(isAdminCreated) {
+			this.administratorFunctions.csvOperations.overwriteAdminFile();
+			
+			this.programLogs.logCurrentEvent("ADMIN", 
+					"INITIAL_CONFIG", this.programLogs.INITIAL_CONFIGUARTION_SUCCESS);
+			
+			JOptionPane.showMessageDialog(null, "Admin Name:\n" + "\nConfiguration Success...\nNow You Can Customize Your Database", "SUCCESS!!!", JOptionPane.INFORMATION_MESSAGE);
+			this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_LOGIN);
+		}
 	}
 	
 	public String getAdminPassphrase() {
@@ -201,7 +208,7 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 	}
 }
 
-public class PanelInitialConfiguration extends JPanel {
+public class ConfigurationPanel extends JPanel {
 	/**
 	 * 
 	 */
@@ -220,7 +227,7 @@ public class PanelInitialConfiguration extends JPanel {
 	public String adminLastName;
 	public String adminPassword;
 	
-	public PanelInitialConfiguration(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
+	public ConfigurationPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
 		this.administratorFunctions = administratorFunctions;
 		this.panelCentral = panelCentral;
 		this.grid = new GridBagConstraints();

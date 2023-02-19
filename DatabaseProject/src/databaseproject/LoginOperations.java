@@ -36,7 +36,12 @@ public class LoginOperations {
 		else if(typeOfUser.equals("ADMIN")) {
 			hashedStoredPassword = this.administratorFunctions.getAdminHashMap().get(userName).getAdminPassword();
 			salt = this.administratorFunctions.getAdminHashMap().get(userName).getSalt();
+			/*
+			System.out.println("Plain Password: " + attemptedPassword);
+			System.out.println("Current Salt: " + salt);
+			*/
 			hashedAttemptedPassword = this.panelCentral.passwordEncryption.hashPassword(attemptedPassword, salt);
+			//System.out.println("First: " + hashedStoredPassword + " :: \nSecond: " + hashedAttemptedPassword);
 		}
 		
 		// If both hashes line up, 

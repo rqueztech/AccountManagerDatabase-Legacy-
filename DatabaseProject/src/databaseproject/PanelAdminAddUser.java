@@ -18,6 +18,66 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
+class AddAdminWorker extends SwingWorker<Boolean, Void> {
+	private String firstName;
+	private String lastName;
+	private String employeeCreationMessage;
+	private AdministratorFunctions administratorFunctions;
+	
+	/**
+	 * This class constructs the general information required to create an employee
+	 * in a separate thread to be passed in to the createEmployee function found in
+	 * the AdministratorFunctions class
+	 * @param firstName gets the first name of the user to be added
+	 * @param lastName gets the last name of the user to be added
+	 * @param gender gets the gender of the user to be added
+	 * @param administratorFunctions
+	 */
+	public AddAdminWorker(String firstName, String lastName, 
+			AdministratorFunctions administratorFunctions) {
+		
+		this.administratorFunctions = administratorFunctions;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+	
+	@Override
+	protected Boolean doInBackground() throws Exception {
+		boolean isAdminCreated = false;
+		
+		String mgrPassword = JOptionPane.showInputDialog("Enter Manager Password");
+		boolean checkAdminPassword = this.administratorFunctions.loginOperations
+				.checkAdminPassphrase(mgrPassword);
+		
+		if(checkAdminPassword) {
+			isAdminCreated = this.administratorFunctions.createNewAdmin(firstName, lastName);
+				this.administratorFunctions.panelCentral.panelAdminDisplayUsers.updateTable();
+		}
+		
+		else {
+			JOptionPane.showMessageDialog(null, "Improper Password Entered");
+		}
+		
+		// TODO Auto-generated method stub
+		return isAdminCreated;
+	}
+	
+	@Override
+	protected void done() {
+		try {
+            boolean success = get();
+            
+            if (success) {
+            	JOptionPane.showMessageDialog(null, "Admin Creation Successful", "Creation Successful", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+            	JOptionPane.showMessageDialog(null, this.employeeCreationMessage, "Creation Failed", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            JOptionPane.showMessageDialog(null, "Error searching error.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+	}
+}
+
 class AddEmployeeWorker extends SwingWorker<Boolean, Void> {
 	private String firstName;
 	private String lastName;
@@ -52,14 +112,9 @@ class AddEmployeeWorker extends SwingWorker<Boolean, Void> {
 				.checkAdminPassphrase(mgrPassword);
 		
 		if(checkAdminPassword) {
-			this.employeeCreationMessage = this.administratorFunctions.SUCCESS;
 			
-			this.employeeCreationMessage = this.administratorFunctions.createNewEmployee(firstName, lastName, 
-					this.administratorFunctions.panelCentral.USER, gender);
-			
-			if(this.employeeCreationMessage.equals(this.administratorFunctions.SUCCESS)) {
-				isUserCreated = true;
-			}
+			isUserCreated = this.administratorFunctions.createNewEmployee
+					(firstName, lastName, gender);
 			
 			this.administratorFunctions.panelCentral.panelAdminDisplayUsers.updateTable();
 		}
@@ -220,6 +275,18 @@ public class PanelAdminAddUser extends JPanel implements ActionListener {
 		this.clearBoxes();
 		
 		addEmployeeWorker.execute();
+	}
+	
+	// -----------------------------------------------------------------------------------
+	public void addAdmin() {
+		AddAdminWorker addAdminWorker = 
+				new AddAdminWorker(this.getFirstName(), 
+				this.getLastName(), 
+				this.administratorFunctions);
+		
+		this.clearBoxes();
+		
+		addAdminWorker.execute();
 	}
 	
 	// -----------------------------------------------------------------------------------

@@ -5,14 +5,15 @@ import java.util.HashMap;
 import javax.swing.JOptionPane;
 
 public class AdministratorFunctions {
+	public String configHeader = "empNoCounter,admNoCounter,adPhrase,adSalt\n";
+	
 	public EmployeeFunctions empFunctions;
 	public CSVOperations csvOperations;
 	public InputOperations inputOperations;
 	public ConfigurationOperations configurationOperations;
-	public String configHeader = "empNoCounter,admNoCounter,adPhrase,adSalt\n";
 	public LoginOperations loginOperations;
 	public PanelCentral panelCentral;
-	public PanelInitialConfiguration panelInitialConfiguration;
+	public ConfigurationPanel panelInitialConfiguration;
 	
 	public final String SUCCESS = "SUCCESS";
 	
@@ -185,48 +186,70 @@ public class AdministratorFunctions {
 		return sb.toString();
 	}
 	
-	//-------------------------------------------------------------------------------------
-	// This will add the userName with a brand new profile into the database
-	public String createNewEmployee(String firstName, String lastName, String typeOfUser, String gender) {
-		StringBuilder sb = new StringBuilder(this.SUCCESS);
+	
+	public boolean createNewAdmin(String firstName, String lastName) {
+		StringBuilder sb = new StringBuilder();
 		
 		// If only letters were entered for the first name, pass validation
 		if(!this.inputOperations.onlyLetterCharacters(firstName)) {
-			
-			// If the stringbuilder is the default success string, clear the success
-			// Message
-			if(sb.toString().equals(this.SUCCESS)) {
-				sb.setLength(0);
-			}
-			
-			// Append the error message to the string builder
-			sb.append("First Name: Non-Alphabetic Input Not Allowed\n");
+			sb.append("First Name: Only Alphabet Allowed\n");
 		}
 		
-		// If only letters were entered for the last name, pass validation
 		if(!this.inputOperations.onlyLetterCharacters(lastName)) {
+			sb.append("Last Name: Only Alphabet Allowed\n");
+		}
+		
+		String hereIs = sb.toString();
+		
+		if(sb.toString() == "") {
+			String newAdminUserName = this.generateNewEmployeeUsername(firstName, lastName, panelCentral.ADMIN);
 			
-			// If the stringbuilder is the default success string, clear the success
-			// Message
-			if(sb.toString().equals(this.SUCCESS)) {
-				sb.setLength(0);
-			}
-			sb.append("Last Name: Non-Alphabetic Input Not Allowed\n");
+			// While there seems like no reason to generate this in another function, password
+			// Complexity may be increased in the future. By using a separate function, it will
+			// be much easier to do so in the future
+			String newAdminPassword = this.generateNewUserPassword(firstName);
+			String newAdminSalt = this.panelCentral.passwordEncryption.generateSalt();
+			String encryptedPasswordHash = this.panelCentral.passwordEncryption.hashPassword(newAdminPassword, newAdminSalt);
+			
+			// Increase the employee number by one to prevent a duplicate employee
+			// number from being used
+			this.configurationOperations.increaseAdmNo();
+			
+			// Add the new created user into the hashmap
+			this.getAdminHashMap().put(newAdminUserName, new AdminNode(newAdminUserName, firstName, lastName, 
+					encryptedPasswordHash, newAdminSalt, this.configurationOperations.getAdmNo()));
+			
+			this.csvOperations.overwriteAdminFile();
+			this.csvOperations.readFromAdminFile();
+			
+			return true;
+		}
+		
+		
+		return false;
+	}
+	
+	//-------------------------------------------------------------------------------------
+	// This will add the userName with a brand new profile into the database
+	public boolean createNewEmployee(String firstName, String lastName, String gender) {
+		StringBuilder sb = new StringBuilder();
+		
+		// If only letters were entered for the first name, pass validation
+		if(!this.inputOperations.onlyLetterCharacters(firstName)) {
+			sb.append("First Name: Only Alphabet Allowed\n");
+		}
+		 	
+		if(!this.inputOperations.onlyLetterCharacters(lastName)) {
+			sb.append("Last Name: Only Alphabet Allowed\n");
 		}
 		
 		// If gender is not entered
 		if(gender.equals("Select")) {
-			
-			// If the stringbuilder is the default success string, clear the success
-			// Message
-			if(sb.toString().equals(this.SUCCESS)) {
-				sb.setLength(0);
-			}
 			sb.append("Must Select Gender");
 		}
 		
-		if(sb.toString().equals(this.SUCCESS)) {
-			String newEmployeeUserName = this.generateNewEmployeeUsername(firstName, lastName, typeOfUser);
+		if(sb.toString().equals("")) {
+			String newEmployeeUserName = this.generateNewEmployeeUsername(firstName, lastName, "USER");
 			
 			// While there seems like no reason to generate this in another function, password
 			// Complexity may be increased in the future. By using a separate function, it will
@@ -238,44 +261,26 @@ public class AdministratorFunctions {
 			
 			// Get the new user salt and encrypted password byte
 			
-			if(typeOfUser.equals("USER")) {
-				// Increase the employee number by one to prevent a duplicate employee
-				// number from being used
-				this.configurationOperations.increaseEmpNo();
-				
-				// Add the new created user into the hashmap
-				this.getEmployeeHashMap().put(newEmployeeUserName, new EmployeeNode(newEmployeeUserName, firstName, lastName, 
-						gender, encryptedPasswordHash, newEmployeeSalt, this.configurationOperations.getEmpNo()));
-				this.csvOperations.overwriteUserFile();
-				this.csvOperations.readFromUserFile();
-			}
+			// Increase the employee number by one to prevent a duplicate employee
+			// number from being used
+			this.configurationOperations.increaseEmpNo();
 			
-			else if(typeOfUser.equals("ADMIN")) {
-				// Increase the employee number by one to prevent a duplicate employee
-				// number from being used
-				this.configurationOperations.increaseAdmNo();
-				
-				// Add the new created user into the hashmap
-				this.getAdminHashMap().put(newEmployeeUserName, new AdminNode(newEmployeeUserName, firstName, lastName, 
-						encryptedPasswordHash, newEmployeeSalt, this.configurationOperations.getAdmNo()));
-				
-				this.csvOperations.overwriteAdminFile();
-				this.csvOperations.readFromAdminFile();
-			}
-			
-			else {
-				JOptionPane.showMessageDialog(null, "Massive Error In: admin.createNewEmployee()");
-			}
+			// Add the new created user into the hashmap
+			this.getEmployeeHashMap().put(newEmployeeUserName, new EmployeeNode(newEmployeeUserName, firstName, lastName, 
+					gender, encryptedPasswordHash, newEmployeeSalt, this.configurationOperations.getEmpNo()));
+			this.csvOperations.overwriteUserFile();
+			this.csvOperations.readFromUserFile();
 			
 			this.csvOperations.overwriteConfigFile();
 			
+			return true;
 		}
 		
 		else {
 			sb.insert(0, "CREATE USER FAILED\n");
 			JOptionPane.showMessageDialog(null, sb.toString(), "User Not Created", JOptionPane.ERROR_MESSAGE);
+			
+			return false;
 		}
-	
-		return sb.toString();
 	}
 }

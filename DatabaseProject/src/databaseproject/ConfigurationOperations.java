@@ -3,7 +3,7 @@ package databaseproject;
 public class ConfigurationOperations {
 	
 	public AdministratorFunctions administratorFunctions;
-	public ConfigurationOperations configurationOperations;
+	//public ConfigurationOperations configurationOperations;
 	
 	public String configHeader;
 	
@@ -15,7 +15,7 @@ public class ConfigurationOperations {
 	//-------------------------------------------------------------------------------------
 	public ConfigurationOperations(AdministratorFunctions administratorFunctions) {
 		this.administratorFunctions = administratorFunctions;
-		this.configurationOperations = administratorFunctions.configurationOperations;
+		//this.configurationOperations = administratorFunctions.configurationOperations;
 		this.configHeader = "empNoCounter,admNoCounter,adPhrase,adSalt\n";
 	}
 	
@@ -38,7 +38,7 @@ public class ConfigurationOperations {
 		String salt = this.administratorFunctions.panelCentral.passwordEncryption.generateSalt();
 		String encryptedPassphrase = this.administratorFunctions.panelCentral.passwordEncryption.hashPassword(passphrase, salt);
 		
-		this.setAdministrativePassword(encryptedPassphrase);
+		this.setAdministrativePassphrase(encryptedPassphrase);
 		this.setSalt(salt);
 		
 		
@@ -61,7 +61,7 @@ public class ConfigurationOperations {
 		this.admPassphraseSalt = salt;
 	}
 	
-	public void setAdministrativePassword(String passphrase) {
+	public void setAdministrativePassphrase(String passphrase) {
 		this.administratorPassphrase = passphrase;
 	}
 	

@@ -12,6 +12,8 @@ public class PasswordEncryption {
 		try {
 			String mixedPassword = attemptedPassword + salt;
 			
+			System.out.println(attemptedPassword + salt);
+			
 			MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
 			messageDigest.update(mixedPassword.getBytes());
 			byte[] resultByteArray = messageDigest.digest();
@@ -48,26 +50,27 @@ public class PasswordEncryption {
 		// Iterate 8 times and select two random characters of each type
 		for(int counter = 0; counter < 32; counter++) {
 			
-			// UpperCase for positions 0 and 3
-			if(counter%4 == 0) {
-				salt.append(upperCaseString.charAt(randomCharacter.nextInt(upperCaseString.length())));
+			switch(counter%4) {
+				case 0:
+					salt.append(upperCaseString.charAt(randomCharacter.nextInt(upperCaseString.length())));
+					break;
+					
+				case 1:
+					salt.append(lowerCaseString.charAt(randomCharacter.nextInt(lowerCaseString.length())));
+					break;
+					
+				case 2:
+					salt.append(specialCharacterString.charAt(randomCharacter.nextInt(specialCharacterString.length())));
+					break;
+					
+				case 3:
+					salt.append(numberString.charAt(randomCharacter.nextInt(numberString.length())));
+					break;
+					
+				default:
+					System.out.println("Error");
+					break;
 			}
-			
-			// LowerCase for positions 1 and 4
-			else if(counter%4 == 1) {
-				salt.append(lowerCaseString.charAt(randomCharacter.nextInt(lowerCaseString.length())));
-			}
-			
-			// Special Character for positions 2 and 5
-			else if(counter%4 == 2) {
-				salt.append(specialCharacterString.charAt(randomCharacter.nextInt(specialCharacterString.length())));
-			}
-			
-			// Special Character for positions 3 and 6
-			else if(counter%4 == 3) {
-				salt.append(numberString.charAt(randomCharacter.nextInt(numberString.length())));
-			}
-			
 		}
 		
 		// Convert the salt into a string

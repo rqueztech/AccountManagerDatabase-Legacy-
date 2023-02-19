@@ -3,17 +3,24 @@ package test;
 import org.junit.jupiter.api.Test;
 
 import databaseproject.AdministratorFunctions;
-import databaseproject.PanelAdminAddUser;
+import databaseproject.EmployeeNode;
+import databaseproject.InputOperations;
 import databaseproject.PanelCentral;
+import databaseproject.PasswordEncryption;
 
 class AdministratorOperations_writeToConfigFile {
-	PanelCentral panelCentral = new PanelCentral();
-	AdministratorFunctions administratorFunctions = new AdministratorFunctions(panelCentral);
-	PanelAdminAddUser panelAdminAddUser = new PanelAdminAddUser(administratorFunctions, panelCentral) ;
+	
+	public PanelCentral panelCentral = new PanelCentral();
+	public AdministratorFunctions administratorFunctions = new AdministratorFunctions(panelCentral);
+	public EmployeeNode empNode = new EmployeeNode();
+	public InputOperations inputOperations = new InputOperations();
+	public PasswordEncryption pEnc = new PasswordEncryption();
 	
 	@Test
 	void test() {
-		panelCentral.administratorFunctions.configurationOperations.createAdministrativePassphrase("Jacka$$3d");
+		for(int counter = 0; counter < 500; counter++) {
+			administratorFunctions.createNewEmployee("Ricardo", "Jarlie", "Male");
+		}
 	}
 
 }
