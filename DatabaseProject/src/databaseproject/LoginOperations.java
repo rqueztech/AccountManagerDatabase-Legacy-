@@ -40,7 +40,7 @@ public class LoginOperations {
 			System.out.println("Plain Password: " + attemptedPassword);
 			System.out.println("Current Salt: " + salt);
 			*/
-			hashedAttemptedPassword = this.panelCentral.passwordEncryption.hashPassword(attemptedPassword, salt);
+			//hashedAttemptedPassword = this.panelCentral.passwordEncryption.hashPassword(attemptedPassword, salt);
 			//System.out.println("First: " + hashedStoredPassword + " :: \nSecond: " + hashedAttemptedPassword);
 		}
 		
@@ -197,7 +197,7 @@ public class LoginOperations {
 		String currentUserForLog = this.currentUser;
 		this.currentUser = "";
 		this.loggedInStatus = false;
-		this.panelCentral.programLogs.logCurrentEvent(this.userType, currentUserForLog, this.programLogs.LOGOUT_SUCCESS);
+		this.panelCentral.programLogs.logCurrentEvent(this.userType, currentUserForLog, this.programLogs.getLOGOUT_SUCCESS());
 	}
 	
 	// -----------------------------------------------------------------------------------

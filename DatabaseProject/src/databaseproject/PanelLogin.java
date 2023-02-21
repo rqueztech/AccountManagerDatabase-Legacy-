@@ -223,7 +223,7 @@ public class PanelLogin extends JPanel {
 				// If the login is valid, proceed
 				if(isValidLogin) {
 					this.panelCentral.programLogs.logCurrentEvent(typeOfUser, userName, 
-							this.programLogs.LOGIN_SUCCESS);
+							this.programLogs.getLOGIN_SUCCESS());
 					this.usrPassword.setText("");
 					
 					boolean isDefaultPassword = this.loginOperations.checkDefaultPassword(userName, userPassword, typeOfUser);
@@ -306,7 +306,7 @@ public class PanelLogin extends JPanel {
 									
 									// LOG THE EVENT
 									this.panelCentral.programLogs.logCurrentEvent(typeOfUser, userName, 
-											this.programLogs.PASSWORD_CHANGE_SUCCESS);
+											this.programLogs.getPASSWORD_CHANGE_SUCCESS());
 								}
 							}
 							
@@ -316,7 +316,7 @@ public class PanelLogin extends JPanel {
 								
 								// LOG THE EVENT
 								this.panelCentral.programLogs.logCurrentEvent(typeOfUser, userName, 
-										this.programLogs.PASSWORD_CHANGE_CANCELLED);
+										this.programLogs.getPASSWORD_CHANGE_CANCELLED());
 							}
 							
 							// This message will display if the user password doesn't meet requirements
@@ -334,7 +334,7 @@ public class PanelLogin extends JPanel {
 
 								// LOG THE EVENT
 								this.panelCentral.programLogs.logCurrentEvent(typeOfUser, userName, 
-										this.programLogs.PASSWORD_CHANGE_FAIL);
+										this.programLogs.getPASSWORD_CHANGE_FAIL());
 							}
 							
 						} while(isPasswordChangeUnsuccessful && usrOption == 0);
@@ -346,7 +346,7 @@ public class PanelLogin extends JPanel {
 				else {
 					JOptionPane.showMessageDialog(null, "Invalid User Name / Password", "Invalid Attempt", JOptionPane.ERROR_MESSAGE);
 					this.panelCentral.programLogs.logCurrentEvent(typeOfUser, userName, 
-							this.programLogs.LOGIN_FAIL);
+							this.programLogs.getLOGIN_FAIL());
 				}
 			}
 			
@@ -354,7 +354,7 @@ public class PanelLogin extends JPanel {
 			else {
 				JOptionPane.showMessageDialog(null, "Invalid User Name / Password");
 				this.panelCentral.programLogs.logCurrentEvent(typeOfUser, userName, 
-						this.programLogs.LOGIN_FAIL_INVALID_NAME);
+						this.programLogs.getLOGIN_FAIL_INVALID_NAME());
 				
 				this.usrPassword.setText("");
 			}
@@ -374,7 +374,7 @@ public class PanelLogin extends JPanel {
 			}
 			
 			this.panelCentral.programLogs.logCurrentEvent(typeOfUser, userName,
-					this.programLogs.PASSWORD_CHANGE_ILLEGAL_CHARACTER);
+					this.programLogs.getPASSWORD_CHANGE_ILLEGAL_CHARACTER());
 			
 			JOptionPane.showMessageDialog(this, userMessage, "Warning", JOptionPane.WARNING_MESSAGE);
 		}

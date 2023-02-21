@@ -9,43 +9,31 @@ public class InputOperations {
 	public Matcher matcher;
 
 	// ------------------------------------------------------------------------------------
+	// Create a function that will accept the regular expression and input string
+	public boolean matchRegex(String input, String regex) {
+		this.pattern = Pattern.compile(regex);
+		this.matcher = pattern.matcher(input);
+		
+		return matcher.find();
+	}
+	
+	// ------------------------------------------------------------------------------------
 	// legalCharactersEntered: Tests developed - passes all tests
 
 	// Check so see if input entered by the user is legal. If all characters
 	// Entered are legal, then it will be return true. Otherwise, returns false.
 	public boolean legalCharactersEntered(String loginString) {
-
-		// Assume the entry is not legal by default. If all criteria match, set
-		// legalCharacters to true.
-		boolean legalCharacters = false;
-
-		// Ensures that: only the included characters have been inserted. Return false
-		// if
-		// Any character that doesn't match is inserted by the end-user
-		this.pattern = Pattern.compile("^[A-Za-z0-9@$!%*#?&]+$");
-		this.matcher = pattern.matcher(loginString);
-		legalCharacters = matcher.find();
-
-		return legalCharacters;
+		
+		// Return true or false (dependent on if the regex matches)
+		return matchRegex(loginString, "^[A-Za-z0-9@$!%*#?&]+$");
 	}
 	
 	// ------------------------------------------------------------------------------------
 	// Check so see if input entered by the user is legal. If all characters
 	// Entered are legal, then it will be return true. Otherwise, returns false.
 	public boolean onlyLettersAndNumbers(String loginString) {
-
-		// Assume the entry is not legal by default. If all criteria match, set
-		// legalCharacters to true.
-		boolean legalCharacters = false;
-
-		// Ensures that: only the included characters have been inserted. Return false
-		// if
-		// Any character that doesn't match is inserted by the end-user
-		this.pattern = Pattern.compile("^[A-Za-z0-9]+$");
-		this.matcher = pattern.matcher(loginString);
-		legalCharacters = matcher.find();
 		
-		return legalCharacters;
+		return matchRegex(loginString, "^[A-Za-z0-9]+$");
 	}
 	
 	// ------------------------------------------------------------------------------------
@@ -53,32 +41,14 @@ public class InputOperations {
 	// Entered are legal, then it will be return true. Otherwise, returns false.
 	public boolean onlyLetterCharacters(String loginString) {
 
-		// Assume the entry is not legal by default. If all criteria match, set
-		// legalCharacters to true.
-		boolean legalCharacters = false;
-
-		// Ensures that: only the included characters have been inserted. Return false
-		// if
-		// Any character that doesn't match is inserted by the end-user
-		this.pattern = Pattern.compile("^[A-Za-z]+$");
-		this.matcher = pattern.matcher(loginString);
-		legalCharacters = matcher.find();
-
-		return legalCharacters;
+		return matchRegex(loginString, "^[A-Za-z]+$");
 	}
 	
 	
 	// ------------------------------------------------------------------------------------
 	public boolean onlyNumberCharactersPassword(String passwordNumbersOnly) {
 
-		// Assume that the number characters are only 
-		boolean numberCharactersOnly = false;
-		
-		this.pattern = Pattern.compile("^[0-9]+$");
-		this.matcher = pattern.matcher(passwordNumbersOnly);
-		numberCharactersOnly = matcher.find();
-		
-		return numberCharactersOnly;
+		return matchRegex(passwordNumbersOnly, "^[0-9]+$");
 	}
 	
 	// ------------------------------------------------------------------------------------
@@ -177,13 +147,7 @@ public class InputOperations {
 	// Check to see if the minimum requirements for the password have been met.
 	// If this is not the case, it will return false.
 	public boolean passwordRequirements(String passwordString) {
-		boolean passwordRequirementsMet = false;
 
-		// Ensures that: The password contains one uppercase, one lowercase, and at
-		// least 8 characters
-		passwordRequirementsMet = Pattern.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}",
-				passwordString);
-
-		return passwordRequirementsMet;
+		return matchRegex(passwordString, "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}");
 	}
 }

@@ -379,7 +379,7 @@ public class PanelAdminDisplayUsers extends JPanel implements ActionListener {
 	public void logoutAdmin() {
 		this.loginOperations.logOutuser();
 		this.panelCentral.programLogs.logCurrentEvent(this.panelCentral.ADMIN, 
-				this.loginOperations.getCurrentUser(), this.panelCentral.programLogs.LOGOUT_SUCCESS);
+				this.loginOperations.getCurrentUser(), this.panelCentral.programLogs.getLOGOUT_SUCCESS());
 		
 		JOptionPane.showMessageDialog(null, "Log out successful");
 		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_LOGIN);

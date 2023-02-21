@@ -12,8 +12,6 @@ public class PasswordEncryption {
 		try {
 			String mixedPassword = attemptedPassword + salt;
 			
-			System.out.println(attemptedPassword + salt);
-			
 			MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
 			messageDigest.update(mixedPassword.getBytes());
 			byte[] resultByteArray = messageDigest.digest();

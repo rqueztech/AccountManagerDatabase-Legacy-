@@ -80,7 +80,7 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 					JOptionPane.showMessageDialog(null, "Pasphrase Cancelled, EOP...", "Passphrase Operation", JOptionPane.ERROR_MESSAGE);
 					
 					this.programLogs.logCurrentEvent("ADMIN", 
-							"INITIAL_CONFIG", this.programLogs.INITIAL_CONFIGUARTION_FAILED);
+							"INITIAL_CONFIG", this.programLogs.getINITIAL_CONFIGUARTION_FAILED());
 					
 					System.exit(0);
 					return false;
@@ -148,7 +148,7 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 				JOptionPane.showMessageDialog(null, "Must Create User... Please Restart Configuration", "Exit", JOptionPane.ERROR_MESSAGE);
 				
 				this.programLogs.logCurrentEvent("ADMIN", 
-						"INITIAL_CONFIG", this.programLogs.INITIAL_CONFIGUARTION_FAILED);
+						"INITIAL_CONFIG", this.programLogs.getINITIAL_CONFIGUARTION_FAILED());
 				
 				System.exit(0);
 			}
@@ -168,7 +168,7 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 			this.administratorFunctions.csvOperations.overwriteAdminFile();
 			
 			this.programLogs.logCurrentEvent("ADMIN", 
-					"INITIAL_CONFIG", this.programLogs.INITIAL_CONFIGUARTION_SUCCESS);
+					"INITIAL_CONFIG", this.programLogs.getINITIAL_CONFIGUARTION_SUCCESS());
 			
 			JOptionPane.showMessageDialog(null, "Admin Name:\n" + "\nConfiguration Success...\nNow You Can Customize Your Database", "SUCCESS!!!", JOptionPane.INFORMATION_MESSAGE);
 			this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_LOGIN);
