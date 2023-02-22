@@ -1,1 +1,6 @@
 /test/
+.idea
+AdminDatabase.csv
+config.csv
+database.csv
+log.txt
