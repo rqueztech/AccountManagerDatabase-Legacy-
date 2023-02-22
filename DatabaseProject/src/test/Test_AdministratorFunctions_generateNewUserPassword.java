@@ -18,7 +18,7 @@ import databaseproject.EmployeeNode;
 import databaseproject.InputOperations;
 import databaseproject.PasswordEncryption;
 
-class Test_AdministratorFunctions_generateNewUserPassword {
+class Test_AdministratorFunctions_generateDefaultUserPassword {
 	public AdministratorFunctions administratorFunctions = new AdministratorFunctions();
 	public EmployeeNode empNode = new EmployeeNode();
 	public InputOperations inputOperations = new InputOperations();
@@ -55,16 +55,16 @@ class Test_AdministratorFunctions_generateNewUserPassword {
 			
 			randomNames[positionCounterNames] = currentRandomName;
 			
-			String currentPassword = this.administratorFunctions.generateNewUserPassword(randomNames[positionCounterNames]);
+			String currentPassword = this.administratorFunctions.generateDefaultUserPassword(randomNames[positionCounterNames]);
 			
 			System.out.println(currentPassword);
 		}
 		
 		// Iterate through random generated passwords
 		for(int counter = 1; counter <randomNames.length; counter++) {
-			String newPassword = this.administratorFunctions.generateNewUserPassword("Ricardo");
+			String newPassword = this.administratorFunctions.generateDefaultUserPassword("Ricardo");
 			
-			testPassed = inputOperations.passwordRequirements(newPassword);
+			testPassed = inputOperations.isMeetsPasswordRequirements(newPassword);
 			
 			// If testPassed is set to false, an error message will be printed
 			// before asserEquals terminates the program due to failure

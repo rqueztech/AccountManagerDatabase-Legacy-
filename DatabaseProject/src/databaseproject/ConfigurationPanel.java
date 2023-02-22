@@ -49,6 +49,7 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 			boolean success = get();
 			if(success) {
 				JOptionPane.showMessageDialog(null, "Configuration Success");
+				
 			} else {
 				JOptionPane.showMessageDialog(null, "Configuration Failed");
 			}
@@ -86,7 +87,7 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 					return false;
 				}
 				
-			} while(!this.administratorFunctions.inputOperations.passwordRequirements(this.getAdminPassphrase()));
+			} while(!this.administratorFunctions.inputOperations.isMeetsPasswordRequirements(this.getAdminPassphrase()));
 			
 		}
 		
@@ -111,19 +112,19 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 			
 			if(this.adminFirstName != null) {
 				while(this.adminFirstName != null && this.adminFirstName.length() <= 3
-					|| !this.administratorFunctions.inputOperations.onlyLetterCharacters(this.adminFirstName)) {
+					|| !this.administratorFunctions.inputOperations.isOnlyLetterCharacters(this.adminFirstName)) {
 					this.adminFirstName = JOptionPane.showInputDialog(null, "Enter Admin First Name (Must Only Contain Letters)", "Alphabet Characters Only!!!", JOptionPane.ERROR_MESSAGE);
 				}
 				
 				this.adminLastName = JOptionPane.showInputDialog(null, "Enter Admin Last Name");
 				while(this.adminFirstName != null && this.adminLastName.length() <= 3
-					|| !this.administratorFunctions.inputOperations.onlyLetterCharacters(this.adminLastName)) {	
+					|| !this.administratorFunctions.inputOperations.isOnlyLetterCharacters(this.adminLastName)) {	
 					this.adminLastName = JOptionPane.showInputDialog(null, "Enter Admin Last Name (Must Only Contain Letters)", "Alphabet Characters Only!!!", JOptionPane.ERROR_MESSAGE);
 				}
 				
 				this.adminPassword = JOptionPane.showInputDialog(null, "Enter Admin Password");
 				while(this.adminFirstName != null && this.adminPassword.length() <= 3
-					|| !this.administratorFunctions.inputOperations.passwordRequirements(this.adminPassword)) {
+					|| !this.administratorFunctions.inputOperations.isMeetsPasswordRequirements(this.adminPassword)) {
 					
 					this.adminPassword = JOptionPane.showInputDialog(null, "Enter Valid Password:"
 							+ "\n8 Char Minimum"
@@ -136,9 +137,6 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 				if(this.adminFirstName != null
 				&& this.adminLastName != null 
 				&& this.adminPassword != null) {
-					System.out.println(this.adminFirstName);
-					System.out.println(this.adminLastName);
-					System.out.println(this.adminPassword);
 					this.saveConfigurationChanges();
 					result = true;
 				}
@@ -159,13 +157,16 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 	
 	//-----------------------------------------------------------------------------------
 	public void saveConfigurationChanges() {
-		this.administratorFunctions.configurationOperations.createAdministrativePassphrase(this.getAdminPassphrase());			
-		this.administratorFunctions.csvOperations.overwriteConfigFile();
 		
 		// Create the new admin here
-		boolean isAdminCreated = this.administratorFunctions.createNewAdmin(this.adminFirstName, this.adminLastName);
+		boolean isAdminCreated = this.administratorFunctions.createInitialAdmin(this.adminFirstName, this.adminLastName, this.adminPassword);
+		
 		if(isAdminCreated) {
+			this.administratorFunctions.configurationOperations.createAdministrativePassphrase(this.getAdminPassphrase());			
+			this.administratorFunctions.csvOperations.overwriteConfigFile();
+			
 			this.administratorFunctions.csvOperations.overwriteAdminFile();
+			this.administratorFunctions.csvOperations.readFromAdminFile();
 			
 			this.programLogs.logCurrentEvent("ADMIN", 
 					"INITIAL_CONFIG", this.programLogs.getINITIAL_CONFIGUARTION_SUCCESS());
@@ -238,7 +239,6 @@ public class ConfigurationPanel extends JPanel {
 		
 		JLabel labelOne = new JLabel("Welcome To The Initial Configuration.");
 		
-		labelOne.setBackground(Color.black);
 		labelOne.setBackground(Color.white);
 		
 		this.grid.gridx = 0;
@@ -248,7 +248,6 @@ public class ConfigurationPanel extends JPanel {
 		
 		JLabel labelTwo = new JLabel("You Must set an Administrative Passphrase");
 		
-		labelTwo.setBackground(Color.black);
 		labelTwo.setBackground(Color.white);
 		
 		this.grid.gridx = 0;
@@ -258,7 +257,6 @@ public class ConfigurationPanel extends JPanel {
 		
 		JLabel labelThree = new JLabel("And an Administrator Account To Begin Use.");
 		
-		labelThree.setBackground(Color.black);
 		labelThree.setBackground(Color.white);
 		
 		this.grid.gridx = 0;

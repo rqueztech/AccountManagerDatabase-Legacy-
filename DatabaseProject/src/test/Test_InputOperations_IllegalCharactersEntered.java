@@ -1,7 +1,7 @@
 /*
 	TEST COMPLETE
 	Returns FALSE for illegalCharArray[] since all characters contain illegal characters
-	The test will be conducted against Input Opeartions: legalCharactersEntered class.
+	The test will be conducted against Input Opeartions: isLegalCharactersEntered class.
 	The test should return true if illegal characters are detected in the string entry.
 */
 
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import databaseproject.InputOperations;
 import org.junit.jupiter.api.Test;
 
-class Test_InputOperations_IllegalCharactersEntered {
+class Test_InputOperations_IlisLegalCharactersEntered {
 	InputOperations inputOperations = new InputOperations();
 	
 	@Test
@@ -26,22 +26,17 @@ class Test_InputOperations_IllegalCharactersEntered {
 		for(String iterator : illegalCharacterArray) {
 			
 			// Returns true if illegal characters were entered, false if they were not
-			boolean illegalCharacters = inputOperations.legalCharactersEntered(iterator);
+			boolean illegalCharacters = inputOperations.isIllegalCharactersFound(iterator);
 			
 			// If illegal characters are detected, print out fail message
 			if(illegalCharacters) {
 				System.out.println("****************************************************");
-				System.out.println("FAIL: IllegalCharactersEnteredTest\nPassword Illegal Char Not Detected In: " + iterator);
+				System.out.println("FAIL: IlisLegalCharactersEnteredTest\nPassword Illegal Char Not Detected In: " + iterator);
 				System.out.println("");
 			}
 			
 			assertEquals(false, illegalCharacters);
 		}
-		
-		System.out.println("****************************************************");
-		System.out.println("PASS: InputOperations_IllegalCharactersEnteredTest:\nIllegal Characters in all passwords detected");
-		System.out.println("");
-		
 	}
 
 }

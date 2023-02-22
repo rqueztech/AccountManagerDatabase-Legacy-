@@ -28,7 +28,7 @@ class Test_InputOperations_PasswordRequirementsMet {
 		for(String iterator : legalTestPasswords) {
 			
 			// Returns true if the password passed through it meets all legal requirements
-			boolean passwordMeetsRequirements = inputOperations.passwordRequirements(iterator);
+			boolean passwordMeetsRequirements = inputOperations.isMeetsPasswordRequirements(iterator);
 			
 			// If passwordMeetsRequirements is false, then print out the illegal password
 			// Accepted message

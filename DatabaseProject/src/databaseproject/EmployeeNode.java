@@ -52,19 +52,14 @@ public class EmployeeNode {
 	// This method is going to increase the employee number
 	
 	public void setEmpNo(int empNo) {
-		if(inputOperations.onlyNumberCharacters(empNo)) {
-			this.empNo = empNo;
-		}
+		this.empNo = empNo;
 		
-		else {
-			JOptionPane.showMessageDialog(null, "Non Numbers allowed in empNo", "SETTER TEST FAILED", JOptionPane.ERROR_MESSAGE);
-		}
 	}
 	
 	//-----------------------------------------------------------------------------------
 	
 	public void setUserName(String userName) {
-		if(inputOperations.onlyLettersAndNumbers(userName)) {
+		if(inputOperations.isOnlyLettersAndNumbers(userName)) {
 			this.userName = userName;
 		}
 		
@@ -79,7 +74,7 @@ public class EmployeeNode {
 		
 		// Perform validation check to make sure only letter characters
 		// Are used for the first name
-		if(inputOperations.onlyLetterCharacters(firstName)
+		if(inputOperations.isOnlyLetterCharacters(firstName)
 				&& firstName.length() > 1) {
 			this.firstName = firstName;
 		}
@@ -92,7 +87,7 @@ public class EmployeeNode {
 	//-----------------------------------------------------------------------------------
 	
 	public void setLastName(String lastName) {
-		if(this.inputOperations.onlyLetterCharacters(lastName)
+		if(this.inputOperations.isOnlyLetterCharacters(lastName)
 				&& lastName.length() > 1) {
 			this.lastName = lastName;
 		}

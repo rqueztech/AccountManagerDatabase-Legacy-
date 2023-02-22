@@ -204,8 +204,8 @@ public class PanelLogin extends JPanel {
 		boolean isUserOrAdminExists = this.loginOperations.searchUser(userName, typeOfUser);
 		
 		// Ensure user only contains legal characters
-		boolean validUsernameCharacters = this.inputOperations.onlyLettersAndNumbers(userName);
-		boolean validPasswordCharacters = this.inputOperations.legalCharactersEntered(userPassword);
+		boolean validUsernameCharacters = this.inputOperations.isOnlyLettersAndNumbers(userName);
+		boolean validPasswordCharacters = this.inputOperations.isLegalCharactersEntered(userPassword);
 		
 		// If both the username and password contains all legal characters, process
 		// The rest of the login attempt
@@ -274,8 +274,8 @@ public class PanelLogin extends JPanel {
 							this.usrDefaultChangeRepeat.setText("");
 							
 							// Catch whether each password met requirements with boolean values
-							boolean isPasswordRequirements = this.inputOperations.passwordRequirements(changePasswordEntered);
-							boolean isPasswordRequirementsReentered = this.inputOperations.passwordRequirements(changePasswordReEntered);
+							boolean isPasswordRequirements = this.inputOperations.isMeetsPasswordRequirements(changePasswordEntered);
+							boolean isPasswordRequirementsReentered = this.inputOperations.isMeetsPasswordRequirements(changePasswordReEntered);
 							
 							// Check to see if password meets requirements (character wise and
 							// The proper strings)

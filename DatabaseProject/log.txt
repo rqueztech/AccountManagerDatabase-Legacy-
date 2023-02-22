@@ -59,3 +59,184 @@
 2023-02-21 12:01:22.367 - (ADMIN)rquez -> LOGIN SUCCESS: Login Success
 *--------------START LOGGING--------------
 *Separate Session For: 2023-02-21 12:20:31.197
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-21 15:18:55.380
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-21 22:56:58.653
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-21 22:57:06.427
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-21 22:57:26.302
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-21 23:26:52.907
+2023-02-21 23:27:35.662 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-21 23:28:34.874
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-21 23:29:09.471
+2023-02-21 23:29:35.542 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-21 23:33:22.009
+2023-02-21 23:34:07.723 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-21 23:57:49.317
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:00:14.321
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:00:30.265
+2023-02-22 00:00:41.656 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:00:43.622
+2023-02-22 00:01:09.372 - (ADMIN)aadmi -> LOGIN FAIL: Login Attempt Fail
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:01:55.820
+2023-02-22 00:02:08.719 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:02:11.045
+2023-02-22 00:02:22.738 - (ADMIN)aadmi -> LOGIN FAIL: Login Attempt Fail
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:02:27.075
+2023-02-22 00:02:39.123 - (ADMIN)aadmi -> LOGIN FAIL: Login Attempt Fail
+2023-02-22 00:02:51.430 - (ADMIN)aadmi -> LOGIN FAIL: Login Attempt Fail
+2023-02-22 00:03:07.899 - (ADMIN)aadmi -> LOGIN FAIL: Login Attempt Fail
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:06:56.639
+2023-02-22 00:07:08.392 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:07:15.571
+2023-02-22 00:07:24.319 - (ADMIN)aadmi -> LOGIN FAIL: Login Attempt Fail
+2023-02-22 00:07:36.056 - (ADMIN)aadmi -> LOGIN FAIL: Login Attempt Fail
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:09:50.287
+2023-02-22 00:10:04.151 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+2023-02-22 00:10:34.774 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration Failed, No Changes Made/Saved...
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:13:55.845
+2023-02-22 00:14:09.088 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:17:58.443
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:18:10.821
+2023-02-22 00:18:22.829 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:20:16.594
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:20:54.969
+2023-02-22 00:23:01.363 - (ADMIN)aadmi -> LOGIN FAIL: Login Attempt Fail
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:23:15.642
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:35:39.632
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 00:36:00.438
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 09:21:47.357
+2023-02-22 09:21:54.664 - (ADMIN)aadmi -> LOGIN SUCCESS: Login Success
+2023-02-22 09:22:01.065 - (ADMIN)aadmi -> PASSWORD CHANGE CANCELLED: Password change has been cancelled by end-user
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 11:16:58.166
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 11:17:12.875
+2023-02-22 11:17:46.982 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration Failed, No Changes Made/Saved...
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 11:17:50.413
+2023-02-22 11:18:06.305 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+2023-02-22 11:18:15.296 - (USER)aadmi -> LOGIN FAILED: Invalid Name Entered
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 11:18:28.954
+2023-02-22 11:18:36.707 - (ADMIN)aadmi -> LOGIN FAIL: Login Attempt Fail
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 11:20:17.250
+2023-02-22 11:20:27.224 - (ADMIN)aadmi -> LOGIN FAIL: Login Attempt Fail
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 11:20:39.641
+2023-02-22 11:20:53.718 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 11:21:26.590
+2023-02-22 11:21:34.576 - (ADMIN)aadmi -> LOGIN FAIL: Login Attempt Fail
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 12:25:30.410
+2023-02-22 12:25:42.525 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 12:26:40.869
+2023-02-22 12:27:29.095 - (ADMIN)admin -> LOGIN FAILED: Invalid Name Entered
+2023-02-22 12:27:41.198 - (ADMIN)aadmi -> LOGIN FAIL: Login Attempt Fail
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 12:42:24.501
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 12:42:39.702
+2023-02-22 12:42:53.759 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+2023-02-22 12:43:00.053 - (USER)aadmi -> LOGIN FAILED: Invalid Name Entered
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 12:43:13.862
+2023-02-22 12:43:20.387 - (ADMIN)aadmi -> LOGIN SUCCESS: Login Success
+2023-02-22 12:43:23.074 - (ADMIN)aadmi -> LOGOUT SUCCESS: Logged Out Successfully
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 13:17:52.523
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 13:19:38.115
+2023-02-22 13:19:55.526 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 13:20:03.726
+2023-02-22 13:20:12.962 - (ADMIN)aadmi -> LOGIN SUCCESS: Login Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 13:26:43.730
+2023-02-22 13:26:56.367 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 13:27:04.405
+2023-02-22 13:27:12.253 - (ADMIN)aadmi -> LOGIN SUCCESS: Login Success
+2023-02-22 13:27:27.400 - (ADMIN)aadmi -> LOGOUT SUCCESS: Logged Out Successfully
+2023-02-22 13:27:39.207 - (USER)Charles -> LOGIN FAILED: Invalid Name Entered
+2023-02-22 13:27:44.096 - (USER)cxavi -> LOGIN SUCCESS: Login Success
+2023-02-22 13:27:59.341 - (USER)cxavi -> PASSWORD CHANGE FAILED: Password Change Failed
+2023-02-22 13:28:11.887 - (USER)cxavi -> PASSWORD CHANGE SUCCESS: Password Changed Successfully
+2023-02-22 13:28:16.365 - (USER)cxavi -> LOGIN SUCCESS: Login Success
+2023-02-22 13:28:20.116 - (USER)cxavi -> LOGOUT SUCCESS: Logged Out Successfully
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 14:05:00.476
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:18:58.104
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:33:57.422
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:34:10.620
+2023-02-22 15:34:27.444 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:34:33.612
+2023-02-22 15:34:41.962 - (ADMIN)aadmi -> LOGIN SUCCESS: Login Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:37:42.040
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:38:16.566
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:46:14.795
+2023-02-22 15:46:27.511 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:46:33.745
+2023-02-22 15:46:40.357 - (ADMIN)aadmi -> LOGIN SUCCESS: Login Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:49:15.593
+2023-02-22 15:49:26.107 - (ADMIN)aadmi -> LOGIN SUCCESS: Login Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:50:12.064
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:50:42.396
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:52:41.475
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:57:58.871
+2023-02-22 15:58:18.902 - (ADMIN)INITIAL_CONFIG -> INITIAL CONFIGURATION: Initial Configuration SuccessINITIAL CONFIGURATION: Initial Configuration Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 15:58:25.815
+2023-02-22 15:58:36.391 - (ADMIN)aadmi -> LOGIN SUCCESS: Login Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 16:14:25.321
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 16:15:30.884
+2023-02-22 16:15:39.705 - (ADMIN)aadmi -> LOGIN SUCCESS: Login Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 16:16:52.183
+2023-02-22 16:17:04.753 - (ADMIN)aadmi -> LOGIN SUCCESS: Login Success
+*--------------START LOGGING--------------
+*Separate Session For: 2023-02-22 16:17:50.269
+2023-02-22 16:17:57.384 - (ADMIN)aadmi -> LOGIN SUCCESS: Login Success

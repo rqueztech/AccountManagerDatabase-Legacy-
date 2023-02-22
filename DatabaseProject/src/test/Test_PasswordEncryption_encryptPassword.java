@@ -32,7 +32,7 @@ class Test_PasswordEncryption_encryptPassword {
 		for(String iterator : legalCharacterArray) {
 			
 			String hashedPassword = "";
-			boolean legalCharacters = inputOperations.legalCharactersEntered(iterator);
+			boolean legalCharacters = inputOperations.isLegalCharactersEntered(iterator);
 			
 			if(legalCharacters) {
 				// The hashed password string will take the encrypted version of the password passed to it

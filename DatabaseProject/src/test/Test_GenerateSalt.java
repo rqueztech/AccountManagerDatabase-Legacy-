@@ -1,10 +1,24 @@
-// **TEST CASE COMPLETE
+/*
+ * Test Case Completed. 
+ * Number of Assertions: 6
+ * 1. Salts generated are 32 characters long
+ * 2. Salts generated are not equal to the previous salt
+ * 3. 
+ * 4. 
+ * 5. 
+ * 6. 
+ */
+
 
 package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,33 +32,36 @@ class Test_GenerateSalt {
 	@Test
 	void test() {
 		// Create 100 salted strings, each will be 32 characters in length
-		String[] saltStrings = new String[100];
+		//String[] saltStrings = new String[100];
+		List <String> saltStrings = new ArrayList<String>();
 		
 		Pattern specialCharacterPattern = Pattern.compile("^[@$!%*#?&]+$");
 		Matcher matcher;
 		
 		for(int counter = 0; counter < 100; counter++) {
-			saltStrings[counter] = passwordEncryption.generateSalt();
+			saltStrings.add(passwordEncryption.generateSalt());
 			
-			// Assert that the current generated string is 32 characters in length
-			assertEquals(32, saltStrings[counter].length());
+			// The salt is 32 characters in length
+			assertEquals(32, saltStrings.get(counter).length());
 
 			for(int innerCounter = 0; innerCounter < 32; innerCounter++) {
-				char currentCharacter = saltStrings[counter].charAt(innerCounter);
+				char currentCharacter = saltStrings.get(counter).charAt(innerCounter);
 				
 				switch(innerCounter%4) {
 					case 0:
-						// Assert that the current character is uppercase
+						// Current Character is uppercase
 						assertTrue(Character.isUpperCase(currentCharacter));
 
 						break;
 						
 					case 1:
+						// Current Character is lowercase
 						assertTrue(Character.isLowerCase(currentCharacter));
 
 						break;
 						
 					case 2:
+						// Current Character is a special symbol
 						matcher = specialCharacterPattern.matcher(String.valueOf(currentCharacter));
 						boolean thirdTestPassed = matcher.find();
 						assertTrue(thirdTestPassed);
@@ -52,6 +69,7 @@ class Test_GenerateSalt {
 						break;
 						
 					case 3:
+						// Churrent character is a digit
 						assertEquals(true, Character.isDigit(currentCharacter));
 						
 						break;
@@ -60,6 +78,18 @@ class Test_GenerateSalt {
 						break;
 				}
 			}
+		}
+		
+		// Keep string outside of for loop to prevent constant initialization of a new string object
+		String currentString = "";
+		
+		// List will ensure that the value never repeats
+		for(int duplicatesCounter = 0; duplicatesCounter < saltStrings.size(); duplicatesCounter++) {
+			currentString = saltStrings.get(duplicatesCounter);
+			
+			// Ensure that Collections.frequency only appears once in the list
+			assertEquals(Collections.frequency(saltStrings, currentString) == 1, true);
+			
 		}
 	}
 

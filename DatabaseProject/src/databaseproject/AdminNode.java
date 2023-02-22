@@ -44,18 +44,14 @@ public class AdminNode {
 	// This method is going to increase the Admin number
 	
 	public void setEmpNo(int empNo) {
-		if(inputOperations.onlyNumberCharacters(empNo)) {
+		if(Character.isDigit(empNo)) {
 			this.empNo = empNo;
-		}
-		
-		else {
-			System.out.println("NOT NUMBERS");
 		}
 	}
 	
 	//-----------------------------------------------------------------------------------
 	public void setAdminName(String AdminName) {
-		if(inputOperations.onlyLettersAndNumbers(AdminName)) {
+		if(inputOperations.isOnlyLettersAndNumbers(AdminName)) {
 			this.AdminName = AdminName;
 		}
 		
@@ -70,7 +66,7 @@ public class AdminNode {
 		
 		// Perform validation check to make sure only letter characters
 		// Are used for the first name
-		if(inputOperations.onlyLetterCharacters(firstName)
+		if(inputOperations.isOnlyLetterCharacters(firstName)
 				&& firstName.length() > 1) {
 			this.firstName = firstName;
 		}
@@ -83,7 +79,7 @@ public class AdminNode {
 	//-----------------------------------------------------------------------------------
 	
 	public void setLastName(String lastName) {
-		if(inputOperations.onlyLetterCharacters(lastName)
+		if(inputOperations.isOnlyLetterCharacters(lastName)
 				&& lastName.length() > 1) {
 			this.lastName = lastName;
 		}

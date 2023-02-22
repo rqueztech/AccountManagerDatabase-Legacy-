@@ -41,7 +41,6 @@ public class ConfigurationOperations {
 		this.setAdministrativePassphrase(encryptedPassphrase);
 		this.setSalt(salt);
 		
-		
 		this.administratorFunctions.csvOperations.overwriteConfigFile();
 	}
 	

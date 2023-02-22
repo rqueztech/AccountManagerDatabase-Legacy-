@@ -124,18 +124,8 @@ public class AdministratorFunctions {
 	}
 	
 	//-------------------------------------------------------------------------------------
-	/*
-		This function will create a new employee given first name and last name.
-		It will check to see if the user exists in the hashmap. If the user exists,
-		it will retry the same username with a different number at the end. This wil
-		prevent duplicates.
-	*/
 	public String generateNewEmployeeUsername(String fstName, String lastName, String typeOfUser) {
 		
-		//=============================
-		// 1. USERNAME PORTION
-		// =============================
-		// Counter that will increment for the new username
 		int uniqueUsernameCounter = 0;
 		
 		// Create a new username for the username
@@ -176,38 +166,109 @@ public class AdministratorFunctions {
 	}
 	
 	//-------------------------------------------------------------------------------------
-	public String generateNewUserPassword(String fName) {
-		StringBuilder sb = new StringBuilder();
+	public String generateDefaultUserPassword(String fName) {
+		StringBuilder sbNewUserPasswored = new StringBuilder();
 		
 		// The default password will be "abc" followed by the first letter of 
-		//
-		sb.append("abc" + fName.charAt(0));
+		sbNewUserPasswored.append("abc" + fName.charAt(0));
+		
+		return sbNewUserPasswored.toString();
+	}
+	
+	public String validateNewUser(String firstName, String lastName) {
+		StringBuilder sb = new StringBuilder();
+		
+		// If only letters were entered for the first name, pass validation
+		if(!this.inputOperations.isOnlyLetterCharacters(firstName)) {
+			sb.append("First Name: Only Alphabet Allowed\n");
+		}
+		
+		if(!this.inputOperations.isOnlyLetterCharacters(lastName)) {
+			sb.append("Last Name: Only Alphabet Allowed\n");
+		}
 		
 		return sb.toString();
 	}
 	
+	public EmployeeNode generateEmployeeCredentials(String firstName, String lastName, String gender) {
+		String newEmployeeUserName = this.generateNewEmployeeUsername(firstName, lastName, panelCentral.USER);
+		
+		String newEmployeePassword = this.generateDefaultUserPassword(firstName);
+		String newEmployeeSalt = this.panelCentral.passwordEncryption.generateSalt();
+		String encryptedPasswordHash = this.panelCentral.passwordEncryption.hashPassword(newEmployeePassword, newEmployeeSalt);
+		this.configurationOperations.increaseAdmNo();
+		
+		return new EmployeeNode(newEmployeeUserName, firstName, lastName, gender, encryptedPasswordHash, newEmployeeSalt, 0);
+	}
+	
+	public void addNewEmployeeToHashMap(String newEmployeeName, EmployeeNode newEmployee) {
+		// Add the new created user into the hashmap
+		this.getEmployeeHashMap().put(newEmployeeName, newEmployee);
+	}
+	
+	//-------------------------------------------------------------------------------------
+	// This will add the userName with a brand new profile into the database
+	public boolean createNewEmployee(String firstName, String lastName, String gender) {
+		String message = validateNewUser(firstName, lastName);
+		
+		if(message.equals("")) {
+			EmployeeNode newEmployee = generateEmployeeCredentials(firstName, lastName, gender);
+			
+			this.addNewEmployeeToHashMap(newEmployee.getUserName(), newEmployee);
+			
+			this.csvOperations.overwriteUserFile();
+			this.csvOperations.readFromUserFile();
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
+	
+	public AdminNode generateAdminCredentials(String firstName, String lastName) {
+		String newAdminUserName = this.generateNewEmployeeUsername(firstName, lastName, panelCentral.ADMIN);
+		String newAdminPassword = this.generateDefaultUserPassword(firstName);
+		String newAdminSalt = this.panelCentral.passwordEncryption.generateSalt();
+		String encryptedPasswordHash = this.panelCentral.passwordEncryption.hashPassword(newAdminPassword, newAdminSalt);
+		this.configurationOperations.increaseAdmNo();
+		
+		return new AdminNode(newAdminUserName, firstName, lastName, encryptedPasswordHash, newAdminSalt, 0);
+	}
+	
+	public void addNewAdminToHashMap(String newAdminName, AdminNode newAdmin) {
+		// Add the new created user into the hashmap
+		this.getAdminHashMap().put(newAdminName, newAdmin);
+	}
 	
 	public boolean createNewAdmin(String firstName, String lastName) {
-		StringBuilder sb = new StringBuilder();
+		String message = validateNewUser(firstName, lastName);
 		
-		// If only letters were entered for the first name, pass validation
-		if(!this.inputOperations.onlyLetterCharacters(firstName)) {
-			sb.append("First Name: Only Alphabet Allowed\n");
+		if(message.equals("")) {
+			AdminNode newAdmin = generateAdminCredentials(firstName, lastName);
+			
+			this.addNewAdminToHashMap(newAdmin.getAdminName(), newAdmin);
+			
+			this.csvOperations.overwriteAdminFile();
+			this.csvOperations.readFromAdminFile();
+			
+			return true;
 		}
 		
-		if(!this.inputOperations.onlyLetterCharacters(lastName)) {
-			sb.append("Last Name: Only Alphabet Allowed\n");
-		}
+		return false;
+	}
+	
+	
+	public boolean createInitialAdmin(String firstName, String lastName, String newAdminPassword) {
+		String message = validateNewUser(firstName, lastName);
 		
-		String hereIs = sb.toString();
-		
-		if(sb.toString() == "") {
+		if(message.equals("")) {
 			String newAdminUserName = this.generateNewEmployeeUsername(firstName, lastName, panelCentral.ADMIN);
 			
 			// While there seems like no reason to generate this in another function, password
 			// Complexity may be increased in the future. By using a separate function, it will
 			// be much easier to do so in the future
-			String newAdminPassword = this.generateNewUserPassword(firstName);
 			String newAdminSalt = this.panelCentral.passwordEncryption.generateSalt();
 			String encryptedPasswordHash = this.panelCentral.passwordEncryption.hashPassword(newAdminPassword, newAdminSalt);
 			
@@ -225,62 +286,6 @@ public class AdministratorFunctions {
 			return true;
 		}
 		
-		
 		return false;
-	}
-	
-	//-------------------------------------------------------------------------------------
-	// This will add the userName with a brand new profile into the database
-	public boolean createNewEmployee(String firstName, String lastName, String gender) {
-		StringBuilder sb = new StringBuilder();
-		
-		// If only letters were entered for the first name, pass validation
-		if(!this.inputOperations.onlyLetterCharacters(firstName)) {
-			sb.append("First Name: Only Alphabet Allowed\n");
-		}
-		 	
-		if(!this.inputOperations.onlyLetterCharacters(lastName)) {
-			sb.append("Last Name: Only Alphabet Allowed\n");
-		}
-		
-		// If gender is not entered
-		if(gender.equals("Select")) {
-			sb.append("Must Select Gender");
-		}
-		
-		if(sb.toString().equals("")) {
-			String newEmployeeUserName = this.generateNewEmployeeUsername(firstName, lastName, "USER");
-			
-			// While there seems like no reason to generate this in another function, password
-			// Complexity may be increased in the future. By using a separate function, it will
-			// be much easier to do so in the future
-			String newEmployeePassword = this.generateNewUserPassword(firstName);
-			String newEmployeeSalt = this.panelCentral.passwordEncryption.generateSalt();
-			String encryptedPasswordHash = this.panelCentral.passwordEncryption.hashPassword(newEmployeePassword, newEmployeeSalt);
-			
-			
-			// Get the new user salt and encrypted password byte
-			
-			// Increase the employee number by one to prevent a duplicate employee
-			// number from being used
-			this.configurationOperations.increaseEmpNo();
-			
-			// Add the new created user into the hashmap
-			this.getEmployeeHashMap().put(newEmployeeUserName, new EmployeeNode(newEmployeeUserName, firstName, lastName, 
-					gender, encryptedPasswordHash, newEmployeeSalt, this.configurationOperations.getEmpNo()));
-			this.csvOperations.overwriteUserFile();
-			this.csvOperations.readFromUserFile();
-			
-			this.csvOperations.overwriteConfigFile();
-			
-			return true;
-		}
-		
-		else {
-			sb.insert(0, "CREATE USER FAILED\n");
-			JOptionPane.showMessageDialog(null, sb.toString(), "User Not Created", JOptionPane.ERROR_MESSAGE);
-			
-			return false;
-		}
 	}
 }

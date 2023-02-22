@@ -235,7 +235,7 @@ public class PanelAdminDisplayUsers extends JPanel implements ActionListener {
 	public void confirmDeleteUser() {
 		boolean isValid = this.administratorFunctions
 				.inputOperations
-				.onlyLettersAndNumbers(this.userNameDelete.getText());
+				.isOnlyLettersAndNumbers(this.userNameDelete.getText());
 		
 		String userToDelete = this.userNameDelete.getText();
 		this.userNameDelete.setText("");

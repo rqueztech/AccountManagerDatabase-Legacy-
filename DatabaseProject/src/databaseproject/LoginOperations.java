@@ -39,9 +39,9 @@ public class LoginOperations {
 			/*
 			System.out.println("Plain Password: " + attemptedPassword);
 			System.out.println("Current Salt: " + salt);
-			*/
-			//hashedAttemptedPassword = this.panelCentral.passwordEncryption.hashPassword(attemptedPassword, salt);
 			//System.out.println("First: " + hashedStoredPassword + " :: \nSecond: " + hashedAttemptedPassword);
+			*/
+			hashedAttemptedPassword = this.panelCentral.passwordEncryption.hashPassword(attemptedPassword, salt);
 		}
 		
 		// If both hashes line up, 
@@ -154,16 +154,16 @@ public class LoginOperations {
 		
 		if(typeOfuser.equals("USER")) {
 			// **LOG WILL BE PUT IN THIS FUNCTION
-			if(this.administratorFunctions.getEmployeeHashMap() != null && this.administratorFunctions.getEmployeeHashMap()
-					.get(userName) != null) {
+			if(this.administratorFunctions.getEmployeeHashMap() != null 
+			&& this.administratorFunctions.getEmployeeHashMap().get(userName) != null) {
 				result = true;
 			}
 		}
 		
 		else if (typeOfuser.equals("ADMIN")) {
 			// **LOG WILL BE PUT IN THIS FUNCTION
-			if(this.administratorFunctions.getAdminHashMap() != null && this.administratorFunctions.getAdminHashMap()
-					.get(userName) != null) {
+			if(this.administratorFunctions.getAdminHashMap() != null 
+			&& this.administratorFunctions.getAdminHashMap().get(userName) != null) {
 				result = true;
 			}
 		}

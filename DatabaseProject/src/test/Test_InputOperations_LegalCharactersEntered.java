@@ -27,7 +27,7 @@ class Test_InputOperations_LegalCharactersEntered {
 		boolean testPassed = true;
 		
 		for(String iterator : legalCharacterArray) {
-			boolean legalCharacters = inputOperations.legalCharactersEntered(iterator);
+			boolean legalCharacters = inputOperations.isLegalCharactersEntered(iterator);
 			
 			// Call the flag before the assertion. Once the assertion fails, the test will crash
 			if(!legalCharacters) {
