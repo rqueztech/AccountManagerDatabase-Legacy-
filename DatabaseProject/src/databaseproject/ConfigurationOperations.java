@@ -34,7 +34,7 @@ public class ConfigurationOperations {
 	
 	// ------------------------------------------------------------------------------------
 	// CONFIGURE EMPLOYEE
-	public void createAdministrativePassphrase(String passphrase) {
+	public void createAdministrativePassphrase(char[] passphrase) {
 		String salt = this.administratorFunctions.panelCentral.passwordEncryption.generateSalt();
 		String encryptedPassphrase = this.administratorFunctions.panelCentral.passwordEncryption.hashPassword(passphrase, salt);
 		

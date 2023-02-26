@@ -3,8 +3,8 @@ package databaseproject;
 public class AdminNode {
 	private String firstName;
 	private String lastName;
-	private String AdminName;
-	private String AdminPassword;
+	private String adminName;
+	private String adminPassword;
 	private String salt;
 	private int empNo;
 	
@@ -17,14 +17,14 @@ public class AdminNode {
 	
 	//-----------------------------------------------------------------------------------
 	// Specific constructor to hold all information particular to a given Admin.
-	public AdminNode(String AdminName, String firstName, String lastName, 
-			String AdminPassword, String salt, int empNo) {
+	public AdminNode(String adminName, String firstName, String lastName, 
+			String adminPassword, String salt, int empNo) {
 		this.inputOperations = new InputOperations();
 		
-		this.setAdminName(AdminName);
+		this.setAdminName(adminName);
 		this.setFirstName(firstName);
 		this.setLastName(lastName);
-		this.setAdminPassword(AdminPassword);
+		this.setHashedAdminPassword(adminPassword);
 		this.setSalt(salt);
 		this.setEmpNo(empNo);
 	}
@@ -33,10 +33,10 @@ public class AdminNode {
 	// Set the Admin password here. If encryption fails, an error message will be printed.
 	// If the password meets all requirements, it will be accepted
 	
-	public void setAdminPassword(String AdminPassword) {
+	public void setHashedAdminPassword(String adminPassword) {
 		
-		if(AdminPassword.length() == 128) {
-			this.AdminPassword = AdminPassword;
+		if(new String(adminPassword).length() == 128) {
+			this.adminPassword = adminPassword;
 		}
 	}
 	
@@ -50,9 +50,9 @@ public class AdminNode {
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public void setAdminName(String AdminName) {
-		if(inputOperations.isOnlyLettersAndNumbers(AdminName)) {
-			this.AdminName = AdminName;
+	public void setAdminName(String adminName) {
+		if(inputOperations.isOnlyLettersAndNumbers(adminName)) {
+			this.adminName = adminName;
 		}
 		
 		else {
@@ -92,7 +92,7 @@ public class AdminNode {
 	//-----------------------------------------------------------------------------------
 	
 	public void setSalt(String salt) {
-		if(salt.length() == 32) {
+		if(salt.length() == 128) {
 			this.salt = salt;
 		}
 		
@@ -103,14 +103,14 @@ public class AdminNode {
 	
 	//-----------------------------------------------------------------------------------
 	
-	public String getAdminPassword() {
-		return this.AdminPassword;
+	public String getHashedAdminPassword() {
+		return this.adminPassword;
 	}
 	
 	//-----------------------------------------------------------------------------------
 
 	public String getAdminName() {
-		return this.AdminName;
+		return this.adminName;
 	}
 	
 	//-----------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ public class AdminNode {
 	//-----------------------------------------------------------------------------------
 	
 	public void setChangedPassword(String changedPassword, String changedSalt) {
-		this.setAdminPassword(changedPassword);
+		this.setHashedAdminPassword(changedPassword);
 		this.setSalt(changedSalt);
 	}
 	
@@ -152,7 +152,7 @@ public class AdminNode {
 	public String toString() {
 		String result = "";
 		result = String.format("%s,%s,%s,%s,%s,%s\n", this.getAdminName(), this.getFirstName(), this.getLastName(),
-				this.getAdminPassword(), this.getSalt(), this.getEmpNo());
+				this.getHashedAdminPassword(), this.getSalt(), this.getEmpNo());
 		
 		return result;
 	}

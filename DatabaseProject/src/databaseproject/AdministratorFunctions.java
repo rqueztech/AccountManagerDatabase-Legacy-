@@ -14,6 +14,7 @@ public class AdministratorFunctions {
 	public LoginOperations loginOperations;
 	public PanelCentral panelCentral;
 	public ConfigurationPanel panelInitialConfiguration;
+	public PasswordEncryption passwordEncryption;
 	
 	public final String SUCCESS = "SUCCESS";
 	
@@ -24,19 +25,19 @@ public class AdministratorFunctions {
 	
 	//---NOT FUNCITONAL YET
 	//private HashMap<String, EmployeeNode> administratorHashMap;
-		
+	
+	
 	//------------------------------------------------------------------------------------
 	public AdministratorFunctions(PanelCentral panelCentral) {
 		this.employeeHashMap = new HashMap<String, EmployeeNode>();
 		this.adminHashMap = new HashMap<String, AdminNode>();
-		
 		this.inputOperations = new InputOperations();
 		this.empFunctions = new EmployeeFunctions();
-		
 		this.configurationOperations = new ConfigurationOperations(this);
 		this.csvOperations = new CSVOperations(this);
 		this.panelCentral = panelCentral;
 		this.loginOperations = new LoginOperations(this.panelCentral, this);
+		this.passwordEncryption = this.panelCentral.passwordEncryption;
 	}
 	
 	// ------------------------------------------------------------------------------------
@@ -91,7 +92,7 @@ public class AdministratorFunctions {
 	public boolean deleteUser(String userToDelete) {
 		boolean isUserExists = this.isEmployeeExists(userToDelete);
 			
-			String mgrPassword = JOptionPane.showInputDialog("Enter Manager Password");
+			char[] mgrPassword = JOptionPane.showInputDialog("Enter Manager Password").toCharArray();
 			boolean checkAdminPassword = this.loginOperations.checkAdminPassphrase(mgrPassword);
 		
 			StringBuilder sb = new StringBuilder();
@@ -123,8 +124,27 @@ public class AdministratorFunctions {
 		return isUserExists;
 	}
 	
+	public void updateNewUserPassword(String userName, char[] userPassword) {
+		String salt = this.passwordEncryption.generateSalt();
+		String hashedNewUserPassword = this.passwordEncryption.hashPassword(userPassword, salt);
+		
+		EmployeeNode employeeMap = this.getEmployeeHashMap().get(userName);
+		employeeMap.setChangedPassword(hashedNewUserPassword, salt);
+		this.csvOperations.overwriteUserFile();
+	}
+	
+	public void updateNewAdminPassword(String adminName, char[] adminPassword) {
+		String salt = this.panelCentral.passwordEncryption.generateSalt();
+		String hashedNewUserPassword = this.panelCentral.passwordEncryption.hashPassword(adminPassword, salt);
+		
+		this.getAdminHashMap().get(adminName).setChangedPassword(hashedNewUserPassword, salt);
+		this.csvOperations.overwriteAdminFile();
+	}
+	
+	
+	
 	//-------------------------------------------------------------------------------------
-	public String generateNewEmployeeUsername(String fstName, String lastName, String typeOfUser) {
+	public String generateNewUserName(String fstName, String lastName, String typeOfUser) {
 		
 		int uniqueUsernameCounter = 0;
 		
@@ -138,33 +158,45 @@ public class AdministratorFunctions {
 		
 		// Iterate through the hashmap until the username is not found
 		// In the hashmap
-		if(typeOfUser.equals("USER")) {
-			while(this.getEmployeeHashMap().get(userName.toString()) != null) {
-				if(uniqueUsernameCounter != 0) {
-					userName.setLength(0);
-					userName.append(fstName.toLowerCase().charAt(0));
-					userName.append(lastName.toLowerCase().substring(0,4));
-				}
-				
-				userName.append(++uniqueUsernameCounter);
+		while(this.getEmployeeHashMap().get(userName.toString()) != null) {
+			if(uniqueUsernameCounter != 0) {
+				userName.setLength(0);
+				userName.append(fstName.toLowerCase().charAt(0));
+				userName.append(lastName.toLowerCase().substring(0,4));
 			}
+			
+			userName.append(++uniqueUsernameCounter);
 		}
-		
-		else if(typeOfUser.equals("ADMIN")) {
-			while(this.getAdminHashMap().get(userName.toString()) != null) {
-				if(uniqueUsernameCounter != 0) {
-					userName.setLength(0);
-					userName.append(fstName.toLowerCase().charAt(0));
-					userName.append(lastName.toLowerCase().substring(0,4));
-				}
 				
-				userName.append(++uniqueUsernameCounter);
+		return userName.toString();
+	}
+
+	//-------------------------------------------------------------------------------------
+	public String generateNewAdminName(String fstName, String lastName, String typeOfUser) {
+		
+		int uniqueUsernameCounter = 0;
+		
+		// Create a new username for the username
+		StringBuilder userName = new StringBuilder(); 
+		
+		// Append the first character of the first name, first four of the
+		// last name
+		userName.append(fstName.toLowerCase().charAt(0));
+		userName.append(lastName.toLowerCase().substring(0,4));
+		
+		while(this.getAdminHashMap().get(userName.toString()) != null) {
+			if(uniqueUsernameCounter != 0) {
+				userName.setLength(0);
+				userName.append(fstName.toLowerCase().charAt(0));
+				userName.append(lastName.toLowerCase().substring(0,4));
 			}
+			
+			userName.append(++uniqueUsernameCounter);
 		}
 		
 		return userName.toString();
 	}
-	
+		
 	//-------------------------------------------------------------------------------------
 	public String generateDefaultUserPassword(String fName) {
 		StringBuilder sbNewUserPasswored = new StringBuilder();
@@ -191,9 +223,9 @@ public class AdministratorFunctions {
 	}
 	
 	public EmployeeNode generateEmployeeCredentials(String firstName, String lastName, String gender) {
-		String newEmployeeUserName = this.generateNewEmployeeUsername(firstName, lastName, panelCentral.USER);
+		String newEmployeeUserName = this.generateNewUserName(firstName, lastName, panelCentral.USER);
 		
-		String newEmployeePassword = this.generateDefaultUserPassword(firstName);
+		char[] newEmployeePassword = this.generateDefaultUserPassword(firstName).toCharArray();
 		String newEmployeeSalt = this.panelCentral.passwordEncryption.generateSalt();
 		String encryptedPasswordHash = this.panelCentral.passwordEncryption.hashPassword(newEmployeePassword, newEmployeeSalt);
 		this.configurationOperations.increaseAdmNo();
@@ -225,13 +257,11 @@ public class AdministratorFunctions {
 		return false;
 	}
 	
-	
-	
 	public AdminNode generateAdminCredentials(String firstName, String lastName) {
-		String newAdminUserName = this.generateNewEmployeeUsername(firstName, lastName, panelCentral.ADMIN);
-		String newAdminPassword = this.generateDefaultUserPassword(firstName);
+		String newAdminUserName = this.generateNewAdminName(firstName, lastName, panelCentral.ADMIN);
+		char[] newAdminPassword = this.generateDefaultUserPassword(firstName).toCharArray();
 		String newAdminSalt = this.panelCentral.passwordEncryption.generateSalt();
-		String encryptedPasswordHash = this.panelCentral.passwordEncryption.hashPassword(newAdminPassword, newAdminSalt);
+		String encryptedPasswordHash = this.passwordEncryption.hashPassword(newAdminPassword, newAdminSalt);
 		this.configurationOperations.increaseAdmNo();
 		
 		return new AdminNode(newAdminUserName, firstName, lastName, encryptedPasswordHash, newAdminSalt, 0);
@@ -260,17 +290,17 @@ public class AdministratorFunctions {
 	}
 	
 	
-	public boolean createInitialAdmin(String firstName, String lastName, String newAdminPassword) {
+	public boolean createInitialAdmin(String firstName, String lastName, char[] newAdminPassword) {
 		String message = validateNewUser(firstName, lastName);
 		
 		if(message.equals("")) {
-			String newAdminUserName = this.generateNewEmployeeUsername(firstName, lastName, panelCentral.ADMIN);
+			String newAdminUserName = this.generateNewAdminName(firstName, lastName, panelCentral.ADMIN);
 			
 			// While there seems like no reason to generate this in another function, password
 			// Complexity may be increased in the future. By using a separate function, it will
 			// be much easier to do so in the future
-			String newAdminSalt = this.panelCentral.passwordEncryption.generateSalt();
-			String encryptedPasswordHash = this.panelCentral.passwordEncryption.hashPassword(newAdminPassword, newAdminSalt);
+			String newAdminSalt = this.passwordEncryption.generateSalt();
+			String encryptedPasswordHash = this.passwordEncryption.hashPassword(newAdminPassword, newAdminSalt);
 			
 			// Increase the employee number by one to prevent a duplicate employee
 			// number from being used

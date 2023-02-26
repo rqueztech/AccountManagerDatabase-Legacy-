@@ -100,7 +100,7 @@ public class EmployeeNode {
 	//-----------------------------------------------------------------------------------
 	
 	public void setSalt(String salt) {
-		if(salt.length() == 32) {
+		if(salt.length() == 128) {
 			this.salt = salt;
 		}
 		

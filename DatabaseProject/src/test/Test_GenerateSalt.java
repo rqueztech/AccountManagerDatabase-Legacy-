@@ -1,7 +1,7 @@
 /*
  * Test Case Completed. 
  * Number of Assertions: 6
- * 1. Salts generated are 32 characters long
+ * 1. Salts generated are 128 characters long
  * 2. Salts generated are not equal to the previous salt
  * 3. 
  * 4. 
@@ -31,7 +31,7 @@ class Test_GenerateSalt {
 	
 	@Test
 	void test() {
-		// Create 100 salted strings, each will be 32 characters in length
+		// Create 100 salted strings, each will be 128 characters in length
 		//String[] saltStrings = new String[100];
 		List <String> saltStrings = new ArrayList<String>();
 		
@@ -41,10 +41,10 @@ class Test_GenerateSalt {
 		for(int counter = 0; counter < 100; counter++) {
 			saltStrings.add(passwordEncryption.generateSalt());
 			
-			// The salt is 32 characters in length
-			assertEquals(32, saltStrings.get(counter).length());
+			// The salt is 128 characters in length
+			assertEquals(128, saltStrings.get(counter).length());
 
-			for(int innerCounter = 0; innerCounter < 32; innerCounter++) {
+			for(int innerCounter = 0; innerCounter < 128; innerCounter++) {
 				char currentCharacter = saltStrings.get(counter).charAt(innerCounter);
 				
 				switch(innerCounter%4) {

@@ -45,7 +45,7 @@ class AddAdminWorker extends SwingWorker<Boolean, Void> {
 	protected Boolean doInBackground() throws Exception {
 		boolean isAdminCreated = false;
 		
-		String mgrPassword = JOptionPane.showInputDialog("Enter Manager Password");
+		char[] mgrPassword = JOptionPane.showInputDialog("Enter Manager Password").toCharArray();
 		boolean checkAdminPassword = this.administratorFunctions.loginOperations
 				.checkAdminPassphrase(mgrPassword);
 		
@@ -74,6 +74,7 @@ class AddAdminWorker extends SwingWorker<Boolean, Void> {
             }
         } catch (InterruptedException | ExecutionException e) {
             JOptionPane.showMessageDialog(null, "Error searching error.", "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
 	}
 }
@@ -107,7 +108,7 @@ class AddEmployeeWorker extends SwingWorker<Boolean, Void> {
 	protected Boolean doInBackground() throws Exception {
 		boolean isUserCreated = false;
 		
-		String mgrPassword = JOptionPane.showInputDialog("Enter Manager Password");
+		char[] mgrPassword = JOptionPane.showInputDialog("Enter Manager Password").toCharArray();
 		boolean checkAdminPassword = this.administratorFunctions.loginOperations
 				.checkAdminPassphrase(mgrPassword);
 		
@@ -139,6 +140,7 @@ class AddEmployeeWorker extends SwingWorker<Boolean, Void> {
             }
         } catch (InterruptedException | ExecutionException e) {
             JOptionPane.showMessageDialog(null, "Error searching error.", "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
 	}
 }

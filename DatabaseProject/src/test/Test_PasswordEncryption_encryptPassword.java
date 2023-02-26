@@ -12,24 +12,72 @@ import databaseproject.PasswordEncryption;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.Test;
 
 class Test_PasswordEncryption_encryptPassword {
 	InputOperations inputOperations = new InputOperations();
 	PasswordEncryption passwordEncryption = new PasswordEncryption();
-
+	
 	@Test
 	void test() {
 		StringBuilder sb = new StringBuilder();
 		
 		// String of legal arrays that can be ingested into the database
 		
-		// List of legal characters
-		String[] legalCharacterArray = {"Jacov7&", "Paco7&#?", "Ray%7#%&", "Charlie&7", "Bacon4#", "Charles@7", 
-				"Char12341234314325123@#&", "People@!45", "pQow#@352", "charles&#&#&#924827051923817523"};
+		for(int counter = 0; counter < 400; counter++) {
+			this.passwordEncryption.generateSalt();
+		}
+		
+		StringBuilder password = new StringBuilder();
+		Random randomCharacter = new Random();
+		Random rand = new Random(); 
+		
+		// Create a for loop that will go through 8 iterations. Each
+		// Iterated will designate a random value of the following 8
+		// String arrays.
+		
+		String upperCaseString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; 	// 0 && 3 - UpperCase
+		String lowerCaseString = upperCaseString.toLowerCase(); // 1 && 4 - LowerCase
+		String specialCharacterString = "@$!%*#?&"; 			// 2 && 5 - Special Character
+		String numberString = "1234567890"; 					// 3 && 6 - Number
+		char[] passwordStrings = new char[300];
+		
+		for(int outerCounter = 0; outerCounter < 300; outerCounter++) {
+			int stringLength = rand.nextInt((16 - 8) + 1) + 8;
+			
+			// Iterate 8 times and select two random characters of each type
+			for(int counter = 0; counter < stringLength; counter++) {
+				
+				switch(counter%4) {
+					case 0:
+						password.append(upperCaseString.charAt(randomCharacter.nextInt(upperCaseString.length())));
+						break;
+						
+					case 1:
+						password.append(lowerCaseString.charAt(randomCharacter.nextInt(lowerCaseString.length())));
+						break;
+						
+					case 2:
+						password.append(specialCharacterString.charAt(randomCharacter.nextInt(specialCharacterString.length())));
+						break;
+						
+					case 3:
+						password.append(numberString.charAt(randomCharacter.nextInt(numberString.length())));
+						break;
+						
+					default:
+						System.out.println("Error");
+						break;
+				}
+			}
+			
+			passwordStrings = password.toString().toCharArray();
+		}
 		
 		// Create an iterator to go through the legal character array
-		for(String iterator : legalCharacterArray) {
+		for(char iterator : passwordStrings) {
 			
 			String hashedPassword = "";
 			boolean legalCharacters = inputOperations.isLegalCharactersEntered(iterator);

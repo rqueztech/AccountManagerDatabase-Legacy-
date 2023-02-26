@@ -1,33 +1,36 @@
 package databaseproject;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Random;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
 public class PasswordEncryption {
-	// Hash the user's password
-	public String hashPassword(String attemptedPassword, String salt) {
-		StringBuilder sb = new StringBuilder();
-		
-		try {
-			String mixedPassword = attemptedPassword + salt;
-			
-			MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
-			messageDigest.update(mixedPassword.getBytes());
-			byte[] resultByteArray = messageDigest.digest();
-			
-			for(byte b : resultByteArray) {
-				sb.append(String.format("%02x", b));
-			}
-			
-			return sb.toString();
-		}
-		
-		catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		
-		return "";
+
+	public String hashPassword(char[] attemptedPassword, String salt) {
+	    int iterations = 10000;
+	    int keyLength = 512;
+	    byte[] saltBytes = salt.getBytes();
+	    
+	    try {
+	    	
+	        PBEKeySpec spec = new PBEKeySpec(attemptedPassword, saltBytes, iterations, keyLength);
+	        SecretKeyFactory key = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+	        byte[] hashedPassword = key.generateSecret(spec).getEncoded();
+	        
+	        StringBuilder sb = new StringBuilder();
+	        for(byte b : hashedPassword) {
+	            sb.append(String.format("%02x", b));
+	        }
+	        
+	        return sb.toString();
+	    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return "";
 	}
 	
 	// Generate a string of 8 random characters. This will be aggregated to a given password
@@ -46,7 +49,7 @@ public class PasswordEncryption {
 		String numberString = "1234567890"; 					// 3 && 6 - Number
 		
 		// Iterate 8 times and select two random characters of each type
-		for(int counter = 0; counter < 32; counter++) {
+		for(int counter = 0; counter < 128; counter++) {
 			
 			switch(counter%4) {
 				case 0:
