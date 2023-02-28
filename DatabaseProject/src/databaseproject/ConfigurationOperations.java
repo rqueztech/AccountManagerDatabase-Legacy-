@@ -58,7 +58,9 @@ public class ConfigurationOperations {
 
 	//-------------------------------------------------------------------------------------
 	public void setSalt(String salt) {
-		this.admPassphraseSalt = salt;
+		if(salt.length() == 128) {
+			this.admPassphraseSalt = salt;
+		}
 	}
 	
 	public void setAdministrativePassphrase(String passphrase) {

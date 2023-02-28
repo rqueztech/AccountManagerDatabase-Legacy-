@@ -26,7 +26,7 @@ import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-public class PanelAdminDisplayUsers extends JPanel implements ActionListener {
+public class AdminDisplayUsersPanel extends JPanel implements ActionListener {
 	/**
 	 * 
 	 */
@@ -64,7 +64,7 @@ public class PanelAdminDisplayUsers extends JPanel implements ActionListener {
 	
 	private JComboBox<String> gender;
 
-	public PanelAdminDisplayUsers(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
+	public AdminDisplayUsersPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
 		this.panelCentral = panelCentral;
 		this.administratorFunctions = administratorFunctions;
 		this.setSize(600, 600);

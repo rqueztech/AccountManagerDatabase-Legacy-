@@ -35,20 +35,6 @@ public class LoginOperations {
 	}
 	
 	// -----------------------------------------------------------------------------------
-	public boolean isValidUserLogin(String userName, char[] attemptedAdminPassword) {
-		boolean result = false;
-		String hashedStoredPassword = this.administratorFunctions.getEmployeeHashMap().get(userName).getHashedUserPassword();
-		String salt = this.administratorFunctions.getEmployeeHashMap().get(userName).getSalt();
-		String hashedAttemptedPassword = this.panelCentral.passwordEncryption.hashPassword(attemptedAdminPassword, salt);		
-		// If both hashes line up, 
-		if(hashedStoredPassword.equals(hashedAttemptedPassword)) {
-			result = true;
-		}
-		
-		return result;
-	}
-	
-	// -----------------------------------------------------------------------------------
 	public boolean checkAdminPasswordWhileLoggedIn(char[] mgrPassword) {
 		boolean validAdminPassword = false;
 		
@@ -70,12 +56,9 @@ public class LoginOperations {
 	}
 	
 	// -----------------------------------------------------------------------------------
-	// The function below will check to see if the passphrase was entered properly or not.
 	public boolean checkAdminPassphrase(char[] passphrase) {
 		
-		//Be default, set the admin password to false. This will prevent
-		//Any false positives.
-		boolean result = false;
+		boolean isAdminPassphrase = false;
 		
 		String adminPassphrase = this.administratorFunctions.configurationOperations.getAdminPassphrase();
 		String salt = this.administratorFunctions.configurationOperations.getSalt();
@@ -84,22 +67,10 @@ public class LoginOperations {
 		
 		// If the two match up, then the passphrase was set properly.
 		if(adminPassphrase.equals(newHashedPassword)) {
-			result = true;
+			isAdminPassphrase = true;
 		}
-		
 						
-		return result;
-	}
-	
-	// -----------------------------------------------------------------------------------
-	public boolean checkDefaultUserPassword(String userName, char[] userAttemptedPassword) {
-		String salt = this.administratorFunctions.getEmployeeHashMap().get(userName).getSalt();
-		
-		char[] defaultPlainUserPassword = {'a','b','c',Character.toUpperCase(userAttemptedPassword[0])};
-		String hashedDefault = this.panelCentral.passwordEncryption.hashPassword(defaultPlainUserPassword, salt);
-		String currentUserPasswordHash = this.administratorFunctions.getEmployeeHashMap().get(userName).getHashedUserPassword();
-		
-		return hashedDefault.equals(currentUserPasswordHash);
+		return isAdminPassphrase;
 	}
 	
 	// -----------------------------------------------------------------------------------
@@ -111,15 +82,6 @@ public class LoginOperations {
 		String currentAdminPasswordHash = this.administratorFunctions.getAdminHashMap().get(userName).getHashedAdminPassword();
 		
 		return hashedDefault.equals(currentAdminPasswordHash);
-	}
-	
-	// -----------------------------------------------------------------------------------
-	public void updateEmployeeNewPassword(String userName, char[] changeUserPasswordReentered) {
-		String newSaltString = this.panelCentral.passwordEncryption.generateSalt();
-		String hashedNewPassword = this.panelCentral.passwordEncryption.hashPassword(changeUserPasswordReentered, newSaltString);
-		
-		this.administratorFunctions.getEmployeeHashMap().get(userName).setChangedPassword(hashedNewPassword, newSaltString);
-		this.csvOperations.overwriteUserFile();
 	}
 	
 	// -----------------------------------------------------------------------------------
@@ -155,7 +117,40 @@ public class LoginOperations {
 	}
 	
 	// -----------------------------------------------------------------------------------
-	public boolean searchUser(String userName) {
+	public boolean isValidUserLogin(String userName, char[] attemptedAdminPassword) {
+		String hashedStoredPassword = this.administratorFunctions.getEmployeeHashMap().get(userName).getHashedUserPassword();
+		String salt = this.administratorFunctions.getEmployeeHashMap().get(userName).getSalt();
+		String hashedAttemptedPassword = this.panelCentral.passwordEncryption.hashPassword(attemptedAdminPassword, salt);		
+		// If both hashes line up, 
+		if(hashedStoredPassword.equals(hashedAttemptedPassword)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	// -----------------------------------------------------------------------------------
+	public boolean isDefaultUserPassword(String userName, char[] userAttemptedPassword) {
+		String salt = this.administratorFunctions.getEmployeeHashMap().get(userName).getSalt();
+		
+		char[] defaultPlainUserPassword = {'a','b','c',Character.toUpperCase(userAttemptedPassword[0])};
+		String hashedDefault = this.panelCentral.passwordEncryption.hashPassword(defaultPlainUserPassword, salt);
+		String currentUserPasswordHash = this.administratorFunctions.getEmployeeHashMap().get(userName).getHashedUserPassword();
+		
+		return hashedDefault.equals(currentUserPasswordHash);
+	}
+	
+	// -----------------------------------------------------------------------------------
+	public void updateEmployeeNewPassword(String userName, char[] changeUserPasswordReentered) {
+		String newSaltString = this.panelCentral.passwordEncryption.generateSalt();
+		String hashedNewPassword = this.panelCentral.passwordEncryption.hashPassword(changeUserPasswordReentered, newSaltString);
+		
+		this.administratorFunctions.getEmployeeHashMap().get(userName).setChangedPassword(hashedNewPassword, newSaltString);
+		this.csvOperations.overwriteUserFile();
+	}
+	
+	// -----------------------------------------------------------------------------------
+		public boolean searchUser(String userName) {
 		boolean result = false;
 		
 		// **LOG WILL BE PUT IN THIS FUNCTION
@@ -215,5 +210,4 @@ public class LoginOperations {
 	public boolean getLoggedInStatus() {
 		return this.loggedInStatus;
 	}
-	
 }

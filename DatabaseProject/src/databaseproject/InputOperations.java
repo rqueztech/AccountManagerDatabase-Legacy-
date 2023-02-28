@@ -1,6 +1,7 @@
 package databaseproject;
 
 import java.util.regex.Pattern;
+import java.nio.CharBuffer;
 import java.util.regex.Matcher;
 
 public class InputOperations {
@@ -27,9 +28,8 @@ public class InputOperations {
 	}
 	
 	// ------------------------------------------------------------------------------------
-	public boolean isMeetsPasswordRequirements(String passwordString) {
-
-		return matchRegex(passwordString, PASSWORD_REQUIREMENTS_REGEX);
+	public boolean isMeetsPasswordRequirements(char[] passwordString) {
+		return Pattern.matches(PASSWORD_REQUIREMENTS_REGEX, CharBuffer.wrap(passwordString));
 	}
 	
 	// ------------------------------------------------------------------------------------

@@ -41,27 +41,24 @@ public class ConfigurationPanel extends JPanel {
 		this.setSize(600, 600);
 		
 		JLabel labelOne = new JLabel("Welcome To The Initial Configuration.");
-		
-		labelOne.setBackground(Color.white);
-		
+		labelOne.setOpaque(false);
+		labelOne.setForeground(Color.white);
 		this.grid.gridx = 0;
 		this.grid.gridy = 0;
 		this.grid.gridheight = 1;
 		this.add(labelOne, grid);
 		
 		JLabel labelTwo = new JLabel("You Must set an Administrative Passphrase");
-		
-		labelTwo.setBackground(Color.white);
-		
+		labelTwo.setOpaque(false);
+		labelTwo.setForeground(Color.white);
 		this.grid.gridx = 0;
 		this.grid.gridy = 1;
 		this.grid.gridheight = 1;
 		this.add(labelTwo, grid);
 		
 		JLabel labelThree = new JLabel("And an Administrator Account To Begin Use.");
-		
-		labelThree.setBackground(Color.white);
-		
+		labelThree.setOpaque(false);
+		labelThree.setForeground(Color.white);
 		this.grid.gridx = 0;
 		this.grid.gridy = 2;
 		this.grid.gridheight = 1;

@@ -8,21 +8,29 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ProgramLogs {
-	private final static String LOGIN_SUCCESS = "LOGIN SUCCESS: Login Success";
-	private final static String LOGIN_FAIL_INVALID_NAME = "LOGIN FAILED: Invalid Name Entered";
+	
+	/*
+	 * Account Logs: These logs annotate any events that occur in regards to account creation,
+	 * deletion, and querying.
+	 * */
+	private final static String ACCOUNT_CREATION_FAILURE = "ACCOUNT CREATION FAILURE: Account creation failed";
+	private final static String ACCOUNT_SEARCHED = "ACCOUNT SEARCH: User Searched";
+	private final static String ACCOUNT_ADD_SUCCESS = "ACCOUNT ADD SUCCESS: Account added successfully";
+	
 	private final static String LOGIN_FAIL = "LOGIN FAIL: Login Attempt Fail";
+	private final static String LOGIN_FAIL_INVALID_NAME = "LOGIN FAILED: Invalid Name Entered";
+	private final static String LOGIN_SUCCESS = "LOGIN SUCCESS: Login Success";
 	private final static String LOGOUT_SUCCESS = "LOGOUT SUCCESS: Logged Out Successfully";
-	private final static String PASSWORD_CHANGE_SUCCESS = "PASSWORD CHANGE SUCCESS: Password Changed Successfully";
+	
+	private final static String PASSWORD_CHANGE_CANCELLED = "PASSWORD CHANGE CANCELLED: Password change has been cancelled by end-user";
 	private final static String PASSWORD_CHANGE_FAIL = "PASSWORD CHANGE FAILED: Password Change Failed";
 	private final static String PASSWORD_CHANGE_ILLEGAL_CHARACTER = "PASSWORD CHANGE FAILED: Illegal Character Entered";
-	private final static String PASSWORD_CHANGE_CANCELLED = "PASSWORD CHANGE CANCELLED: Password change has been cancelled by end-user";
-	private final static String ACCOUNT_ADD_SUCCESS = "ACCOUNT ADD SUCCESS: Account added successfully";
-	private final static String ACCOUNT_ADD_FAILURE_WRONGPASSWORD = "ACCOUNT ADD FAILURE: Wrong Admin Password";
-	private final static String ACCOUNT_SEARCHED = "ACCOUNT SEARCH: User Searched";
-	private final static String INITIAL_CONFIGUARTION_STARTED = "INITIAL CONFIGURATION: Begin Initial Configuration";
+	private final static String PASSWORD_CHANGE_SUCCESS = "PASSWORD CHANGE SUCCESS: Password Changed Successfully";
+	
 	private final static String INITIAL_CONFIGUARTION_FAILED = "INITIAL CONFIGURATION: Initial Configuration Failed, No Changes Made/Saved...";
-	private final static String INITIAL_CONFIGUARTION_SUCCESS = "INITIAL CONFIGURATION: Initial Configuration Success";
 	private final static String INITIAL_CONFIGUARTION_PASSPHRASE_CHANGED = "INITIAL CONFIGURATION: Passphrase Changed";
+	private final static String INITIAL_CONFIGUARTION_STARTED = "INITIAL CONFIGURATION: Begin Initial Configuration";
+	private final static String INITIAL_CONFIGUARTION_SUCCESS = "INITIAL CONFIGURATION: Initial Configuration Success";
 	
 	public ProgramLogs() {
 		this.logNewSessionInitiated();
@@ -155,8 +163,8 @@ public class ProgramLogs {
 		return ACCOUNT_ADD_SUCCESS;
 	}
 
-	public String getACCOUNT_ADD_FAILURE_WRONGPASSWORD() {
-		return ACCOUNT_ADD_FAILURE_WRONGPASSWORD;
+	public String getACCOUNT_CREATION_FAILURE() {
+		return ACCOUNT_CREATION_FAILURE;
 	}
 
 	public String getACCOUNT_SEARCHED() {

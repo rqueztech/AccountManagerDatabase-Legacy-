@@ -7,32 +7,58 @@ import javax.swing.SwingWorker;
 
 class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 	
-	public AdministratorFunctions administratorFunctions;
-	public PanelCentral panelCentral;
-	public ProgramLogs programLogs;
+	private AdministratorFunctions administratorFunctions;
 	public ConfigurationOperations configurationOperations;
+	private InputOperations inputOperations;
+	private PanelCentral panelCentral;
+	private ProgramLogs programLogs;
 	
 	private char[] adminPassphrase;
+	private char[] adminPassword;
 	private String adminFirstName;
 	private String adminLastName;
-	private String adminPassword;
 	
 	public InitialConfigurationWorker(PanelCentral panelCentral) {
 		this.panelCentral = panelCentral;
-		this.administratorFunctions = new AdministratorFunctions(this.panelCentral);
-		this.programLogs = panelCentral.programLogs;
-		this.configurationOperations = administratorFunctions.configurationOperations;
 	}
 	
 	@Override
 	protected Boolean doInBackground() throws Exception {
 		// TODO Auto-generated method stub
-		boolean result = false;
+		this.administratorFunctions = new AdministratorFunctions(this.panelCentral);
+		this.programLogs = panelCentral.programLogs;
+		this.configurationOperations = administratorFunctions.configurationOperations;
+		this.inputOperations = administratorFunctions.inputOperations;
 		
-		this.isAdministratorPassphraseExists();
-		result = this.isAdministratorAccountExists();
+		boolean isAdministratorExists = this.isAdministratorAccountExists();
+		boolean isAdminConfigurationSuccess = false;
 		
-		return result;
+		if(!isAdministratorExists) {
+			this.setAdministratorPassphrase();
+			JOptionPane.showMessageDialog(null, "Must Create Account");
+			this.setAdminFirstName();
+			this.setAdminLastName();
+			isAdminConfigurationSuccess = this.setAdminPassword();
+		}
+		
+		if(isAdminConfigurationSuccess) {
+			if(this.adminFirstName != null
+			&& this.adminLastName != null 
+			&& this.adminPassword != null) {
+				this.saveConfigurationChanges();
+			}
+			
+			else {
+				JOptionPane.showMessageDialog(null, "Must Create Admin... Please Restart Configuration", "Exit", JOptionPane.ERROR_MESSAGE);
+				
+				this.programLogs.logCurrentEvent("ADMIN", 
+						"INITIAL_CONFIG", this.programLogs.getINITIAL_CONFIGUARTION_FAILED());
+				
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	@Override
@@ -40,8 +66,8 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 		try {
 			boolean success = get();
 			if(success) {
-				JOptionPane.showMessageDialog(null, "Configuration Success");
-				
+				JOptionPane.showMessageDialog(null, "Admin Name:\n" + "\nConfiguration Success...\nNow You Can Customize Your Database", "SUCCESS!!!", JOptionPane.INFORMATION_MESSAGE);
+				new PanelCentral();
 			} else {
 				JOptionPane.showMessageDialog(null, "Configuration Failed");
 			}
@@ -51,15 +77,23 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public boolean isAdministratorPassphraseExists() {
+	public boolean setAdministratorPassphrase() {
 		//this.adminPassphrase = this.configurationOperations.getAdminPassphrase().toCharArray();
 		boolean meetsPasswordRequirements = false;
+		
+		// Prompt the user to enter the administrator passphrase
+		this.setAdminPassphrase(JOptionPane.showInputDialog(null, "Enter Admin Passphrase:\nPlease Enter An Admin Passphrase", 
+				"Passphrase", JOptionPane.INFORMATION_MESSAGE).toCharArray());
 		
 		// If the administrator passphrase returns with a
 		do {
 			
-			this.setAdminPassphrase(JOptionPane.showInputDialog(null, "Enter Admin Passphrase:\nPlease Enter An Admin Passphrase", 
-					"Passphrase", JOptionPane.INFORMATION_MESSAGE).toCharArray());
+			if(!this.inputOperations.isMeetsPasswordRequirements(this.getAdminPassphrase())) {
+				this.setAdminPassphrase(
+					JOptionPane.showInputDialog(null, "Enter Valid Password", "Password Error", JOptionPane.WARNING_MESSAGE).toCharArray()
+				);
+			}
+			
 			
 			if(this.getAdminPassphrase() == null) {
 				JOptionPane.showMessageDialog(null, "Pasphrase Cancelled, EOP...", "Passphrase Operation", JOptionPane.ERROR_MESSAGE);
@@ -68,18 +102,16 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 						"INITIAL_CONFIG", this.programLogs.getINITIAL_CONFIGUARTION_FAILED());
 				
 				System.exit(0);
-				return false;
 			}
 			
-			meetsPasswordRequirements = this.administratorFunctions.inputOperations.isMeetsPasswordRequirements(new String(this.getAdminPassphrase()));
+			meetsPasswordRequirements = this.administratorFunctions.inputOperations.isMeetsPasswordRequirements(this.getAdminPassphrase());
 			
 		} while(!meetsPasswordRequirements);
-		
-	
 		
 		return true;
 	}
 	
+	//-----------------------------------------------------------------------------------
 	public boolean isAdministratorAccountExists() {
 		boolean result = this.administratorFunctions.csvOperations.isAdminExists;
 		
@@ -87,69 +119,58 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 			return true;
 		}
 		
-		else if(!result) {
-			JOptionPane.showMessageDialog(null, "Must Create User Account");
-			this.adminFirstName = "";
-			this.adminLastName = "";
+		return false;
+	}
+	
+	//-----------------------------------------------------------------------------------
+	private String validateNameInput(String fieldName) {
+	    String inputValue = JOptionPane.showInputDialog(null, "Enter " + fieldName);
+	    while (inputValue != null && inputValue.length() <= 3
+	            || !this.administratorFunctions.inputOperations.isOnlyLetterCharacters(inputValue)) {
+	        	inputValue = JOptionPane.showInputDialog(null, "Enter " + fieldName + " (Must Only Contain Letters)", "Alphabet Characters Only!!!", JOptionPane.ERROR_MESSAGE);
+	    }
+	    return inputValue;
+	}
+
+	//-----------------------------------------------------------------------------------
+	public void setAdminFirstName() {
+	    this.adminFirstName = validateNameInput("Admin First Name");
+	}
+
+	//-----------------------------------------------------------------------------------
+	public void setAdminLastName() {
+	    this.adminLastName = validateNameInput("Admin Last Name");
+	}
+	
+	//-----------------------------------------------------------------------------------
+	public boolean setAdminPassword() {
+		this.adminPassword = JOptionPane.showInputDialog(null, "Enter Admin Password").toCharArray();
+		boolean isMeetsPasswordRequirements = this.administratorFunctions.inputOperations.isMeetsPasswordRequirements(this.adminPassword);
+		
+		while(!isMeetsPasswordRequirements) {
 			
+			this.adminPassword = JOptionPane.showInputDialog(null, "Enter Valid Password:"
+					+ "\n8 Char Minimum"
+					+ "\n1 Number"
+					+ "\n1 Special Symbol", 
+					"Alphabet Characters Only!!!", 
+					JOptionPane.ERROR_MESSAGE).toCharArray();
 			
-			this.adminFirstName = JOptionPane.showInputDialog(null, "Enter Admin First Name");
-			
-			if(this.adminFirstName != null) {
-				while(this.adminFirstName != null && this.adminFirstName.length() <= 3
-					|| !this.administratorFunctions.inputOperations.isOnlyLetterCharacters(this.adminFirstName)) {
-					this.adminFirstName = JOptionPane.showInputDialog(null, "Enter Admin First Name (Must Only Contain Letters)", "Alphabet Characters Only!!!", JOptionPane.ERROR_MESSAGE);
-				}
-				
-				this.adminLastName = JOptionPane.showInputDialog(null, "Enter Admin Last Name");
-				while(this.adminFirstName != null && this.adminLastName.length() <= 3
-					|| !this.administratorFunctions.inputOperations.isOnlyLetterCharacters(this.adminLastName)) {	
-					this.adminLastName = JOptionPane.showInputDialog(null, "Enter Admin Last Name (Must Only Contain Letters)", "Alphabet Characters Only!!!", JOptionPane.ERROR_MESSAGE);
-				}
-				
-				this.adminPassword = JOptionPane.showInputDialog(null, "Enter Admin Password");
-				
-				while(this.adminFirstName != null && this.adminPassword.length() <= 3
-					|| !this.administratorFunctions.inputOperations.isMeetsPasswordRequirements(this.adminPassword)) {
-					
-					this.adminPassword = JOptionPane.showInputDialog(null, "Enter Valid Password:"
-							+ "\n8 Char Minimum"
-							+ "\n1 Number"
-							+ "\n1 Special Symbol", 
-							"Alphabet Characters Only!!!", 
-							JOptionPane.ERROR_MESSAGE);
-				}
-				
-				if(this.adminFirstName != null
-				&& this.adminLastName != null 
-				&& this.adminPassword != null) {
-					this.saveConfigurationChanges();
-					result = true;
-				}
-			}
-				
-			else {
-				JOptionPane.showMessageDialog(null, "Must Create User... Please Restart Configuration", "Exit", JOptionPane.ERROR_MESSAGE);
-				
-				this.programLogs.logCurrentEvent("ADMIN", 
-						"INITIAL_CONFIG", this.programLogs.getINITIAL_CONFIGUARTION_FAILED());
-				
-				System.exit(0);
-			}
+			isMeetsPasswordRequirements = this.administratorFunctions.inputOperations.isMeetsPasswordRequirements(this.adminPassword);
 		}
 		
-		return result;
+		return true;
 	}
 	
 	//-----------------------------------------------------------------------------------
 	public void saveConfigurationChanges() {
 		
 		// Create the new admin here
-		boolean isAdminCreated = this.administratorFunctions.createInitialAdmin(this.adminFirstName, this.adminLastName, this.adminPassword.toCharArray());
+		boolean isAdminCreated = this.administratorFunctions.createInitialAdmin(this.adminFirstName, this.adminLastName, this.adminPassword);
 		
 		if(isAdminCreated) {
-			this.administratorFunctions.configurationOperations.createAdministrativePassphrase(this.getAdminPassphrase());			
 			this.administratorFunctions.csvOperations.initializeEssentialFiles();
+			this.administratorFunctions.configurationOperations.createAdministrativePassphrase(this.getAdminPassphrase());			
 			
 			this.administratorFunctions.csvOperations.overwriteConfigFile();
 			this.administratorFunctions.csvOperations.overwriteAdminFile();
@@ -158,9 +179,6 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 					"INITIAL_CONFIG", this.programLogs.getINITIAL_CONFIGUARTION_SUCCESS());
 			
 			this.administratorFunctions.csvOperations.initializeInitialFileRead();
-			
-			JOptionPane.showMessageDialog(null, "Admin Name:\n" + "\nConfiguration Success...\nNow You Can Customize Your Database", "SUCCESS!!!", JOptionPane.INFORMATION_MESSAGE);
-			new PanelCentral();
 		}
 	}
 	
@@ -188,11 +206,11 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 		this.adminLastName = adminLastName;
 	}
 
-	public String getAdminPassword() {
-		return adminPassword;
+	public char[] getAdminPassword() {
+		return this.adminPassword;
 	}
 
-	public void setAdminPassword(String adminPassword) {
+	public void setAdminPassword(char[] adminPassword) {
 		this.adminPassword = adminPassword;
 	}
 }

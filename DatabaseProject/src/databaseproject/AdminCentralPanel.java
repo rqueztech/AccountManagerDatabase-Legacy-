@@ -13,7 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class PanelAdminCentral extends JPanel implements ActionListener {
+public class AdminCentralPanel extends JPanel implements ActionListener {
 	/**
 	 * 
 	 */
@@ -29,7 +29,7 @@ public class PanelAdminCentral extends JPanel implements ActionListener {
 	public String usrPassword;
 	
 	//-----------------------------------------------------------------------------------
-	public PanelAdminCentral(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
+	public AdminCentralPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
 		this.panelCentral = panelCentral;
 		this.administratorFunctions = administratorFunctions;
 		this.setSize(600, 600);

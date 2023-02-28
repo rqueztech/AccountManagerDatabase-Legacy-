@@ -2,9 +2,10 @@ package databaseproject;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,42 +14,42 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-
-public class PanelLogin extends JPanel {
+public class MainLoginPanel extends JPanel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -702019029783943216L;
 	
-	public PanelCentral panelCentral;
-	public PanelAdminCentral panelAdminCentral;
-	public ProgramLogs programLogs;
-	
 	public Image image;
 	public GridBagConstraints grid;
+	public JPanel pwdInput;
 	public ProgramLogs pgmLogs;
 	
-	JPanel pwdInput;
-	
-	// Text fields for usrName and Password
-	public JTextField usrName;
-	public JPasswordField usrPassword;
-	
-	public AdministratorFunctions administratorFunctions;
-	
-	public LoginOperations loginOperations;
-	public CSVOperations csvOperations;
-	
 	// This instance does not rely on other instances
+	public AdministratorFunctions administratorFunctions;
+	public CSVOperations csvOperations;
 	public InputOperations inputOperations;
+	public LoginOperations loginOperations;
+	public AdminCentralPanel panelAdminCentral;
+	public PanelCentral panelCentral;
+	public ProgramLogs programLogs;
 	
+	// Password field will conceal the password (not display in plaintext)
+	// And return as a char array, which will increase security. Strings
+	// Are not as safe because they instantiate a new object that resides in memory.
+	public JPasswordField usrPassword;
 	
 	// Text boxes that will be used for password reset prompt
 	public JTextField usrDefaultChange;
 	public JTextField usrDefaultChangeRepeat;
+	
+	// Text fields for usrName and Password
+	public JTextField usrName;
+	
+	// Textfield will get the passphrase input from the user
 	public JTextField passphraseInput;
 	
-	public PanelLogin(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
+	public MainLoginPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
 		// Potentially remove login Ops and CSV OPS 
 		// class
 		this.administratorFunctions = administratorFunctions;
@@ -58,7 +59,7 @@ public class PanelLogin extends JPanel {
 		this.panelCentral = panelCentral;
 		this.programLogs = this.panelCentral.programLogs;
 		
-		this.panelAdminCentral = new PanelAdminCentral(this.administratorFunctions, 
+		this.panelAdminCentral = new AdminCentralPanel(this.administratorFunctions, 
 				this.panelCentral);
 		
 		// Initialize instances that don't depend on other instances

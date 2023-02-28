@@ -3,13 +3,13 @@ package test;
 import org.junit.jupiter.api.Test;
 
 import databaseproject.AdministratorFunctions;
-import databaseproject.PanelAdminAddUser;
+import databaseproject.AdminAddUserPanel;
 import databaseproject.PanelCentral;
 
 class LogTesting {
 	PanelCentral panelCentral = new PanelCentral();
 	AdministratorFunctions administratorFunctions = new AdministratorFunctions(panelCentral);
-	PanelAdminAddUser panelAdminAddUser = new PanelAdminAddUser(administratorFunctions, panelCentral) ;
+	AdminAddUserPanel panelAdminAddUser = new AdminAddUserPanel(administratorFunctions, panelCentral) ;
 	
 	@Test
 	void test() {

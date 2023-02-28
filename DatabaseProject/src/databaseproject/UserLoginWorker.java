@@ -69,7 +69,7 @@ public class UserLoginWorker extends SwingWorker<Boolean, Void> {
 		// If the login is unsuccessful, return false
 		if(!isLoginSuccessful) { return false; }
 		
-		boolean defaultPasswordDetected = this.loginOperations.checkDefaultUserPassword(userName, userPassword);
+		boolean defaultPasswordDetected = this.loginOperations.isDefaultUserPassword(userName, userPassword);
 		
 		if(defaultPasswordDetected) { 
 			boolean updatePassword = this.promptUserForReentry();
@@ -84,9 +84,6 @@ public class UserLoginWorker extends SwingWorker<Boolean, Void> {
 	}
 	
 	public boolean promptUserForReentry() {
-		String password = "";
-		String confirmPassword = "";
-		
 		boolean passwordsValidate = false;
 		boolean passwordsMatch = false;
 		
@@ -129,8 +126,8 @@ public class UserLoginWorker extends SwingWorker<Boolean, Void> {
 		    
 		    
 		    if (result == JOptionPane.OK_OPTION) {
-		        password = new String(passwordField.getPassword());
-		        confirmPassword = new String(confirmPasswordField.getPassword());
+		        char[] password = passwordField.getPassword();
+		        char[] confirmPassword = confirmPasswordField.getPassword();
 		        passwordsValidate = this.performPasswordValidations(password, confirmPassword);
 		        
 		        if(passwordsValidate && password.equals(confirmPassword)) {
@@ -148,12 +145,29 @@ public class UserLoginWorker extends SwingWorker<Boolean, Void> {
 		return false;
 	}
 	
+	// -----------------------------------------------------------------------------------
+	public boolean searchUser(String userName) {
+		boolean result = false;
+		
+		// **LOG WILL BE PUT IN THIS FUNCTION
+		if(this.administratorFunctions.getEmployeeHashMap() != null 
+		&& this.administratorFunctions.getEmployeeHashMap().get(userName) != null) {
+			result = true;
+		}		
+		
+		else {
+			System.out.println("MASSIVE ERROR: NO USER ENTERED");
+		}
+			
+		return result;
+	}
+	
 	public void validateUseristratorCredentials() {
 		this.administratorFunctions.getEmployeeHashMap().get(userName);
 	}
 	
 	// Check to see if the passwords meet password validation
-	public boolean performPasswordValidations(String newPasswordEntered, String newPasswordReentered) {
+	public boolean performPasswordValidations(char[] newPasswordEntered, char[] newPasswordReentered) {
 		
 		if(!this.inputOperations.isMeetsPasswordRequirements(newPasswordEntered)) {
 			return false;

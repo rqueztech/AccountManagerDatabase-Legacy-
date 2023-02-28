@@ -1,7 +1,7 @@
 package databaseproject;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.ImageIcon;
 
 public class PanelCentral extends JFrame {
 	
@@ -36,10 +36,10 @@ public class PanelCentral extends JFrame {
 	public AdministratorFunctions administratorFunctions;
 	
 	
-	public PanelLogin panelLogin;
-	public PanelAdminCentral panelAdminCentral;
-	public PanelAdminAddUser panelAdminAddUser;
-	public PanelAdminDisplayUsers panelAdminDisplayUsers;
+	public MainLoginPanel panelLogin;
+	public AdminCentralPanel panelAdminCentral;
+	public AdminAddUserPanel panelAdminAddUser;
+	public AdminDisplayUsersPanel panelAdminDisplayUsers;
 	public ConfigurationPanel panelInitialConfiguration;
 	public ProgramLogs programLogs;
 	
@@ -70,10 +70,10 @@ public class PanelCentral extends JFrame {
 		
 		// Initialize all the panels used in the program and pass the appropriate instances
 		// To each class
-		this.panelLogin = new PanelLogin(this.administratorFunctions, this);
-		this.panelAdminCentral = new PanelAdminCentral(this.administratorFunctions, this);
-		this.panelAdminAddUser = new PanelAdminAddUser(this.administratorFunctions, this);
-		this.panelAdminDisplayUsers = new PanelAdminDisplayUsers(this.administratorFunctions, this);
+		this.panelLogin = new MainLoginPanel(this.administratorFunctions, this);
+		this.panelAdminCentral = new AdminCentralPanel(this.administratorFunctions, this);
+		this.panelAdminAddUser = new AdminAddUserPanel(this.administratorFunctions, this);
+		this.panelAdminDisplayUsers = new AdminDisplayUsersPanel(this.administratorFunctions, this);
 		this.panelInitialConfiguration = new ConfigurationPanel(this.administratorFunctions, this);
 		
 		// Add panels to the current frame

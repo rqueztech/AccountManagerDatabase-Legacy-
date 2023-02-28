@@ -26,7 +26,6 @@ public class AdministratorFunctions {
 	//---NOT FUNCITONAL YET
 	//private HashMap<String, EmployeeNode> administratorHashMap;
 	
-	
 	//------------------------------------------------------------------------------------
 	public AdministratorFunctions(PanelCentral panelCentral) {
 		this.employeeHashMap = new HashMap<String, EmployeeNode>();

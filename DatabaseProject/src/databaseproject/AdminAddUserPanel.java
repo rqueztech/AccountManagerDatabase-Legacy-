@@ -145,7 +145,7 @@ class AddEmployeeWorker extends SwingWorker<Boolean, Void> {
 	}
 }
 
-public class PanelAdminAddUser extends JPanel implements ActionListener {
+public class AdminAddUserPanel extends JPanel implements ActionListener {
 	/**
 	 * 
 	 */
@@ -167,7 +167,7 @@ public class PanelAdminAddUser extends JPanel implements ActionListener {
 	
 	private JComboBox<String> gender;
 	
-	public PanelAdminAddUser(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
+	public AdminAddUserPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
 		String[] genderOptions = {"Select", "Male", "Female"};
 		
 		// Classes needed
