@@ -17,8 +17,9 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 	private char[] adminPassword;
 	private String adminFirstName;
 	private String adminLastName;
-	
-	public InitialConfigurationWorker(PanelCentral panelCentral) {
+
+	//-----------------------------------------------------------------------------------
+	InitialConfigurationWorker(PanelCentral panelCentral) {
 		this.panelCentral = panelCentral;
 	}
 	
@@ -77,7 +78,7 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public boolean setAdministratorPassphrase() {
+	boolean setAdministratorPassphrase() {
 		//this.adminPassphrase = this.configurationOperations.getAdminPassphrase().toCharArray();
 		boolean meetsPasswordRequirements = false;
 		
@@ -112,8 +113,8 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public boolean isAdministratorAccountExists() {
-		boolean result = this.administratorFunctions.csvOperations.isAdminExists;
+	boolean isAdministratorAccountExists() {
+		boolean result = this.administratorFunctions.csvOperations.adminCSVOperations.isAdminExists;
 		
 		if(result) {
 			return true;
@@ -133,17 +134,17 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 	}
 
 	//-----------------------------------------------------------------------------------
-	public void setAdminFirstName() {
+	void setAdminFirstName() {
 	    this.adminFirstName = validateNameInput("Admin First Name");
 	}
 
 	//-----------------------------------------------------------------------------------
-	public void setAdminLastName() {
+	void setAdminLastName() {
 	    this.adminLastName = validateNameInput("Admin Last Name");
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public boolean setAdminPassword() {
+	boolean setAdminPassword() {
 		this.adminPassword = JOptionPane.showInputDialog(null, "Enter Admin Password").toCharArray();
 		boolean isMeetsPasswordRequirements = this.administratorFunctions.inputOperations.isMeetsPasswordRequirements(this.adminPassword);
 		
@@ -163,7 +164,7 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public void saveConfigurationChanges() {
+	void saveConfigurationChanges() {
 		
 		// Create the new admin here
 		boolean isAdminCreated = this.administratorFunctions.createInitialAdmin(this.adminFirstName, this.adminLastName, this.adminPassword);
@@ -172,8 +173,8 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 			this.administratorFunctions.csvOperations.initializeEssentialFiles();
 			this.administratorFunctions.configurationOperations.createAdministrativePassphrase(this.getAdminPassphrase());			
 			
-			this.administratorFunctions.csvOperations.overwriteConfigFile();
-			this.administratorFunctions.csvOperations.overwriteAdminFile();
+			this.administratorFunctions.csvOperations.configurationCSVOperations.overwriteConfigFile();
+			this.administratorFunctions.csvOperations.adminCSVOperations.overwriteAdminFile();
 			
 			this.programLogs.logCurrentEvent("ADMIN", 
 					"INITIAL_CONFIG", this.programLogs.getINITIAL_CONFIGUARTION_SUCCESS());
@@ -181,36 +182,44 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 			this.administratorFunctions.csvOperations.initializeInitialFileRead();
 		}
 	}
-	
-	public char[] getAdminPassphrase() {
+
+	//-----------------------------------------------------------------------------------
+	char[] getAdminPassphrase() {
 		return adminPassphrase;
 	}
 
-	public void setAdminPassphrase(char[] adminPassphrase) {
+	//-----------------------------------------------------------------------------------
+	void setAdminPassphrase(char[] adminPassphrase) {
 		this.adminPassphrase = adminPassphrase;
 	}
 
-	public String getAdminFirstName() {
+	//-----------------------------------------------------------------------------------
+	String getAdminFirstName() {
 		return adminFirstName;
 	}
 
-	public void setAdminFirstName(String adminFirstName) {
+	//-----------------------------------------------------------------------------------
+	void setAdminFirstName(String adminFirstName) {
 		this.adminFirstName = adminFirstName;
 	}
 
-	public String getAdminLastName() {
+	//-----------------------------------------------------------------------------------
+	String getAdminLastName() {
 		return adminLastName;
 	}
 
-	public void setAdminLastName(String adminLastName) {
+	//-----------------------------------------------------------------------------------
+	void setAdminLastName(String adminLastName) {
 		this.adminLastName = adminLastName;
 	}
 
-	public char[] getAdminPassword() {
+	//-----------------------------------------------------------------------------------
+	char[] getAdminPassword() {
 		return this.adminPassword;
 	}
 
-	public void setAdminPassword(char[] adminPassword) {
+	//-----------------------------------------------------------------------------------
+	void setAdminPassword(char[] adminPassword) {
 		this.adminPassword = adminPassword;
 	}
 }

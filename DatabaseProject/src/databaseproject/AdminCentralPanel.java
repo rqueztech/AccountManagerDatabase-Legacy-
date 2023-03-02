@@ -10,28 +10,31 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
-public class AdminCentralPanel extends JPanel implements ActionListener {
+class AdminCentralPanel extends JPanel implements ActionListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3679043023594079500L;
 	
-	public Image image;
-	public AdministratorFunctions administratorFunctions;
-	public GridBagConstraints grid;
-	public PanelCentral panelCentral;
-	public ProgramLogs pgmLogs;
-	
-	public String usrName;
-	public String usrPassword;
+	private Image image;
+	private GridBagConstraints grid;
+	private PanelCentral panelCentral;
 	
 	//-----------------------------------------------------------------------------------
-	public AdminCentralPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
+	AdminCentralPanel(PanelCentral panelCentral) {
 		this.panelCentral = panelCentral;
-		this.administratorFunctions = administratorFunctions;
+		
+		SwingUtilities.invokeLater(() -> {
+			this.invokeGUI();
+		});
+	}
+	
+	//-----------------------------------------------------------------------------------
+	private void invokeGUI() {
+		System.out.println(SwingUtilities.isEventDispatchThread());
 		this.setSize(600, 600);
 		this.image = new ImageIcon("backgroundd.jpg").getImage();
 		this.setLayout(new GridBagLayout());
@@ -61,24 +64,27 @@ public class AdminCentralPanel extends JPanel implements ActionListener {
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public void addEmployee() {
-		this.panelCentral.panelAdminDisplayUsers.updateTable();
+	void addUser() {
+		SwingUtilities.invokeLater(() -> {
+			this.panelCentral.panelAdminDisplayUsers.updateTable();
+		});
 		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_ADMINADDUSER);
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public void delEmployee() {
+	void delUser() {
 		
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public void editUsers() {
+	private void editUsers() {
 		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_ADMINDISPLAYUSERS);
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public void logoutAdmin() {
-		JOptionPane.showMessageDialog(null, "Log out successful");
+	void logoutAdmin() {
+		this.panelCentral.administratorFunctions.loginOperations.logOutuser();
+		// CREATE SOMETHING TO LOG USER OUT
 		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_LOGIN);
 	}
 	

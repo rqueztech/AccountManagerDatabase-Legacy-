@@ -1,9 +1,10 @@
 package databaseproject;
 
-import javax.swing.JFrame;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
-public class PanelCentral extends JFrame {
+class PanelCentral extends JFrame {
 	
 	/**
 	 * 
@@ -36,8 +37,8 @@ public class PanelCentral extends JFrame {
 	public AdministratorFunctions administratorFunctions;
 	
 	
-	public MainLoginPanel panelLogin;
-	public AdminCentralPanel panelAdminCentral;
+	public MainLoginPanel mainLoginPanel;
+	public AdminCentralPanel adminCentralPanel;
 	public AdminAddUserPanel panelAdminAddUser;
 	public AdminDisplayUsersPanel panelAdminDisplayUsers;
 	public ConfigurationPanel panelInitialConfiguration;
@@ -47,18 +48,9 @@ public class PanelCentral extends JFrame {
 	// Declare the public AdminOperations class here. This will ensure that every
 	// Panel will get the same instance.
 	
-	public PanelCentral() {
+	PanelCentral() {
 		// Initialize all classes used in the program
 		this.programLogs = new ProgramLogs();
-		
-		// Setting up all of the attributes for the frame in the file
-		this.setSize(600, 600);
-		this.setLocationRelativeTo(null);
-		this.setTitle("Database Project");
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setResizable(false);
-		this.icon = new ImageIcon("SELF_PUNCH.jpg");
-		
 		this.administratorFunctions = new AdministratorFunctions(this);
 		this.passwordEncryption = new PasswordEncryption();
 		
@@ -66,40 +58,51 @@ public class PanelCentral extends JFrame {
 		this.administratorFunctions.csvOperations.initializeEssentialFiles();
 		this.administratorFunctions.csvOperations.initializeInitialFileRead();
 		
-		//this.panelInitialConfiguration.checkDefaults();
-		
 		// Initialize all the panels used in the program and pass the appropriate instances
 		// To each class
-		this.panelLogin = new MainLoginPanel(this.administratorFunctions, this);
-		this.panelAdminCentral = new AdminCentralPanel(this.administratorFunctions, this);
+		this.mainLoginPanel = new MainLoginPanel(this.administratorFunctions, this);
+		this.adminCentralPanel = new AdminCentralPanel(this);
 		this.panelAdminAddUser = new AdminAddUserPanel(this.administratorFunctions, this);
 		this.panelAdminDisplayUsers = new AdminDisplayUsersPanel(this.administratorFunctions, this);
 		this.panelInitialConfiguration = new ConfigurationPanel(this.administratorFunctions, this);
 		
+		// Setting up all of the attributes for the frame in the file
+		
+		SwingUtilities.invokeLater(() -> {;
+			this.isInvokeGUI();
+		});
+	}
+	
+	private void isInvokeGUI() {
+		this.setSize(600, 600);
+		this.setLocationRelativeTo(null);
+		this.setTitle("Database Project");
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setResizable(false);
+		this.icon = new ImageIcon("SELF_PUNCH.jpg");
+	
 		// Add panels to the current frame
-		this.add(this.panelLogin);
-		this.add(this.panelAdminCentral);
+		this.add(this.mainLoginPanel);
+		this.add(this.adminCentralPanel);
 		this.add(this.panelAdminAddUser);
 		this.add(this.panelAdminDisplayUsers);
 		this.add(this.panelInitialConfiguration);
 		
 		this.checkDefaultConfiguration();
-		
 		this.showCurrentSelectedPanel();
 	}
 	
-	//-----------------------------------------------------------------------------------
-	
-	public void showCurrentSelectedPanel() {
+	//-----------------------------------------------------------------------------------	
+	private void showCurrentSelectedPanel() {
 		this.clearPanels();
 		
 		if(this.currentPanelString.equals(PANEL_LOGIN)) {
-			this.panelLogin.setVisible(true);
+			this.mainLoginPanel.setVisible(true);
 			this.setVisible(true);
 		}
 		
 		else if(this.currentPanelString.equals(PANEL_ADMINCENTRAL)) {
-			this.panelAdminCentral.setVisible(true);
+			this.adminCentralPanel.setVisible(true);
 		}
 		
 		else if(this.currentPanelString.equals(PANEL_ADMINADDUSER)) {
@@ -123,22 +126,22 @@ public class PanelCentral extends JFrame {
 	// Set the visibility of every panel to false. Following this function,
 	// The calling method will call the showCurrentSelectedPanel to set the
 	// Desired panel in the program to true
-	public void clearPanels() {
-		this.panelLogin.setVisible(false);
-		this.panelAdminCentral.setVisible(false);
+	private void clearPanels() {
+		this.mainLoginPanel.setVisible(false);
+		this.adminCentralPanel.setVisible(false);
 		this.panelAdminAddUser.setVisible(false);
 		this.panelAdminDisplayUsers.setVisible(false);
 		this.panelInitialConfiguration.setVisible(false);
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public void setCurrentPanelString(String currentPanelString) {
+	void setCurrentPanelString(String currentPanelString) {
 		this.currentPanelString = currentPanelString;
 		this.showCurrentSelectedPanel();
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public void checkDefaultConfiguration() {
+	private void checkDefaultConfiguration() {
 		if(this.administratorFunctions.configurationOperations.getAdminPassphrase() == null) {
 			this.setCurrentPanelString(PANEL_INITIALCONFIGURATION);
 			this.showCurrentSelectedPanel();
@@ -146,7 +149,7 @@ public class PanelCentral extends JFrame {
 		}
 		
 		else {
-			// Set the initial panel to the "panelLogin". These strings will dictate
+			// Set the initial panel to the "mainLoginPanel". These strings will dictate
 			// Which panel will be displayed at any given time.
 			this.setCurrentPanelString(PANEL_LOGIN);
 		}

@@ -7,9 +7,10 @@ import java.util.Random;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-public class PasswordEncryption {
 
-	public String hashPassword(char[] attemptedPassword, String salt) {
+class PasswordEncryption {
+
+	String hashPassword(char[] attemptedPassword, String salt) {
 	    int iterations = 10000;
 	    int keyLength = 512;
 	    byte[] saltBytes = salt.getBytes();
@@ -33,9 +34,10 @@ public class PasswordEncryption {
 	    return "";
 	}
 	
+	//-----------------------------------------------------------------------------------
 	// Generate a string of 8 random characters. This will be aggregated to a given password
 	// In order to add randomization when the SHA-512 hash will be performed on the user's password
-	public String generateSalt() {
+	String generateSalt() {
 		StringBuilder salt = new StringBuilder();
 		Random randomCharacter = new Random();
 		

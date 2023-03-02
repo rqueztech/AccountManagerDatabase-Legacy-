@@ -1,13 +1,12 @@
 package databaseproject;
 
-import java.util.HashMap;
-
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
-public class AdministratorFunctions {
-	public String configHeader = "empNoCounter,admNoCounter,adPhrase,adSalt\n";
+class AdministratorFunctions {
+	public String configHeader = "userNoCounter,admNoCounter,adPhrase,adSalt\n";
 	
-	public EmployeeFunctions empFunctions;
+	public UserFunctions userFunctions;
 	public CSVOperations csvOperations;
 	public InputOperations inputOperations;
 	public ConfigurationOperations configurationOperations;
@@ -15,43 +14,31 @@ public class AdministratorFunctions {
 	public PanelCentral panelCentral;
 	public ConfigurationPanel panelInitialConfiguration;
 	public PasswordEncryption passwordEncryption;
+	public DatabaseHashMaps databaseHashMaps;
 	
 	public final String SUCCESS = "SUCCESS";
 	
-	// These two hashmaps will contain all of the employee and administrator
-	// Information
-	private HashMap<String,EmployeeNode> employeeHashMap;
-	private HashMap<String, AdminNode> adminHashMap;
-	
 	//---NOT FUNCITONAL YET
-	//private HashMap<String, EmployeeNode> administratorHashMap;
+	//private HashMap<String, UserNode> administratorHashMap;
 	
 	//------------------------------------------------------------------------------------
-	public AdministratorFunctions(PanelCentral panelCentral) {
-		this.employeeHashMap = new HashMap<String, EmployeeNode>();
-		this.adminHashMap = new HashMap<String, AdminNode>();
+	AdministratorFunctions(PanelCentral panelCentral) {
 		this.inputOperations = new InputOperations();
-		this.empFunctions = new EmployeeFunctions();
+		this.userFunctions = new UserFunctions(this);
 		this.configurationOperations = new ConfigurationOperations(this);
 		this.csvOperations = new CSVOperations(this);
 		this.panelCentral = panelCentral;
 		this.loginOperations = new LoginOperations(this.panelCentral, this);
 		this.passwordEncryption = this.panelCentral.passwordEncryption;
-	}
-	
-	// ------------------------------------------------------------------------------------
-	// USER HASHMAP
-	// The hashmap acts as a data structure that holds all of the data being interacted with in the program currently.
-	public HashMap <String, EmployeeNode> getEmployeeHashMap() {
-		return this.employeeHashMap;
+		this.databaseHashMaps = new DatabaseHashMaps();
 	}
 	
 	// ------------------------------------------------------------------------------------
 	// DELETE USER
-	public boolean isEmployeeExists(String userToSearch) {
+	boolean isUserExists(String userToSearch) {
 		boolean result = false;
 		
-		if(this.getEmployeeHashMap().containsKey(userToSearch)) {
+		if(this.databaseHashMaps.getUserHashMap().containsKey(userToSearch)) {
 			result = true;
 		}
 		
@@ -59,40 +46,16 @@ public class AdministratorFunctions {
 	}
 	
 	// ------------------------------------------------------------------------------------
-	// ADMIN HASHMAP
-	// The hashmap acts as a data structure that holds all of the data being interacted with in the program currently.
-	public HashMap <String, AdminNode> getAdminHashMap() {
-		return this.adminHashMap;
-	}
-	
-	
-	// ------------------------------------------------------------------------------------
 	// CONFIG FILE HASHMAP
 	// The hashmap stores all of the configurations that will be used to properly store the settings
 	// That are set by the end-user in regards to the database
 	
-	// ------------------------------------------------------------------------------------
-	public void readIntoEmployeeHashMap(String usrName, String fstName, String lstName, 
-			String gender, String hashedPassword, String salt, int empNo) {
-		
-		this.getEmployeeHashMap().put(usrName, new EmployeeNode(usrName, fstName, 
-				lstName, gender, hashedPassword, salt, empNo));
-	}
-	
-	// ------------------------------------------------------------------------------------
-	public void readIntoAdminHashMap(String usrName, String fstName, String lstName,
-			String hashedPassword, String salt, int empNo) {
-		
-		this.getAdminHashMap().put(usrName, new AdminNode(usrName, fstName,
-				lstName, hashedPassword, salt, empNo));
-	}
-	
 	//-------------------------------------------------------------------------------------
-	public boolean deleteUser(String userToDelete) {
-		boolean isUserExists = this.isEmployeeExists(userToDelete);
+	boolean deleteUser(String userToDelete) {
+		boolean isUserExists = this.isUserExists(userToDelete);
 			
 			char[] mgrPassword = JOptionPane.showInputDialog("Enter Manager Password").toCharArray();
-			boolean checkAdminPassword = this.loginOperations.checkAdminPassphrase(mgrPassword);
+			boolean checkAdminPassword = this.loginOperations.adminLoginOperations.isAdminPassphrase(mgrPassword);
 		
 			StringBuilder sb = new StringBuilder();
 			
@@ -114,36 +77,38 @@ public class AdministratorFunctions {
 			}
 			
 			else if(isUserExists && checkAdminPassword) {
-				this.getEmployeeHashMap().remove(userToDelete);
-				this.csvOperations.overwriteUserFile();
-				this.csvOperations.readFromConfigurationFile();
-				this.panelCentral.panelAdminDisplayUsers.updateTable();
+				this.databaseHashMaps.getUserHashMap().remove(userToDelete);
+				this.csvOperations.userCSVOperations.overwriteUserFile();
+				this.csvOperations.configurationCSVOperations.readConfigurationFile();
+				SwingUtilities.invokeLater(() -> {
+					this.panelCentral.panelAdminDisplayUsers.updateTable();
+				});
 			}
 		
 		return isUserExists;
 	}
 	
-	public void updateNewUserPassword(String userName, char[] userPassword) {
+	//-------------------------------------------------------------------------------------
+	void updateNewUserPassword(String userName, char[] userPassword) {
 		String salt = this.passwordEncryption.generateSalt();
 		String hashedNewUserPassword = this.passwordEncryption.hashPassword(userPassword, salt);
 		
-		EmployeeNode employeeMap = this.getEmployeeHashMap().get(userName);
-		employeeMap.setChangedPassword(hashedNewUserPassword, salt);
-		this.csvOperations.overwriteUserFile();
+		UserNode userMap = this.databaseHashMaps.getUserHashMap().get(userName);
+		userMap.setChangedPassword(hashedNewUserPassword, salt);
+		this.csvOperations.userCSVOperations.overwriteUserFile();
 	}
 	
-	public void updateNewAdminPassword(String adminName, char[] adminPassword) {
+	//-------------------------------------------------------------------------------------
+	void updateNewAdminPassword(String adminName, char[] adminPassword) {
 		String salt = this.panelCentral.passwordEncryption.generateSalt();
 		String hashedNewUserPassword = this.panelCentral.passwordEncryption.hashPassword(adminPassword, salt);
 		
-		this.getAdminHashMap().get(adminName).setChangedPassword(hashedNewUserPassword, salt);
-		this.csvOperations.overwriteAdminFile();
+		this.databaseHashMaps.getAdminHashMap().get(adminName).setChangedPassword(hashedNewUserPassword, salt);
+		this.csvOperations.adminCSVOperations.overwriteAdminFile();
 	}
 	
-	
-	
 	//-------------------------------------------------------------------------------------
-	public String generateNewUserName(String fstName, String lastName, String typeOfUser) {
+	String generateNewUserName(String fstName, String lastName, String typeOfUser) {
 		
 		int uniqueUsernameCounter = 0;
 		
@@ -157,7 +122,7 @@ public class AdministratorFunctions {
 		
 		// Iterate through the hashmap until the username is not found
 		// In the hashmap
-		while(this.getEmployeeHashMap().get(userName.toString()) != null) {
+		while(this.databaseHashMaps.getUserHashMap().get(userName.toString()) != null) {
 			if(uniqueUsernameCounter != 0) {
 				userName.setLength(0);
 				userName.append(fstName.toLowerCase().charAt(0));
@@ -171,7 +136,7 @@ public class AdministratorFunctions {
 	}
 
 	//-------------------------------------------------------------------------------------
-	public String generateNewAdminName(String fstName, String lastName, String typeOfUser) {
+	String generateNewAdminName(String fstName, String lastName, String typeOfUser) {
 		
 		int uniqueUsernameCounter = 0;
 		
@@ -183,7 +148,7 @@ public class AdministratorFunctions {
 		userName.append(fstName.toLowerCase().charAt(0));
 		userName.append(lastName.toLowerCase().substring(0,4));
 		
-		while(this.getAdminHashMap().get(userName.toString()) != null) {
+		while(this.databaseHashMaps.getAdminHashMap().get(userName.toString()) != null) {
 			if(uniqueUsernameCounter != 0) {
 				userName.setLength(0);
 				userName.append(fstName.toLowerCase().charAt(0));
@@ -197,7 +162,7 @@ public class AdministratorFunctions {
 	}
 		
 	//-------------------------------------------------------------------------------------
-	public String generateDefaultUserPassword(String fName) {
+	String generateDefaultUserPassword(String fName) {
 		StringBuilder sbNewUserPasswored = new StringBuilder();
 		
 		// The default password will be "abc" followed by the first letter of 
@@ -206,81 +171,58 @@ public class AdministratorFunctions {
 		return sbNewUserPasswored.toString();
 	}
 	
-	public String validateNewUser(String firstName, String lastName) {
-		StringBuilder sb = new StringBuilder();
+	//-------------------------------------------------------------------------------------
+	UserNode generateUserCredentials(String firstName, String lastName, String gender) {
+		String newUserUserName = this.generateNewUserName(firstName, lastName, panelCentral.USER);
 		
-		// If only letters were entered for the first name, pass validation
-		if(!this.inputOperations.isOnlyLetterCharacters(firstName)) {
-			sb.append("First Name: Only Alphabet Allowed\n");
-		}
-		
-		if(!this.inputOperations.isOnlyLetterCharacters(lastName)) {
-			sb.append("Last Name: Only Alphabet Allowed\n");
-		}
-		
-		return sb.toString();
-	}
-	
-	public EmployeeNode generateEmployeeCredentials(String firstName, String lastName, String gender) {
-		String newEmployeeUserName = this.generateNewUserName(firstName, lastName, panelCentral.USER);
-		
-		char[] newEmployeePassword = this.generateDefaultUserPassword(firstName).toCharArray();
-		String newEmployeeSalt = this.panelCentral.passwordEncryption.generateSalt();
-		String encryptedPasswordHash = this.panelCentral.passwordEncryption.hashPassword(newEmployeePassword, newEmployeeSalt);
+		char[] newUserPassword = this.generateDefaultUserPassword(firstName).toCharArray();
+		String newUserSalt = this.panelCentral.passwordEncryption.generateSalt();
+		String encryptedPasswordHash = this.panelCentral.passwordEncryption.hashPassword(newUserPassword, newUserSalt);
 		this.configurationOperations.increaseAdmNo();
+		int userIDNumber = this.configurationOperations.getUserNo();
 		
-		return new EmployeeNode(newEmployeeUserName, firstName, lastName, gender, encryptedPasswordHash, newEmployeeSalt, 0);
+		return new UserNode(newUserUserName, firstName, lastName, gender, encryptedPasswordHash, newUserSalt, userIDNumber);
 	}
 	
-	public void addNewEmployeeToHashMap(String newEmployeeName, EmployeeNode newEmployee) {
-		// Add the new created user into the hashmap
-		this.getEmployeeHashMap().put(newEmployeeName, newEmployee);
-	}
 	
 	//-------------------------------------------------------------------------------------
 	// This will add the userName with a brand new profile into the database
-	public boolean createNewEmployee(String firstName, String lastName, String gender) {
-		String message = validateNewUser(firstName, lastName);
+	boolean createNewUser(String firstName, String lastName, String gender) {
+		boolean isLegalFirstName = this.inputOperations.isOnlyLetterCharacters(firstName);
+		boolean isLegalLastName = this.inputOperations.isOnlyLetterCharacters(lastName);
 		
-		if(message.equals("")) {
-			EmployeeNode newEmployee = generateEmployeeCredentials(firstName, lastName, gender);
-			
-			this.addNewEmployeeToHashMap(newEmployee.getUserName(), newEmployee);
-			
-			this.csvOperations.overwriteUserFile();
-			this.csvOperations.readFromUserFile();
-			
+		if(isLegalFirstName && isLegalLastName) {
+			UserNode newUser = this.generateUserCredentials(firstName, lastName, gender);
+			this.databaseHashMaps.addNewUserToHashMap(newUser.getUserName(), newUser);
+			updateUserOutbound();
 			return true;
 		}
 		
 		return false;
 	}
 	
-	public AdminNode generateAdminCredentials(String firstName, String lastName) {
+	//-------------------------------------------------------------------------------------
+	AdminNode generateAdminCredentials(String firstName, String lastName) {
 		String newAdminUserName = this.generateNewAdminName(firstName, lastName, panelCentral.ADMIN);
 		char[] newAdminPassword = this.generateDefaultUserPassword(firstName).toCharArray();
 		String newAdminSalt = this.panelCentral.passwordEncryption.generateSalt();
 		String encryptedPasswordHash = this.passwordEncryption.hashPassword(newAdminPassword, newAdminSalt);
 		this.configurationOperations.increaseAdmNo();
+		int adminIDNumber = this.configurationOperations.getAdmNo();
 		
-		return new AdminNode(newAdminUserName, firstName, lastName, encryptedPasswordHash, newAdminSalt, 0);
+		return new AdminNode(newAdminUserName, firstName, lastName, encryptedPasswordHash, newAdminSalt, adminIDNumber);
 	}
 	
-	public void addNewAdminToHashMap(String newAdminName, AdminNode newAdmin) {
-		// Add the new created user into the hashmap
-		this.getAdminHashMap().put(newAdminName, newAdmin);
-	}
-	
-	public boolean createNewAdmin(String firstName, String lastName) {
-		String message = validateNewUser(firstName, lastName);
+	//-------------------------------------------------------------------------------------
+	boolean createNewAdmin(String firstName, String lastName) {
+		boolean isValidFirstName = this.inputOperations.containsLegalCharacters(firstName);
+		boolean isValidLastName = this.inputOperations.containsLegalCharacters(lastName);
 		
-		if(message.equals("")) {
+		if(isValidFirstName && isValidLastName) {
 			AdminNode newAdmin = generateAdminCredentials(firstName, lastName);
-			
-			this.addNewAdminToHashMap(newAdmin.getAdminName(), newAdmin);
-			
-			this.csvOperations.overwriteAdminFile();
-			this.csvOperations.readFromAdminFile();
+			this.databaseHashMaps.addNewAdminToHashMap(newAdmin.getAdminName(), newAdmin);
+			this.csvOperations.adminCSVOperations.overwriteAdminFile();
+			this.csvOperations.adminCSVOperations.readAdminFile();
 			
 			return true;
 		}
@@ -288,11 +230,12 @@ public class AdministratorFunctions {
 		return false;
 	}
 	
-	
-	public boolean createInitialAdmin(String firstName, String lastName, char[] newAdminPassword) {
-		String message = validateNewUser(firstName, lastName);
+	//-------------------------------------------------------------------------------------
+	boolean createInitialAdmin(String firstName, String lastName, char[] newAdminPassword) {
+		boolean isLegalFirstName = this.inputOperations.containsLegalCharacters(firstName);
+		boolean isLegalLastName = this.inputOperations.containsLegalCharacters(lastName);
 		
-		if(message.equals("")) {
+		if(isLegalFirstName && isLegalLastName) {
 			String newAdminUserName = this.generateNewAdminName(firstName, lastName, panelCentral.ADMIN);
 			
 			// While there seems like no reason to generate this in another function, password
@@ -301,20 +244,30 @@ public class AdministratorFunctions {
 			String newAdminSalt = this.passwordEncryption.generateSalt();
 			String encryptedPasswordHash = this.passwordEncryption.hashPassword(newAdminPassword, newAdminSalt);
 			
-			// Increase the employee number by one to prevent a duplicate employee
+			// Increase the user number by one to prevent a duplicate user
 			// number from being used
 			this.configurationOperations.increaseAdmNo();
 			
 			// Add the new created user into the hashmap
-			this.getAdminHashMap().put(newAdminUserName, new AdminNode(newAdminUserName, firstName, lastName, 
+			this.databaseHashMaps.getAdminHashMap().put(newAdminUserName, new AdminNode(newAdminUserName, firstName, lastName, 
 					encryptedPasswordHash, newAdminSalt, this.configurationOperations.getAdmNo()));
-			
-			this.csvOperations.overwriteAdminFile();
-			this.csvOperations.readFromAdminFile();
 			
 			return true;
 		}
 		
+		updateAdminOutbound();
+		
 		return false;
+	}
+	
+	//-------------------------------------------------------------------------------------
+	void updateAdminOutbound() {
+		this.csvOperations.adminCSVOperations.overwriteAdminFile();
+		this.csvOperations.adminCSVOperations.readAdminFile();
+	}
+	
+	void updateUserOutbound() {
+		this.csvOperations.userCSVOperations.overwriteUserFile();
+		this.csvOperations.userCSVOperations.readUserFile();
 	}
 }

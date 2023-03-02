@@ -2,10 +2,9 @@ package databaseproject;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,58 +12,60 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
-public class MainLoginPanel extends JPanel {
+class MainLoginPanel extends JPanel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -702019029783943216L;
 	
-	public Image image;
-	public GridBagConstraints grid;
-	public JPanel pwdInput;
-	public ProgramLogs pgmLogs;
+	private Image image;
+	private GridBagConstraints grid;
+	private JPanel pwdInput;
+	private ProgramLogs pgmLogs;
 	
 	// This instance does not rely on other instances
-	public AdministratorFunctions administratorFunctions;
-	public CSVOperations csvOperations;
-	public InputOperations inputOperations;
-	public LoginOperations loginOperations;
-	public AdminCentralPanel panelAdminCentral;
-	public PanelCentral panelCentral;
-	public ProgramLogs programLogs;
+	private AdministratorFunctions administratorFunctions;
+	private CSVOperations csvOperations;
+	private PanelCentral panelCentral;
+	private ProgramLogs programLogs;
+	
+	private int numberOfAttemptsAdminPassphrase;
 	
 	// Password field will conceal the password (not display in plaintext)
 	// And return as a char array, which will increase security. Strings
 	// Are not as safe because they instantiate a new object that resides in memory.
-	public JPasswordField usrPassword;
+	private JPasswordField usrPassword;
 	
 	// Text boxes that will be used for password reset prompt
-	public JTextField usrDefaultChange;
-	public JTextField usrDefaultChangeRepeat;
+	private JTextField usrDefaultChange;
+	private JTextField usrDefaultChangeRepeat;
 	
 	// Text fields for usrName and Password
-	public JTextField usrName;
+	private JTextField usrName;
 	
 	// Textfield will get the passphrase input from the user
-	public JTextField passphraseInput;
+	// Dead code?
+	private JTextField passphraseInput;
 	
-	public MainLoginPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
+	// -----------------------------------------------------------------------------------
+	MainLoginPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
 		// Potentially remove login Ops and CSV OPS 
 		// class
+		System.out.println("MainLoginPanel -> " + SwingUtilities.isEventDispatchThread());
 		this.administratorFunctions = administratorFunctions;
-		
 		this.csvOperations = this.administratorFunctions.csvOperations;
-		this.loginOperations = this.administratorFunctions.loginOperations;
 		this.panelCentral = panelCentral;
 		this.programLogs = this.panelCentral.programLogs;
+		this.numberOfAttemptsAdminPassphrase = 3;
 		
-		this.panelAdminCentral = new AdminCentralPanel(this.administratorFunctions, 
-				this.panelCentral);
-		
-		// Initialize instances that don't depend on other instances
-		this.inputOperations = new InputOperations();
-		
+		SwingUtilities.invokeLater(() -> {
+			this.isInvokeGUI();
+		});
+	}
+	
+	private void isInvokeGUI() {
 		this.setSize(600, 600);
 		this.image = new ImageIcon("backgroundd.jpg").getImage();
 		
@@ -157,7 +158,7 @@ public class MainLoginPanel extends JPanel {
 	
 	//-----------------------------------------------------------------------------------
 	// The action method for the login button
-	public void userLoginMethod() {
+	private void userLoginMethod() {
 		String userName = usrName.getText();
 		char[] userPasswordEntered = this.usrPassword.getPassword();
 		UserLoginWorker userLogin = new UserLoginWorker(userName,userPasswordEntered,administratorFunctions);
@@ -167,18 +168,36 @@ public class MainLoginPanel extends JPanel {
 	
 	//-----------------------------------------------------------------------------------
 	// The action method for the Administrator Login
-	public void adminLoginMethod() {
+	private void adminLoginMethod() {
 		String adminName = usrName.getText();
 		char[] adminPasswordEntered = this.usrPassword.getPassword();
 		AdminLoginWorker adminLogin = new AdminLoginWorker(adminName,adminPasswordEntered,administratorFunctions);
 		this.clearTextBoxes();
+		this.decreaseNumberOfAttemptsAdminPassphrase();
+		adminLogin.setNumberOfAttempts(this.getNumberOfAttemptsAdminPassphrase());
 		adminLogin.execute();
 	}
 	
 	//------------------------------------------------------------------------------------
-	public void clearTextBoxes() {
+	private void clearTextBoxes() {
 		this.usrName.setText("");
 		this.usrPassword.setText("");
+	}
+	
+	// -----------------------------------------------------------------------------------
+	private void decreaseNumberOfAttemptsAdminPassphrase() {
+		this.numberOfAttemptsAdminPassphrase--;
+	}
+	
+	// -----------------------------------------------------------------------------------
+	private int getNumberOfAttemptsAdminPassphrase() {
+		return this.numberOfAttemptsAdminPassphrase;
+	}
+	
+	// -----------------------------------------------------------------------------------
+	// Dead code?
+	private void setNumberOfAttempts(int numberOfAttemptsAdminPassphrase) {
+		this.numberOfAttemptsAdminPassphrase = numberOfAttemptsAdminPassphrase;
 	}
 	
 	//------------------------------------------------------------------------------------

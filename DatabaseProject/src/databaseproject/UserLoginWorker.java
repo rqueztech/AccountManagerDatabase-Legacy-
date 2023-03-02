@@ -17,7 +17,7 @@ import javax.swing.UIManager;
 // This entire class creates the login panel. The login panel will prompt
 // the user for the username and password.
 
-public class UserLoginWorker extends SwingWorker<Boolean, Void> {
+class UserLoginWorker extends SwingWorker<Boolean, Void> {
 	private InputOperations inputOperations;
 	private AdministratorFunctions administratorFunctions;
 	private LoginOperations loginOperations;
@@ -26,15 +26,15 @@ public class UserLoginWorker extends SwingWorker<Boolean, Void> {
 	//private PasswordEncryption passwordEncryption;
 	
 	/**
-	 * This class constructs the general information required to create an employee
-	 * in a separate thread to be passed in to the createEmployee function found in
+	 * This class constructs the general information required to create an user
+	 * in a separate thread to be passed in to the createUser function found in
 	 * the UseristratorFunctions class
 	 * @param firstName gets the first name of the user to be added
 	 * @param lastName gets the last name of the user to be added
 	 * @param gender gets the gender of the user to be added
 	 * @param administratorFunctions
 	 */
-	public UserLoginWorker(String userName, char[] userPassword, AdministratorFunctions administratorFunctions) {
+	UserLoginWorker(String userName, char[] userPassword, AdministratorFunctions administratorFunctions) {
 		this.userName = userName;
 		this.userPassword = userPassword;
 		this.administratorFunctions = administratorFunctions;
@@ -47,12 +47,11 @@ public class UserLoginWorker extends SwingWorker<Boolean, Void> {
 	protected Boolean doInBackground() throws Exception {
 		boolean isLoginSuccessful = false;
 		
-		boolean doesUserExist = this.loginOperations.searchUser(userName);
-		//String message = performUserLoginValidations();
+		boolean doesUserExist = this.loginOperations.userFunctions.searchUser(userName);
 		String message = performUserLoginValidations();
 		
-		// If the administrator does not exist and there were no errors in the
-		// Input, print error message and return false.
+		// If the administrator does not exist, return false and
+		// 
 		if(!doesUserExist) {
 			JOptionPane.showMessageDialog(null, "User Username/Password Incorrect");
 			return false;
@@ -64,12 +63,12 @@ public class UserLoginWorker extends SwingWorker<Boolean, Void> {
 		}
 		
 		// We are going to validate the administrator's credentials
-		isLoginSuccessful = this.loginOperations.isValidUserLogin(userName, userPassword);
+		isLoginSuccessful = this.loginOperations.userLoginOperations.isValidUserLogin(userName, userPassword);
 		
 		// If the login is unsuccessful, return false
 		if(!isLoginSuccessful) { return false; }
 		
-		boolean defaultPasswordDetected = this.loginOperations.isDefaultUserPassword(userName, userPassword);
+		boolean defaultPasswordDetected = this.loginOperations.userLoginOperations.isDefaultUserPassword(userName, userPassword);
 		
 		if(defaultPasswordDetected) { 
 			boolean updatePassword = this.promptUserForReentry();
@@ -82,8 +81,9 @@ public class UserLoginWorker extends SwingWorker<Boolean, Void> {
 		// TODO Auto-generated method stub
 		return true;
 	}
-	
-	public boolean promptUserForReentry() {
+
+	//-----------------------------------------------------------------------------------
+	boolean promptUserForReentry() {
 		boolean passwordsValidate = false;
 		boolean passwordsMatch = false;
 		
@@ -99,6 +99,7 @@ public class UserLoginWorker extends SwingWorker<Boolean, Void> {
 		    passwordField.setBackground(Color.WHITE);
 		    passwordField.setForeground(Color.BLACK);
 		    passwordField.setEchoChar(' ');
+		    
 		    JLabel passwordLabel = new JLabel("Enter password:");
 		    passwordLabel.setForeground(Color.WHITE);
 		    constraints.gridx = 0;
@@ -111,6 +112,7 @@ public class UserLoginWorker extends SwingWorker<Boolean, Void> {
 		    confirmPasswordField.setBackground(Color.WHITE);
 		    confirmPasswordField.setForeground(Color.BLACK);
 		    confirmPasswordField.setEchoChar(' ');
+		    
 		    JLabel confirmPasswordLabel = new JLabel("Confirm password:");
 		    confirmPasswordLabel.setForeground(Color.WHITE);
 		    constraints.gridx = 0;
@@ -146,12 +148,13 @@ public class UserLoginWorker extends SwingWorker<Boolean, Void> {
 	}
 	
 	// -----------------------------------------------------------------------------------
-	public boolean searchUser(String userName) {
+	// Dead code?
+	boolean searchUser(String userName) {
 		boolean result = false;
 		
 		// **LOG WILL BE PUT IN THIS FUNCTION
-		if(this.administratorFunctions.getEmployeeHashMap() != null 
-		&& this.administratorFunctions.getEmployeeHashMap().get(userName) != null) {
+		if(this.administratorFunctions.databaseHashMaps.getUserHashMap() != null 
+		&& this.administratorFunctions.databaseHashMaps.getUserHashMap().get(userName) != null) {
 			result = true;
 		}		
 		
@@ -162,29 +165,24 @@ public class UserLoginWorker extends SwingWorker<Boolean, Void> {
 		return result;
 	}
 	
-	public void validateUseristratorCredentials() {
-		this.administratorFunctions.getEmployeeHashMap().get(userName);
+	// -----------------------------------------------------------------------------------
+	// Dead code?
+	void validateUseristratorCredentials() {
+		this.administratorFunctions.databaseHashMaps.getUserHashMap().get(userName);
 	}
 	
 	// Check to see if the passwords meet password validation
-	public boolean performPasswordValidations(char[] newPasswordEntered, char[] newPasswordReentered) {
-		
-		if(!this.inputOperations.isMeetsPasswordRequirements(newPasswordEntered)) {
-			return false;
-		}
-		
-		if(!this.inputOperations.isMeetsPasswordRequirements(newPasswordReentered)) {
-			return false;
-		}
-		
-		return true;
+	private boolean performPasswordValidations(char[] newPasswordEntered, char[] newPasswordReentered) {
+		return this.inputOperations.isMeetsPasswordRequirements(newPasswordEntered)
+					&& this.inputOperations.isMeetsPasswordRequirements(newPasswordReentered);
 	}
 	
-	public String performUserLoginValidations() {
+	// -----------------------------------------------------------------------------------
+	private String performUserLoginValidations() {
 		String message = "";
 		// Ensure user only contains legal characters
 		boolean validUsernameCharacters = this.inputOperations.isOnlyLettersAndNumbers(userName);
-		boolean validPasswordCharacters = this.inputOperations.isLegalCharactersEntered(new String(userPassword));
+		boolean validPasswordCharacters = this.inputOperations.containsLegalCharacters(new String(userPassword));
 		
 		if(!validUsernameCharacters) {
 			message += "Error: UserName Can Only Contain Characters\n";

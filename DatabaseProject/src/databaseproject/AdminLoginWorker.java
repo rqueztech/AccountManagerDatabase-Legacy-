@@ -18,111 +18,164 @@ import javax.swing.UIManager;
 //the user for the username and password.
 
 class AdminLoginWorker extends SwingWorker<Boolean, Void> {
-	private InputOperations inputOperations;
-	private AdministratorFunctions administratorFunctions;
-	private LoginOperations loginOperations;
 	private String adminName;
 	private char[] adminPassword;
-	public String failMessage;
-	private int numberOfAttempts;
+	public String finalMessage;
+	private int numberOfAttemptsAdminPassphrase;
+	
+	private AdministratorFunctions administratorFunctions;
+	private InputOperations inputOperations;
+	private LoginOperations loginOperations;
+	
 	
 	/**
-	 * This class constructs the general information required to create an employee
-	 * in a separate thread to be passed in to the createEmployee function found in
+	 * This class constructs the general information required to create an user
+	 * in a separate thread to be passed in to the createUser function found in
 	 * the AdministratorFunctions class
 	 * @param firstName gets the first name of the admin to be added
 	 * @param lastName gets the last name of the admin to be added
 	 * @param gender gets the gender of the admin to be added
 	 * @param administratorFunctions
 	 */
-	public AdminLoginWorker(String adminName, char[] adminPassword, AdministratorFunctions administratorFunctions) {
+	AdminLoginWorker(String adminName, char[] adminPassword, AdministratorFunctions administratorFunctions) {
 		this.adminName = adminName;
 		this.adminPassword = adminPassword;
 		this.administratorFunctions = administratorFunctions;
 		this.inputOperations = administratorFunctions.inputOperations;
 		this.loginOperations = administratorFunctions.loginOperations;
-		this.setNumberOfAttempts(this.numberOfAttempts);
+		this.setNumberOfAttempts(this.numberOfAttemptsAdminPassphrase);
 	}
 	
+	// -----------------------------------------------------------------------------------
 	@Override
 	protected Boolean doInBackground() throws Exception {
+		//boolean isAdminPassphrase = false;
 		boolean isLoginSuccessful = false;
-		boolean isAdminPassphrase = false;
+		boolean isPasswordChangeSuccessful = false;
 		
-		boolean doesAdminExist = this.loginOperations.searchAdmin(adminName);
-		//String message = performAdminLoginValidations();
-		String message = performAdminLoginValidations();
+		boolean doesAdminExist = this.loginOperations.adminLoginOperations.searchAdmin(adminName);
 		
-		// If the administrator does not exist and there were no errors in the
-		// Input, print error message and return false.
+		// If the administrator does not exist, return false and exit
 		if(!doesAdminExist) {
-			JOptionPane.showMessageDialog(null, "Adminname/Password Incorrect");
+			finalMessage = "Adminname/Password Incorrect";
 			return false;
 		}
 		
-		else if(doesAdminExist) {
-			// Prompt the user to enter the administrator passphrase using JOptionPane
-			char[] adminPassphrase = JOptionPane.showInputDialog(null, "Enter Admin Passphrase").toCharArray();
-			
-			// Pass the adminPassphrase in to the check admin passphrase function. This passphrase
-			// Will use the salt for the current user on the new passphrase and match it to the admin's hashed
-			// Passphrase. If it returns true, that means the user passphrase was entered correctly
-			isAdminPassphrase = this.loginOperations.checkAdminPassphrase(adminPassphrase);
-		}
-		
-		else if(!message.equals("")) {
-			JOptionPane.showMessageDialog(null, message);
+		// If the password is not correct, return fail message
+		if(!this.isPassphraseCorrect()) {
+			finalMessage = "Incorrect Passphrase, number of attempts left: " + this.numberOfAttemptsAdminPassphrase;
 			return false;
 		}
 		
-		// If the passphrase was not the correct passphrase, end the function and return false
-		if(!isAdminPassphrase) { 
-			failMessage = "Incorrect Passphrase, number of attempts: " + this.numberOfAttempts;
-			this.numberOfAttempts--;
-			return false; 
-		}
-		
-		if(this.numberOfAttempts == 0) { 
-			JOptionPane.showMessageDialog(null, "Failed Attempts Exceeded");
-			System.exit(0); 
-		};
+		// Return true if the login is successful
+		isLoginSuccessful = this.loginOperations.adminLoginOperations.isValidAdminLogin(adminName, adminPassword);
 		
 		// If the login is unsuccessful, return false
 		if(!isLoginSuccessful) { 
+			//*CREATE LOG - Login was unsuccessful
+			finalMessage = "AdminName/Login Incorrect";
 			return false; 
 		}
 		
-		boolean isDefaultAdminPassword = this.administratorFunctions.loginOperations.checkDefaultAdminPassword(adminName, adminPassword);
+		// *At this point, the login was successrul.
+		// We will test to see if the default admin password is being used.
+		boolean isDefaultAdminPassword = this.administratorFunctions.loginOperations.adminLoginOperations.checkDefaultAdminPassword(adminName, adminPassword);
 		
+		// If the default password is being used, prompt for entry. The prompt contains
+		// A while loop that will keep checking until the user has entered the correct
+		// Passphrase.
 		if(isDefaultAdminPassword) {
-			this.promptAdminForReentry();
-		}
+			isPasswordChangeSuccessful = this.promptAdminForReentry();
+		
+			// If the password change is not successful, return false 
+			// And end the program, do not proceed to changing.
 			
+			if(!isPasswordChangeSuccessful) { 
+				finalMessage = "Admin Password Change Cancelled";
+				return false;
+			}
+		}
+		
+		// If you have reached this point, congratulations, all changes
+		// Have passed. The changed user password will be set in done function
 		return true;
 	}
 	
 	// -----------------------------------------------------------------------------------
-	public void setNumberOfAttempts(int numberOfAttempts) {
-		this.numberOfAttempts = numberOfAttempts;
+	@Override
+	protected void done() {
+		try {
+			boolean success = get();
+	   
+			if (success) {
+				this.administratorFunctions.loginOperations.setLogUserIn(this.adminName, true, "ADMIN");
+				this.administratorFunctions.panelCentral.setCurrentPanelString(this.administratorFunctions.panelCentral.PANEL_ADMINCENTRAL);
+				JOptionPane.showMessageDialog(null, "User Login Success");
+			} 
+			else {
+				if(this.numberOfAttemptsAdminPassphrase == 0) { 
+					//*CREATE LOG - Passphrase exceeded attempts
+					JOptionPane.showMessageDialog(null, "Failed Attempts Exceeded... Shutting Down");
+					System.exit(0); 
+				}
+				
+				else {
+					// Print out the final message in accordance to DRY principles
+					JOptionPane.showMessageDialog(null, finalMessage);
+				}
+			}
+		} 
+			
+		catch (InterruptedException | ExecutionException e) {
+				JOptionPane.showMessageDialog(null, "Error searching error.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	// -----------------------------------------------------------------------------------
-	public void decreaseNumberOfAttempts() {
-		this.numberOfAttempts--;
+	void setNumberOfAttempts(int numberOfAttemptsAdminPassphrase) {
+		this.numberOfAttemptsAdminPassphrase = numberOfAttemptsAdminPassphrase;
+	}
+
+	//-----------------------------------------------------------------------------------
+	boolean isPassphraseCorrect() {
+		boolean isAdminPassphrase = false;
+		
+		// ENTRY PASSPHRASE FOR THE USER
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+		panel.setFocusable(true);
+		
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.insets = new Insets(10, 10, 10, 10);
+		panel.add(new JLabel("Enter Admin Passphrase"), constraints);
+		
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.insets = new Insets(0, 10, 10, 10);
+		JPasswordField passwordField = new JPasswordField();
+		passwordField.setFocusable(true);
+		panel.add(passwordField, constraints);
+		
+		int option = JOptionPane.showConfirmDialog(null, panel, "Authentication Required", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		char[] adminPassphrase = passwordField.getPassword();
+		
+		if(option == JOptionPane.OK_OPTION) {
+			passwordField.requestFocusInWindow();
+			isAdminPassphrase = this.loginOperations.adminLoginOperations.isAdminPassphrase(adminPassphrase);
+		}
+		
+		return isAdminPassphrase;
 	}
 	
 	// -----------------------------------------------------------------------------------
-	public int getNumberOfAttempts() {
-		return this.numberOfAttempts;
-	}
-	
-	// -----------------------------------------------------------------------------------
-	public boolean searchAdmin(String userName) {
+	boolean searchAdmin(String userName) {
 		boolean result = false;
 		
 		// **LOG WILL BE PUT IN THIS FUNCTION
-		if(this.administratorFunctions.getAdminHashMap() != null 
-		&& this.administratorFunctions.getAdminHashMap().get(userName) != null) {
+		if(this.administratorFunctions.databaseHashMaps.getAdminHashMap() != null 
+		&& this.administratorFunctions.databaseHashMaps.getAdminHashMap().get(userName) != null) {
 			result = true;
 		}		
 		
@@ -132,8 +185,9 @@ class AdminLoginWorker extends SwingWorker<Boolean, Void> {
 			
 		return result;
 	}
-	
-	public boolean promptAdminForReentry() {
+
+	//-----------------------------------------------------------------------------------
+	boolean promptAdminForReentry() {
 		boolean passwordsValidate = false;
 		boolean passwordsMatch = false;
 		
@@ -160,6 +214,7 @@ class AdminLoginWorker extends SwingWorker<Boolean, Void> {
 	    confirmPasswordField.setBackground(Color.WHITE);
 	    confirmPasswordField.setForeground(Color.BLACK);
 	    confirmPasswordField.setEchoChar(' ');
+	    
 	    JLabel confirmPasswordLabel = new JLabel("Confirm password:");
 	    confirmPasswordLabel.setForeground(Color.WHITE);
 	    constraints.gridx = 0;
@@ -173,8 +228,7 @@ class AdminLoginWorker extends SwingWorker<Boolean, Void> {
 	    UIManager.put("OptionPane.backgroundColor", Color.BLACK);
 	    UIManager.put("Panel.background", Color.BLACK);
 		
-		while (!passwordsValidate) {
-		    
+		while (!passwordsValidate) {    
 		    if (result == JOptionPane.OK_OPTION) {
 		        char[] password = passwordField.getPassword();
 		        char[] confirmPassword = confirmPasswordField.getPassword();
@@ -186,20 +240,22 @@ class AdminLoginWorker extends SwingWorker<Boolean, Void> {
 		        }
 		    } else {
 		        // Admin clicked cancel or closed the dialog
-		    	JOptionPane.showMessageDialog(null, "PASSWORD CHANGE CANCELLED");
+		    	//*CREATE LOG - User Admin Change Cancelled
+		    	finalMessage = "Password Change Cancelled";
 		    	return false;
 		    }
 		}
 		
 		return false;
 	}
-	
-	public void validateAdministratorCredentials() {
-		this.administratorFunctions.getAdminHashMap().get(adminName);
+
+	//-----------------------------------------------------------------------------------
+	void validateAdministratorCredentials() {
+		this.administratorFunctions.databaseHashMaps.getAdminHashMap().get(adminName);
 	}
 	
 	// Check to see if the passwords meet password validation
-	public boolean performPasswordValidations(char[] newPasswordEntered, char[] newPasswordReentered) {
+	boolean performPasswordValidations(char[] newPasswordEntered, char[] newPasswordReentered) {
 		
 		if(!this.inputOperations.isMeetsPasswordRequirements(newPasswordEntered)) {
 			return false;
@@ -210,41 +266,5 @@ class AdminLoginWorker extends SwingWorker<Boolean, Void> {
 		}
 		
 		return true;
-	}
-	
-	public String performAdminLoginValidations() {
-		String message = "";
-		// Ensure admin only contains legal characters
-		boolean validAdminnameCharacters = this.inputOperations.isOnlyLettersAndNumbers(adminName);
-		boolean validPasswordCharacters = this.inputOperations.isLegalCharactersEntered(new String(adminPassword));
-		
-		if(!validAdminnameCharacters) {
-			message += "Error: AdminName Can Only Contain Characters\n";
-		}
-		
-		if(!validPasswordCharacters) {
-			message += "Error: Illegal Password Characters Detected";
-		}
-		
-		return message;
-	}
-	
-	@Override
-	protected void done() {
-		try {
-			boolean success = get();
-	   
-			if (success) {
-				this.administratorFunctions.loginOperations.setLogUserIn(this.adminName, true, "ADMIN");
-				this.administratorFunctions.panelCentral.setCurrentPanelString(this.administratorFunctions.panelCentral.PANEL_ADMINCENTRAL);
-			} 
-			else {
-				JOptionPane.showMessageDialog(null, failMessage, "Creation Failed", JOptionPane.ERROR_MESSAGE);
-			}
-		} 
-			
-		catch (InterruptedException | ExecutionException e) {
-				JOptionPane.showMessageDialog(null, "Error searching error.", "Error", JOptionPane.ERROR_MESSAGE);
-		}
 	}
 }

@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class ProgramLogs {
+class ProgramLogs {
 	
 	/*
 	 * Account Logs: These logs annotate any events that occur in regards to account creation,
@@ -31,13 +31,14 @@ public class ProgramLogs {
 	private final static String INITIAL_CONFIGUARTION_PASSPHRASE_CHANGED = "INITIAL CONFIGURATION: Passphrase Changed";
 	private final static String INITIAL_CONFIGUARTION_STARTED = "INITIAL CONFIGURATION: Begin Initial Configuration";
 	private final static String INITIAL_CONFIGUARTION_SUCCESS = "INITIAL CONFIGURATION: Initial Configuration Success";
-	
-	public ProgramLogs() {
+
+	//-----------------------------------------------------------------------------------
+	ProgramLogs() {
 		this.logNewSessionInitiated();
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public void logNewSessionInitiated() {
+	void logNewSessionInitiated() {
 		String defaultLogString = String.format("*--------------START LOGGING--------------\n" + "*Separate Session For: " 
 				+ this.getCurrentLocalDateTimeStamp());
 		
@@ -46,13 +47,13 @@ public class ProgramLogs {
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public String getCurrentLocalDateTimeStamp() {
+	String getCurrentLocalDateTimeStamp() {
 	    return LocalDateTime.now()
 	       .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public String printTimeStampUserName(String usrType, String usrName) {
+	String printTimeStampUserName(String usrType, String usrName) {
 		String logStringHead = String.format(this.getCurrentLocalDateTimeStamp() + " - " 
 				+ "(" + usrType + ")" + usrName + " -> ");
 		
@@ -60,7 +61,7 @@ public class ProgramLogs {
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public void logCurrentEvent(String usrType, String usrName, String eventLogged) {
+	void logCurrentEvent(String usrType, String usrName, String eventLogged) {
 		String logString = "";
 		
 		logString += String.format(
@@ -126,69 +127,83 @@ public class ProgramLogs {
 		
 		this.writeToLog(logString);
 	}
-	
-	public String getLOGIN_SUCCESS() {
+
+	//-----------------------------------------------------------------------------------
+	String getLOGIN_SUCCESS() {
 		return LOGIN_SUCCESS;
 	}
 
-	public String getLOGIN_FAIL_INVALID_NAME() {
+	String getLOGIN_FAIL_INVALID_NAME() {
 		return LOGIN_FAIL_INVALID_NAME;
 	}
 
-	public String getLOGIN_FAIL() {
+	//-----------------------------------------------------------------------------------
+	String getLOGIN_FAIL() {
 		return LOGIN_FAIL;
 	}
 
-	public String getLOGOUT_SUCCESS() {
+	//-----------------------------------------------------------------------------------
+	String getLOGOUT_SUCCESS() {
 		return LOGOUT_SUCCESS;
 	}
 
-	public String getPASSWORD_CHANGE_SUCCESS() {
+	//-----------------------------------------------------------------------------------
+	String getPASSWORD_CHANGE_SUCCESS() {
 		return PASSWORD_CHANGE_SUCCESS;
 	}
 
-	public String getPASSWORD_CHANGE_FAIL() {
+	//-----------------------------------------------------------------------------------
+	String getPASSWORD_CHANGE_FAIL() {
 		return PASSWORD_CHANGE_FAIL;
 	}
 
-	public String getPASSWORD_CHANGE_ILLEGAL_CHARACTER() {
+	//-----------------------------------------------------------------------------------
+	String getPASSWORD_CHANGE_ILLEGAL_CHARACTER() {
 		return PASSWORD_CHANGE_ILLEGAL_CHARACTER;
 	}
 
-	public String getPASSWORD_CHANGE_CANCELLED() {
+	//-----------------------------------------------------------------------------------
+	String getPASSWORD_CHANGE_CANCELLED() {
 		return PASSWORD_CHANGE_CANCELLED;
 	}
 
-	public String getACCOUNT_ADD_SUCCESS() {
+	//-----------------------------------------------------------------------------------
+	String getACCOUNT_ADD_SUCCESS() {
 		return ACCOUNT_ADD_SUCCESS;
 	}
 
-	public String getACCOUNT_CREATION_FAILURE() {
+	//-----------------------------------------------------------------------------------
+	String getACCOUNT_CREATION_FAILURE() {
 		return ACCOUNT_CREATION_FAILURE;
 	}
 
-	public String getACCOUNT_SEARCHED() {
+	//-----------------------------------------------------------------------------------
+	String getACCOUNT_SEARCHED() {
 		return ACCOUNT_SEARCHED;
 	}
 
-	public String getINITIAL_CONFIGUARTION_STARTED() {
+	//-----------------------------------------------------------------------------------
+	String getINITIAL_CONFIGUARTION_STARTED() {
 		return INITIAL_CONFIGUARTION_STARTED;
 	}
 
-	public String getINITIAL_CONFIGUARTION_FAILED() {
+	//-----------------------------------------------------------------------------------
+	String getINITIAL_CONFIGUARTION_FAILED() {
 		return INITIAL_CONFIGUARTION_FAILED;
 	}
 
-	public String getINITIAL_CONFIGUARTION_SUCCESS() {
+	//-----------------------------------------------------------------------------------
+	String getINITIAL_CONFIGUARTION_SUCCESS() {
 		return INITIAL_CONFIGUARTION_SUCCESS;
 	}
 
-	public String getINITIAL_CONFIGUARTION_PASSPHRASE_CHANGED() {
+	//-----------------------------------------------------------------------------------
+	String getINITIAL_CONFIGUARTION_PASSPHRASE_CHANGED() {
 		return INITIAL_CONFIGUARTION_PASSPHRASE_CHANGED;
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public void writeToLog(String logString) {
+	private void writeToLog(String logString) {
 		try(FileWriter fw = new FileWriter("log.txt", true);
 		    BufferedWriter bw = new BufferedWriter(fw);
 		    PrintWriter out = new PrintWriter(bw))

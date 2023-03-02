@@ -1,6 +1,6 @@
 package databaseproject;
 
-public class ConfigurationOperations {
+class ConfigurationOperations {
 	
 	public AdministratorFunctions administratorFunctions;
 	//public ConfigurationOperations configurationOperations;
@@ -9,47 +9,47 @@ public class ConfigurationOperations {
 	
 	private String administratorPassphrase;
 	private String admPassphraseSalt;
-	private int empNo;
+	private int userNo;
 	private int admNo;
 	
 	//-------------------------------------------------------------------------------------
-	public ConfigurationOperations(AdministratorFunctions administratorFunctions) {
+	ConfigurationOperations(AdministratorFunctions administratorFunctions) {
 		this.administratorFunctions = administratorFunctions;
 		//this.configurationOperations = administratorFunctions.configurationOperations;
-		this.configHeader = "empNoCounter,admNoCounter,adPhrase,adSalt\n";
+		this.configHeader = "userNoCounter,admNoCounter,adPhrase,adSalt\n";
 	}
 	
 	//-------------------------------------------------------------------------------------
-	public void updateConfiguration(int empNo, int admNo, String adminPassphrase, String salt) {
-		this.empNo = empNo;
+	void updateConfiguration(int userNo, int admNo, String adminPassphrase, String salt) {
+		this.userNo = userNo;
 		this.admNo = admNo;
 		this.administratorPassphrase = adminPassphrase;
 		this.admPassphraseSalt = salt;
 	}
 	
 	//-------------------------------------------------------------------------------------
-	public String getAdminPassphrase() {
+	String getAdminPassphrase() {
 		return this.administratorPassphrase;
 	}
 	
 	// ------------------------------------------------------------------------------------
-	// CONFIGURE EMPLOYEE
-	public void createAdministrativePassphrase(char[] passphrase) {
+	// CONFIGURE ADMIN
+	void createAdministrativePassphrase(char[] passphrase) {
 		String salt = this.administratorFunctions.panelCentral.passwordEncryption.generateSalt();
 		String encryptedPassphrase = this.administratorFunctions.panelCentral.passwordEncryption.hashPassword(passphrase, salt);
 		
 		this.setAdministrativePassphrase(encryptedPassphrase);
 		this.setSalt(salt);
 		
-		this.administratorFunctions.csvOperations.overwriteConfigFile();
+		this.administratorFunctions.csvOperations.configurationCSVOperations.overwriteConfigFile();
 	}
 	
 	
 	//-------------------------------------------------------------------------------------
-	public String getConfigurationString() {
+	String getConfigurationString() {
 		return String.format("%s%s,%s,%s,%s",
 				this.configHeader,
-				this.empNo,
+				this.userNo,
 				this.admNo,
 				this.getAdminPassphrase(),
 				this.getSalt()
@@ -57,38 +57,39 @@ public class ConfigurationOperations {
 	}
 
 	//-------------------------------------------------------------------------------------
-	public void setSalt(String salt) {
+	void setSalt(String salt) {
 		if(salt.length() == 128) {
 			this.admPassphraseSalt = salt;
 		}
 	}
-	
-	public void setAdministrativePassphrase(String passphrase) {
+
+	//-----------------------------------------------------------------------------------
+	void setAdministrativePassphrase(String passphrase) {
 		this.administratorPassphrase = passphrase;
 	}
 	
 	//-------------------------------------------------------------------------------------
-	public String getSalt() {
+	String getSalt() {
 		return this.admPassphraseSalt;
 	}
 	
 	//-------------------------------------------------------------------------------------
-	public int getEmpNo() {
-		return this.empNo;
+	int getUserNo() {
+		return this.userNo;
 	}
 	
 	//-------------------------------------------------------------------------------------
-	public void increaseEmpNo() {
-		this.empNo++;
+	void increaseUserNo() {
+		this.userNo++;
 	}
 	
 	//-------------------------------------------------------------------------------------
-	public int getAdmNo() {
+	int getAdmNo() {
 		return this.admNo;
 	}
 	
 	//-------------------------------------------------------------------------------------
-	public void increaseAdmNo() {
+	void increaseAdmNo() {
 		this.admNo++;
 	}
 }

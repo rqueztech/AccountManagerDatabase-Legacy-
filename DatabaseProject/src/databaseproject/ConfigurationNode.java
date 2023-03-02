@@ -1,55 +1,65 @@
 package databaseproject;
 
-public class ConfigurationNode {
-	private String empNoCounter;
+class ConfigurationNode {
 	private String admNoCounter;
 	private String admPhrase;
 	private String admSalt;
+	private String userNoCounter;
 	
-	public ConfigurationNode(String empNoCounter, String admNoCounter, String admPhrase, String admSalt) {
-		this.empNoCounter = empNoCounter;
+	// -----------------------------------------------------------------------------------
+	ConfigurationNode(String userNoCounter, String admNoCounter, String admPhrase, String admSalt) {
 		this.admNoCounter = admNoCounter;
 		this.admPhrase = admPhrase;
 		this.admSalt = admSalt;
+		this.userNoCounter = userNoCounter;
 	}
 
-	public String getEmpNoCounter() {
-		return empNoCounter;
+	// -----------------------------------------------------------------------------------
+	String getUserNoCounter() {
+		return userNoCounter;
 	}
 	
-	public void setEmpNoCounter(String empNoCounter) {
-		this.empNoCounter = empNoCounter;
+	// -----------------------------------------------------------------------------------
+	void setUserNoCounter(String userNoCounter) {
+		this.userNoCounter = userNoCounter;
 	}
 
-	public String getAdmNoCounter() {
+	// -----------------------------------------------------------------------------------
+	String getAdmNoCounter() {
 		return admNoCounter;
 	}
 
-	public void setAdmNoCounter(String admNoCounter) {
+	// -----------------------------------------------------------------------------------
+	void setAdmNoCounter(String admNoCounter) {
 		this.admNoCounter = admNoCounter;
 	}
 
-	public String getAdmPhrase() {
+	// -----------------------------------------------------------------------------------
+	String getAdmPhrase() {
 		return admPhrase;
 	}
 
-	public void setAdmPhrase(String admPhrase) {
+	// -----------------------------------------------------------------------------------
+	void setAdmPhrase(String admPhrase) {
 		this.admPhrase = admPhrase;
 	}
 
-	public String getAdmSalt() {
+	// -----------------------------------------------------------------------------------
+	String getAdmSalt() {
 		return admSalt;
 	}
 
-	public void setadmSalt(String admSalt) {
+	// -----------------------------------------------------------------------------------
+	void setadmSalt(String admSalt) {
 		this.admSalt = admSalt;
 	}
 
+	// -----------------------------------------------------------------------------------
 	@Override
 	public String toString() {
 		String result = "";
 		
-		result += String.format("%s,%s,%s,%s", this.getEmpNoCounter(), this.getAdmNoCounter(), 
+		result += String.format("%s,%s,%s,%s", this.getUserNoCounter(), this.getAdmNoCounter(), 
 				this.getAdmPhrase(), this.getAdmSalt());
 		
 		return result;

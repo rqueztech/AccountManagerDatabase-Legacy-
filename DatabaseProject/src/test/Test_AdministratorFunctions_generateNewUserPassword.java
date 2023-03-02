@@ -12,18 +12,12 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import databaseproject.AdministratorFunctions;
-import databaseproject.EmployeeNode;
-import databaseproject.InputOperations;
-import databaseproject.PanelCentral;
-import databaseproject.PasswordEncryption;
-
 class Test_AdministratorFunctions_generateDefaultUserPassword {
-	public PanelCentral panelCentral = new PanelCentral();
-	public AdministratorFunctions administratorFunctions = new AdministratorFunctions(panelCentral);
-	public EmployeeNode empNode = new EmployeeNode();
-	public InputOperations inputOperations = new InputOperations();
-	public PasswordEncryption pEnc = new PasswordEncryption();
+	PanelCentral panelCentral = new PanelCentral();
+	AdministratorFunctions administratorFunctions = new AdministratorFunctions(panelCentral);
+	UserNode userNode = new UserNode();
+	InputOperations inputOperations = new InputOperations();
+	PasswordEncryption pEnc = new PasswordEncryption();
 	
 	@Test
 	void test() {

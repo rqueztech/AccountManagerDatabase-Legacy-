@@ -2,26 +2,26 @@ package databaseproject;
 
 import javax.swing.JOptionPane;
 
-public class EmployeeNode {
+class UserNode {
 	private String firstName;
 	private String lastName;
 	private String userName;
 	private String userPassword;
 	private String salt;
 	private String gender;
-	private int empNo;
+	private int userNo;
 	
-	public InputOperations inputOperations;
+	private InputOperations inputOperations;
 	
 	//-----------------------------------------------------------------------------------
-	public EmployeeNode() {
+	UserNode() {
 		this.inputOperations = new InputOperations();
 	}
 	
 	//-----------------------------------------------------------------------------------
-	// Specific constructor to hold all information particular to a given employee.
-	public EmployeeNode(String userName, String firstName, String lastName, 
-			String gender, String userPassword, String salt, int empNo) {
+	// Specific constructor to hold all information particular to a given user.
+	UserNode(String userName, String firstName, String lastName, 
+			String gender, String userPassword, String salt, int userNo) {
 		this.inputOperations = new InputOperations();
 		
 		this.setUserName(userName);
@@ -30,14 +30,13 @@ public class EmployeeNode {
 		this.setGender(gender);
 		this.setUserPassword(userPassword);
 		this.setSalt(salt);
-		this.setEmpNo(empNo);
+		this.setUserNo(userNo);
 	}
 
 	//-----------------------------------------------------------------------------------
 	// Set the user password here. If encryption fails, an error message will be printed.
 	// If the password meets all requirements, it will be accepted
-	
-	public void setUserPassword(String userPassword) {
+	private void setUserPassword(String userPassword) {
 		
 		if(userPassword.length() == 128) {
 			this.userPassword = userPassword;
@@ -49,16 +48,14 @@ public class EmployeeNode {
 	}
 	
 	//-----------------------------------------------------------------------------------
-	// This method is going to increase the employee number
-	
-	public void setEmpNo(int empNo) {
-		this.empNo = empNo;
+	// This method is going to increase the user number
+	private void setUserNo(int userNo) {
+		this.userNo = userNo;
 		
 	}
 	
 	//-----------------------------------------------------------------------------------
-	
-	public void setUserName(String userName) {
+	private void setUserName(String userName) {
 		if(inputOperations.isOnlyLettersAndNumbers(userName)) {
 			this.userName = userName;
 		}
@@ -68,9 +65,8 @@ public class EmployeeNode {
 		}
 	}
 	
-	//-----------------------------------------------------------------------------------
-	
-	public void setFirstName(String firstName) {
+	//-----------------------------------------------------------------------------------	
+	private void setFirstName(String firstName) {
 		
 		// Perform validation check to make sure only letter characters
 		// Are used for the first name
@@ -85,8 +81,7 @@ public class EmployeeNode {
 	}
 	
 	//-----------------------------------------------------------------------------------
-	
-	public void setLastName(String lastName) {
+	private void setLastName(String lastName) {
 		if(this.inputOperations.isOnlyLetterCharacters(lastName)
 				&& lastName.length() > 1) {
 			this.lastName = lastName;
@@ -98,8 +93,7 @@ public class EmployeeNode {
 	}
 	
 	//-----------------------------------------------------------------------------------
-	
-	public void setSalt(String salt) {
+	private void setSalt(String salt) {
 		if(salt.length() == 128) {
 			this.salt = salt;
 		}
@@ -110,8 +104,7 @@ public class EmployeeNode {
 	}
 	
 	//-----------------------------------------------------------------------------------
-	
-	public void setGender(String gender) {
+	private void setGender(String gender) {
 		if(!gender.equals("Select")) { 
 			this.gender = gender;
 		}
@@ -122,49 +115,44 @@ public class EmployeeNode {
 	}
 	
 	//-----------------------------------------------------------------------------------
-	
-	public String getHashedUserPassword() {
+	String getHashedUserPassword() {
 		return this.userPassword;
 	}
 	
 	//-----------------------------------------------------------------------------------
-	
-	public String getGender() {
+	String getGender() {
 		return this.gender;
 	}
 	
 	//-----------------------------------------------------------------------------------
 
-	public String getUserName() {
+	String getUserName() {
 		return this.userName;
 	}
 	
 	//-----------------------------------------------------------------------------------
-		
-	public int getEmpNo() {
-		return this.empNo;
+	private int getUserNo() {
+		return this.userNo;
 	}
 	
 	//-----------------------------------------------------------------------------------
-	
-	public String getFirstName() {
+	String getFirstName() {
 		return this.firstName;
 	}
 	
 	//-----------------------------------------------------------------------------------
 
-	public String getLastName() {
+	String getLastName() {
 		return this.lastName;
 	}
 	
 	//-----------------------------------------------------------------------------------
-	
-	public String getSalt() {
+	String getSalt() {
 		return this.salt;
 	}
 	
 	//-----------------------------------------------------------------------------------
-	public void setChangedPassword(String changedPassword, String changedSalt) {
+	void setChangedPassword(String changedPassword, String changedSalt) {
 		this.setUserPassword(changedPassword);
 		this.setSalt(changedSalt);
 	}
@@ -173,7 +161,7 @@ public class EmployeeNode {
 	public String toString() {
 		String result = "";
 		result = String.format("%s,%s,%s,%s,%s,%s,%s\n", this.getUserName(), this.getFirstName(), this.getLastName(),
-				this.getGender(), this.getHashedUserPassword(), this.getSalt(), this.getEmpNo());
+				this.getGender(), this.getHashedUserPassword(), this.getSalt(), this.getUserNo());
 		
 		return result;
 	}

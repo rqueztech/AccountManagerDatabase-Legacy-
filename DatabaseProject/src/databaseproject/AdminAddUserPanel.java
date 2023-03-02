@@ -7,7 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -16,169 +15,48 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingWorker;
+import javax.swing.SwingUtilities;
 
-class AddAdminWorker extends SwingWorker<Boolean, Void> {
-	private String firstName;
-	private String lastName;
-	private String employeeCreationMessage;
-	private AdministratorFunctions administratorFunctions;
-	
-	/**
-	 * This class constructs the general information required to create an employee
-	 * in a separate thread to be passed in to the createEmployee function found in
-	 * the AdministratorFunctions class
-	 * @param firstName gets the first name of the user to be added
-	 * @param lastName gets the last name of the user to be added
-	 * @param gender gets the gender of the user to be added
-	 * @param administratorFunctions
-	 */
-	public AddAdminWorker(String firstName, String lastName, 
-			AdministratorFunctions administratorFunctions) {
-		
-		this.administratorFunctions = administratorFunctions;
-		this.firstName = firstName;
-		this.lastName = lastName;
-	}
-	
-	@Override
-	protected Boolean doInBackground() throws Exception {
-		boolean isAdminCreated = false;
-		
-		char[] mgrPassword = JOptionPane.showInputDialog("Enter Manager Password").toCharArray();
-		boolean checkAdminPassword = this.administratorFunctions.loginOperations
-				.checkAdminPassphrase(mgrPassword);
-		
-		if(checkAdminPassword) {
-			isAdminCreated = this.administratorFunctions.createNewAdmin(firstName, lastName);
-				this.administratorFunctions.panelCentral.panelAdminDisplayUsers.updateTable();
-		}
-		
-		else {
-			JOptionPane.showMessageDialog(null, "Improper Password Entered");
-		}
-		
-		// TODO Auto-generated method stub
-		return isAdminCreated;
-	}
-	
-	@Override
-	protected void done() {
-		try {
-            boolean success = get();
-            
-            if (success) {
-            	JOptionPane.showMessageDialog(null, "Admin Creation Successful", "Creation Successful", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-            	JOptionPane.showMessageDialog(null, this.employeeCreationMessage, "Creation Failed", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            JOptionPane.showMessageDialog(null, "Error searching error.", "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-	}
-}
-
-class AddEmployeeWorker extends SwingWorker<Boolean, Void> {
-	private String firstName;
-	private String lastName;
-	private String gender;
-	private String employeeCreationMessage;
-	private AdministratorFunctions administratorFunctions;
-	
-	/**
-	 * This class constructs the general information required to create an employee
-	 * in a separate thread to be passed in to the createEmployee function found in
-	 * the AdministratorFunctions class
-	 * @param firstName gets the first name of the user to be added
-	 * @param lastName gets the last name of the user to be added
-	 * @param gender gets the gender of the user to be added
-	 * @param administratorFunctions
-	 */
-	public AddEmployeeWorker(String firstName, String lastName, 
-			String gender,AdministratorFunctions administratorFunctions) {
-		
-		this.administratorFunctions = administratorFunctions;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.gender = gender;
-	}
-	
-	@Override
-	protected Boolean doInBackground() throws Exception {
-		boolean isUserCreated = false;
-		
-		char[] mgrPassword = JOptionPane.showInputDialog("Enter Manager Password").toCharArray();
-		boolean checkAdminPassword = this.administratorFunctions.loginOperations
-				.checkAdminPassphrase(mgrPassword);
-		
-		if(checkAdminPassword) {
-			
-			isUserCreated = this.administratorFunctions.createNewEmployee
-					(firstName, lastName, gender);
-			
-			this.administratorFunctions.panelCentral.panelAdminDisplayUsers.updateTable();
-		}
-		
-		else {
-			JOptionPane.showMessageDialog(null, "Improper Password Entered");
-		}
-		
-		// TODO Auto-generated method stub
-		return isUserCreated;
-	}
-	
-	@Override
-	protected void done() {
-		try {
-            boolean success = get();
-            
-            if (success) {
-            	JOptionPane.showMessageDialog(null, "User Creation Successful", "Creation Successful", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-            	JOptionPane.showMessageDialog(null, this.employeeCreationMessage, "Creation Failed", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            JOptionPane.showMessageDialog(null, "Error searching error.", "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-	}
-}
-
-public class AdminAddUserPanel extends JPanel implements ActionListener {
+class AdminAddUserPanel extends JPanel implements ActionListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4841719570690036053L;
 	
-	public Image image;
-	public AdministratorFunctions administratorFunctions;
-	public LoginOperations loginOperations;
-	public GridBagConstraints grid;
-	public PanelCentral panelCentral;
-	public InputOperations inputOperations;
+	private Image image;
+	private AdministratorFunctions administratorFunctions;
+	private LoginOperations loginOperations;
+	private GridBagConstraints grid;
+	private PanelCentral panelCentral;
 	
-	public final int WIDTH = 600;
-	public final int HEIGHT = 600;
+	private final int WIDTH = 600;
+	private final int HEIGHT = 600;
 	
 	// First name, last name, and password Text Field
 	private JTextField fName;
 	private JTextField lName;
 	
 	private JComboBox<String> gender;
-	
-	public AdminAddUserPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
-		String[] genderOptions = {"Select", "Male", "Female"};
-		
+
+	//-----------------------------------------------------------------------------------
+	AdminAddUserPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
 		// Classes needed
 		this.loginOperations = administratorFunctions.loginOperations;
+		this.panelCentral = panelCentral;
+		this.administratorFunctions = administratorFunctions;
+		
+		SwingUtilities.invokeLater(() -> {
+			this.isInvokeGUI();
+		});
+	}
+	
+	private void isInvokeGUI() {
+		String[] genderOptions = {"Select", "Male", "Female"};
 		
 		this.gender = new JComboBox<String>(genderOptions);
 		this.gender.setForeground(Color.white);
 		this.gender.setBackground(Color.black);
 
-		this.panelCentral = panelCentral;
-		this.administratorFunctions = administratorFunctions;
 		this.setSize(this.WIDTH, this.HEIGHT);
 		this.image = new ImageIcon("backgroundd.jpg").getImage();
 		this.setLayout(new GridBagLayout());
@@ -244,7 +122,7 @@ public class AdminAddUserPanel extends JPanel implements ActionListener {
 		this.grid.gridheight = 1;
 		this.grid.gridwidth = 1;
 		this.add(addButton, grid);
-		addButton.addActionListener(e -> this.addEmployee());
+		addButton.addActionListener(e -> this.addUser());
 		
 		// Delete Button
 		JButton goBackButton = new JButton("Go Back");
@@ -268,21 +146,22 @@ public class AdminAddUserPanel extends JPanel implements ActionListener {
 	}
 	
 	// -----------------------------------------------------------------------------------
-	public void addEmployee() {
-		AddEmployeeWorker addEmployeeWorker = 
-				new AddEmployeeWorker(this.getFirstName(), 
+	private void addUser() {
+		AddUserWorker addUserWorker = 
+				new AddUserWorker(this.getFirstName(), 
 				this.getLastName(), this.getGender(), 
 				this.administratorFunctions);
 		
 		this.clearBoxes();
 		
-		addEmployeeWorker.execute();
+		addUserWorker.execute();
 	}
 	
 	// -----------------------------------------------------------------------------------
-	public void addAdmin() {
-		AddAdminWorker addAdminWorker = 
-				new AddAdminWorker(this.getFirstName(), 
+	// Dead code?
+	private void addAdmin() {
+		AdminAddWorker addAdminWorker = 
+				new AdminAddWorker(this.getFirstName(), 
 				this.getLastName(), 
 				this.administratorFunctions);
 		
@@ -292,20 +171,20 @@ public class AdminAddUserPanel extends JPanel implements ActionListener {
 	}
 	
 	// -----------------------------------------------------------------------------------
-	public void clearBoxes() {
+	private void clearBoxes() {
 		this.fName.setText("");
 		this.lName.setText("");
 		this.gender.setSelectedIndex(0);
 	}
 	
 	// -----------------------------------------------------------------------------------
-	public void goBack() {
+	private void goBack() {
 		this.panelCentral.setCurrentPanelString(
 				this.panelCentral.PANEL_ADMINDISPLAYUSERS);
 	}
 	
 	// -----------------------------------------------------------------------------------
-	public void logoutAdmin() {
+	void logoutAdmin() {
 		this.loginOperations.logOutuser();
 		JOptionPane.showMessageDialog(null, "Log out successful");
 		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_LOGIN);
@@ -327,16 +206,17 @@ public class AdminAddUserPanel extends JPanel implements ActionListener {
 	}
 	
 	// -----------------------------------------------------------------------------------
-	
-	public String getFirstName() {
+	private String getFirstName() {
 		return this.fName.getText();
 	}
-	
-	public String getLastName() {
+
+	//-----------------------------------------------------------------------------------
+	private String getLastName() {
 		return this.lName.getText();
 	}
-	
-	public String getGender() {
+
+	//-----------------------------------------------------------------------------------
+	private String getGender() {
 		return this.gender.getSelectedItem().toString();
 	}
 }

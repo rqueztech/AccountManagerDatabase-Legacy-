@@ -10,30 +10,28 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
-public class ConfigurationPanel extends JPanel {
+class ConfigurationPanel extends JPanel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5013287192014503920L;
 	
-	public Image image;
-	public PanelCentral panelCentral;
-	public AdministratorFunctions administratorFunctions;
-	public GridBagConstraints grid;
+	private Image image;
+	private PanelCentral panelCentral;
+	private GridBagConstraints grid;
 	
-	public JTextField firstField;
-	public JTextField secondField;
-	
-	public String adminPassphrase;
-	public String adminFirstName;
-	public String adminLastName;
-	public String adminPassword;
-	
-	public ConfigurationPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
-		this.administratorFunctions = administratorFunctions;
+	// This panel will hold the GUI for the configuration operations of the program
+	ConfigurationPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
 		this.panelCentral = panelCentral;
+		
+		SwingUtilities.invokeLater(() -> {
+			this.isInvokeGUI();
+		});
+	}
+	
+	void isInvokeGUI() {
 		this.grid = new GridBagConstraints();
 		this.setLayout(new GridBagLayout());
 		
@@ -74,10 +72,10 @@ public class ConfigurationPanel extends JPanel {
 		this.grid.gridwidth = 1;
 		this.add(addButton, grid);
 		addButton.addActionListener(e -> this.initialConfiguration());
-		
 	}
-	
-	public void initialConfiguration() {
+
+	//-----------------------------------------------------------------------------------
+	void initialConfiguration() {
 		InitialConfigurationWorker worker = new InitialConfigurationWorker(panelCentral);
 		worker.execute();
 	}
