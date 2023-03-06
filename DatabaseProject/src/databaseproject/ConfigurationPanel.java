@@ -80,11 +80,11 @@ class ConfigurationPanel extends JPanel {
 
 	//-----------------------------------------------------------------------------------
 	void initialConfiguration() {
-		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_CONFIGURATIONAGREEMENTPANEL);
+		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_INITIALCONFIGURATIONAGREEMENT);
 		
 		/* IN WORK
 		InitialConfigurationWorker worker = new InitialConfigurationWorker(panelCentral);
-		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_CONFIGURATIONAGREEMENTPANEL);
+		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_INITIALCONFIGURATIONAGREEMENT);
 		worker.execute();
 		*/
 	}

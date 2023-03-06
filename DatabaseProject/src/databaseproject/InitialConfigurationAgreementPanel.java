@@ -11,10 +11,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-class ConfigurationAgreementPanel extends JPanel {
+class InitialConfigurationAgreementPanel extends JPanel {
 	/**
 	 * 
 	 */
@@ -24,8 +25,14 @@ class ConfigurationAgreementPanel extends JPanel {
 	private PanelCentral panelCentral;
 	private GridBagConstraints grid;
 	
+	private JTextField adminFirstName = new JTextField(15);
+	private JTextField adminLastName = new JTextField(15);
+	private JPasswordField adminPassword = new JPasswordField(15);
+	private JPasswordField adminPasswordReentered = new JPasswordField(15);
+	private JPasswordField adminPassphrase = new JPasswordField(15);
+	
 	// This panel will hold the GUI for the configuration operations of the program
-	ConfigurationAgreementPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
+	InitialConfigurationAgreementPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
 		this.panelCentral = panelCentral;
 		
 		// Put the invoke GUI into the SwingUtilities lambda (previously known as runnable).
@@ -35,6 +42,8 @@ class ConfigurationAgreementPanel extends JPanel {
 		});
 	}
 	
+	// Initial Configuration GUI. This is separated from the main constructor
+	// To avoid clutter and for easy invocation in the EDT.
 	void isInvokeGUI() {
 		this.grid = new GridBagConstraints();
 		this.setLayout(new GridBagLayout());
@@ -56,11 +65,10 @@ class ConfigurationAgreementPanel extends JPanel {
 		this.grid.gridx = 0;
 		this.add(firstNameLabel, grid);
 		
-		JTextField firstNameTextField = new JTextField(15);
-		firstNameTextField.setOpaque(true);
-		firstNameTextField.setForeground(Color.white);
+		adminFirstName.setOpaque(true);
+		adminFirstName.setForeground(Color.black);
 		this.grid.gridx = 1;
-		this.add(firstNameTextField, grid);
+		this.add(adminFirstName, grid);
 		
 		// ---------------------------------------------------------
 		// Last Name Label And TextField Pair
@@ -71,11 +79,10 @@ class ConfigurationAgreementPanel extends JPanel {
 		this.grid.gridx = 0;
 		this.add(lastNameLabel, grid);
 		
-		JTextField lastNameTextField = new JTextField(15);
-		lastNameTextField.setOpaque(true);
-		lastNameTextField.setForeground(Color.white);
+		adminLastName.setOpaque(true);
+		adminLastName.setForeground(Color.black);
 		this.grid.gridx = 1;
-		this.add(lastNameTextField, grid);
+		this.add(adminLastName, grid);
 		
 		// ---------------------------------------------------------
 		// Password Label And TextField Pair
@@ -86,11 +93,10 @@ class ConfigurationAgreementPanel extends JPanel {
 		this.grid.gridx = 0;
 		this.add(passwordLabel, grid);
 		
-		JTextField passwordTextField = new JTextField(15);
-		passwordTextField.setOpaque(true);
-		passwordTextField.setForeground(Color.white);
+		adminPassword.setOpaque(true);
+		adminPassword.setForeground(Color.black);
 		this.grid.gridx = 1;
-		this.add(passwordTextField, grid);
+		this.add(adminPassword, grid);
 		
 		// ---------------------------------------------------------
 		// Confirm Password Label And TextField Pair
@@ -101,11 +107,10 @@ class ConfigurationAgreementPanel extends JPanel {
 		this.grid.gridx = 0;
 		this.add(confirmPasswordLabel, grid);
 		
-		JTextField reenterPasswordTextField = new JTextField(15);
-		reenterPasswordTextField.setOpaque(true);
-		reenterPasswordTextField.setForeground(Color.white);
+		adminPasswordReentered.setOpaque(true);
+		adminPasswordReentered.setForeground(Color.black);
 		this.grid.gridx = 1;
-		this.add(reenterPasswordTextField, grid);
+		this.add(adminPasswordReentered, grid);
 		
 		// ---------------------------------------------------------
 		// Passphrase Label And TextField Pair
@@ -116,11 +121,10 @@ class ConfigurationAgreementPanel extends JPanel {
 		this.grid.gridx = 0;
 		this.add(passphraseLabel, grid);
 		
-		JTextField passphraseTextField = new JTextField(15);
-		passphraseTextField.setOpaque(true);
-		passphraseTextField.setForeground(Color.white);
+		adminPassphrase.setOpaque(true);
+		adminPassphrase.setForeground(Color.black);
 		this.grid.gridx = 1;
-		this.add(passphraseTextField, grid);
+		this.add(adminPassphrase, grid);
 		
 		// ---------------------------------------------------------
 		// Go Back and Submit Pair
@@ -137,17 +141,25 @@ class ConfigurationAgreementPanel extends JPanel {
 		submitButton.setForeground(Color.white);
 		this.grid.gridx = 1;
 		this.add(submitButton, grid);
+		submitButton.addActionListener(e -> this.submitFunction());
 	}
 	
 	//-----------------------------------------------------------------------------------
 	public void goBackFunction() {
-		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_CONFIGURATIONAGREEMENTPANEL);
+		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_INITIALCONFIGURATION);
 	}
 
 	//-----------------------------------------------------------------------------------
-	void initialConfiguration() {
-		InitialConfigurationWorker worker = new InitialConfigurationWorker(panelCentral);
-		worker.execute();
+	public void submitFunction() {
+		InitialConfigurationWorker initialConfigurationWorker = 
+				new InitialConfigurationWorker(panelCentral, 
+						this.adminFirstName.getText(),
+						this.adminLastName.getText(),
+						this.adminPassphrase.getPassword(),
+						this.adminPassword.getPassword(),
+						this.adminPasswordReentered.getPassword()
+				);
+		initialConfigurationWorker.execute();
 	}
 	
 	//-----------------------------------------------------------------------------------

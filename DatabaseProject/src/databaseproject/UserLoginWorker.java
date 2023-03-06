@@ -173,16 +173,16 @@ class UserLoginWorker extends SwingWorker<Boolean, Void> {
 	
 	// Check to see if the passwords meet password validation
 	private boolean performPasswordValidations(char[] newPasswordEntered, char[] newPasswordReentered) {
-		return this.inputOperations.isMeetsPasswordRequirements(newPasswordEntered)
-					&& this.inputOperations.isMeetsPasswordRequirements(newPasswordReentered);
+		return this.inputOperations.isMeetsPasswordRequirements(newPasswordEntered).isEmpty()
+					&& this.inputOperations.isMeetsPasswordRequirements(newPasswordReentered).isEmpty();
 	}
 	
 	// -----------------------------------------------------------------------------------
 	private String performUserLoginValidations() {
 		String message = "";
 		// Ensure user only contains legal characters
-		boolean validUsernameCharacters = this.inputOperations.isOnlyLettersAndNumbers(userName);
-		boolean validPasswordCharacters = this.inputOperations.containsLegalCharacters(new String(userPassword));
+		boolean validUsernameCharacters = this.inputOperations.isOnlyLettersAndNumbers(userName).isEmpty();
+		boolean validPasswordCharacters = this.inputOperations.containsLegalCharacters(new String(userPassword)).isEmpty();
 		
 		if(!validUsernameCharacters) {
 			message += "Error: UserName Can Only Contain Characters\n";

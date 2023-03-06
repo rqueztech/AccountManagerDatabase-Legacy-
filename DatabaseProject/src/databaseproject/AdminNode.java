@@ -50,7 +50,7 @@ class AdminNode {
 	
 	//-----------------------------------------------------------------------------------
 	void setAdminName(String adminName) {
-		if(inputOperations.isOnlyLettersAndNumbers(adminName)) {
+		if(inputOperations.isOnlyLettersAndNumbers(adminName).isEmpty()) {
 			this.adminName = adminName;
 		}
 		
@@ -64,7 +64,7 @@ class AdminNode {
 		
 		// Perform validation check to make sure only letter characters
 		// Are used for the first name
-		if(inputOperations.isOnlyLetterCharacters(firstName)
+		if(inputOperations.isOnlyLetterCharacters(firstName).isEmpty()
 				&& firstName.length() > 1) {
 			this.firstName = firstName;
 		}
@@ -76,7 +76,7 @@ class AdminNode {
 	
 	//-----------------------------------------------------------------------------------
 	void setLastName(String lastName) {
-		if(inputOperations.isOnlyLetterCharacters(lastName)
+		if(inputOperations.isOnlyLetterCharacters(lastName).isEmpty()
 				&& lastName.length() > 1) {
 			this.lastName = lastName;
 		}

@@ -56,7 +56,7 @@ class UserNode {
 	
 	//-----------------------------------------------------------------------------------
 	private void setUserName(String userName) {
-		if(inputOperations.isOnlyLettersAndNumbers(userName)) {
+		if(inputOperations.isOnlyLettersAndNumbers(userName).isEmpty()) {
 			this.userName = userName;
 		}
 		
@@ -70,7 +70,7 @@ class UserNode {
 		
 		// Perform validation check to make sure only letter characters
 		// Are used for the first name
-		if(inputOperations.isOnlyLetterCharacters(firstName)
+		if(inputOperations.isOnlyLetterCharacters(firstName).isEmpty()
 				&& firstName.length() > 1) {
 			this.firstName = firstName;
 		}
@@ -82,7 +82,7 @@ class UserNode {
 	
 	//-----------------------------------------------------------------------------------
 	private void setLastName(String lastName) {
-		if(this.inputOperations.isOnlyLetterCharacters(lastName)
+		if(this.inputOperations.isOnlyLetterCharacters(lastName).isEmpty()
 				&& lastName.length() > 1) {
 			this.lastName = lastName;
 		}

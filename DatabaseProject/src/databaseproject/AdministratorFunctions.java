@@ -122,7 +122,7 @@ class AdministratorFunctions {
 		
 		// Iterate through the hashmap until the username is not found
 		// In the hashmap
-		while(this.databaseHashMaps.getUserHashMap().get(userName.toString()) != null) {
+		while(this.databaseHashMaps.getUserHashMap().containsKey(userName.toString())) {
 			if(uniqueUsernameCounter != 0) {
 				userName.setLength(0);
 				userName.append(fstName.toLowerCase().charAt(0));
@@ -188,8 +188,8 @@ class AdministratorFunctions {
 	//-------------------------------------------------------------------------------------
 	// This will add the userName with a brand new profile into the database
 	boolean createNewUser(String firstName, String lastName, String gender) {
-		boolean isLegalFirstName = this.inputOperations.isOnlyLetterCharacters(firstName);
-		boolean isLegalLastName = this.inputOperations.isOnlyLetterCharacters(lastName);
+		boolean isLegalFirstName = this.inputOperations.isOnlyLetterCharacters(firstName).isEmpty();
+		boolean isLegalLastName = this.inputOperations.isOnlyLetterCharacters(lastName).isEmpty();
 		
 		if(isLegalFirstName && isLegalLastName) {
 			UserNode newUser = this.generateUserCredentials(firstName, lastName, gender);
@@ -215,8 +215,8 @@ class AdministratorFunctions {
 	
 	//-------------------------------------------------------------------------------------
 	boolean createNewAdmin(String firstName, String lastName) {
-		boolean isValidFirstName = this.inputOperations.containsLegalCharacters(firstName);
-		boolean isValidLastName = this.inputOperations.containsLegalCharacters(lastName);
+		boolean isValidFirstName = this.inputOperations.containsLegalCharacters(firstName).isEmpty();
+		boolean isValidLastName = this.inputOperations.containsLegalCharacters(lastName).isEmpty();
 		
 		if(isValidFirstName && isValidLastName) {
 			AdminNode newAdmin = generateAdminCredentials(firstName, lastName);
@@ -232,8 +232,8 @@ class AdministratorFunctions {
 	
 	//-------------------------------------------------------------------------------------
 	boolean createInitialAdmin(String firstName, String lastName, char[] newAdminPassword) {
-		boolean isLegalFirstName = this.inputOperations.containsLegalCharacters(firstName);
-		boolean isLegalLastName = this.inputOperations.containsLegalCharacters(lastName);
+		boolean isLegalFirstName = this.inputOperations.containsLegalCharacters(firstName).isEmpty();
+		boolean isLegalLastName = this.inputOperations.containsLegalCharacters(lastName).isEmpty();
 		
 		if(isLegalFirstName && isLegalLastName) {
 			String newAdminUserName = this.generateNewAdminName(firstName, lastName, panelCentral.ADMIN);

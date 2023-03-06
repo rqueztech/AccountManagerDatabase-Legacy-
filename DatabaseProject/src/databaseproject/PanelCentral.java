@@ -17,7 +17,7 @@ class PanelCentral extends JFrame {
 	public final String PANEL_ADMINDELETEUSER = "PANEL_ADMINDELETEUSER";
 	public final String PANEL_ADMINDISPLAYUSERS = "PANEL_ADMINDISPLAYUSERS";
 	public final String PANEL_INITIALCONFIGURATION = "PANEL_INITIALCONFIGURATION";
-	public final String PANEL_CONFIGURATIONAGREEMENTPANEL = "PANEL_CONFIGURATIONAGREEMENTPANEL";
+	public final String PANEL_INITIALCONFIGURATIONAGREEMENT = "PANEL_INITIALCONFIGURATIONAGREEMENT";
 	
 	public static final int WIDTH = 600;
 	public static final int HEIGHT = 600;
@@ -26,9 +26,6 @@ class PanelCentral extends JFrame {
 	public final String USER = "USER";
 	
 	public PasswordEncryption passwordEncryption;
-	
-	// Set the wiidth and height variable to 600 each, that will be a 600px
-	// by 600 px screen
 	
 	
 	public ImageIcon icon;
@@ -44,7 +41,7 @@ class PanelCentral extends JFrame {
 	public AdminDisplayUsersPanel panelAdminDisplayUsers;
 	public ConfigurationPanel panelInitialConfiguration;
 	public ProgramLogs programLogs;
-	public ConfigurationAgreementPanel configurationAgreementPanel;
+	public InitialConfigurationAgreementPanel initialConfigurationAgreementPanel;
 	
 	//-----------------------------------------------------------------------------------
 	// Declare the public AdminOperations class here. This will ensure that every
@@ -67,7 +64,7 @@ class PanelCentral extends JFrame {
 		this.panelAdminAddUser = new AdminAddUserPanel(this.administratorFunctions, this);
 		this.panelAdminDisplayUsers = new AdminDisplayUsersPanel(this.administratorFunctions, this);
 		this.panelInitialConfiguration = new ConfigurationPanel(this.administratorFunctions, this);
-		this.configurationAgreementPanel = new ConfigurationAgreementPanel(administratorFunctions, this);
+		this.initialConfigurationAgreementPanel = new InitialConfigurationAgreementPanel(administratorFunctions, this);
 		
 		// Setting up all of the attributes for the frame in the file
 		
@@ -90,7 +87,7 @@ class PanelCentral extends JFrame {
 		this.add(this.panelAdminAddUser);
 		this.add(this.panelAdminDisplayUsers);
 		this.add(this.panelInitialConfiguration);
-		this.add(this.configurationAgreementPanel);
+		this.add(this.initialConfigurationAgreementPanel);
 		
 		this.checkDefaultConfiguration();
 		this.showCurrentSelectedPanel();
@@ -125,8 +122,8 @@ class PanelCentral extends JFrame {
 			this.panelInitialConfiguration.setVisible(true);
 		}
 		
-		else if(this.currentPanelString.equals(PANEL_CONFIGURATIONAGREEMENTPANEL)) {
-			this.configurationAgreementPanel.setVisible(true);
+		else if(this.currentPanelString.equals(PANEL_INITIALCONFIGURATIONAGREEMENT)) {
+			this.initialConfigurationAgreementPanel.setVisible(true);
 		}
 	}
 	
@@ -140,7 +137,7 @@ class PanelCentral extends JFrame {
 		this.panelAdminAddUser.setVisible(false);
 		this.panelAdminDisplayUsers.setVisible(false);
 		this.panelInitialConfiguration.setVisible(false);
-		this.configurationAgreementPanel.setVisible(false);
+		this.initialConfigurationAgreementPanel.setVisible(false);
 	}
 	
 	//-----------------------------------------------------------------------------------

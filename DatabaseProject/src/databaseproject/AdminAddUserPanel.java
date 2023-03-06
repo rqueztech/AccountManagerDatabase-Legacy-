@@ -51,12 +51,13 @@ class AdminAddUserPanel extends JPanel implements ActionListener {
 	}
 	
 	private void isInvokeGUI() {
+		// Gender Dropbox
 		String[] genderOptions = {"Select", "Male", "Female"};
-		
 		this.gender = new JComboBox<String>(genderOptions);
 		this.gender.setForeground(Color.white);
 		this.gender.setBackground(Color.black);
 
+		// Set the layout for the current frame
 		this.setSize(this.WIDTH, this.HEIGHT);
 		this.image = new ImageIcon("backgroundd.jpg").getImage();
 		this.setLayout(new GridBagLayout());

@@ -257,11 +257,11 @@ class AdminLoginWorker extends SwingWorker<Boolean, Void> {
 	// Check to see if the passwords meet password validation
 	boolean performPasswordValidations(char[] newPasswordEntered, char[] newPasswordReentered) {
 		
-		if(!this.inputOperations.isMeetsPasswordRequirements(newPasswordEntered)) {
+		if(!this.inputOperations.isMeetsPasswordRequirements(newPasswordEntered).isEmpty()) {
 			return false;
 		}
 			
-		if(!this.inputOperations.isMeetsPasswordRequirements(newPasswordReentered)) {
+		if(!this.inputOperations.isMeetsPasswordRequirements(newPasswordReentered).isEmpty()) {
 			return false;
 		}
 		
