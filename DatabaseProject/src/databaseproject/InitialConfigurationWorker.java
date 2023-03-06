@@ -34,6 +34,7 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 		boolean isAdministratorExists = this.isAdministratorAccountExists();
 		boolean isAdminConfigurationSuccess = false;
 		
+		/*
 		if(!isAdministratorExists) {
 			this.setAdministratorPassphrase();
 			JOptionPane.showMessageDialog(null, "Must Create Account");
@@ -58,6 +59,7 @@ class InitialConfigurationWorker extends SwingWorker<Boolean, Void> {
 				return false;
 			}
 		}
+		*/
 		
 		return true;
 	}

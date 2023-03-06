@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -37,6 +38,9 @@ class ConfigurationPanel extends JPanel {
 		
 		this.image = new ImageIcon("background.jpg").getImage();
 		this.setSize(600, 600);
+		
+		Insets insets = new Insets(0, 0, 5, 0);
+		this.grid.insets = insets;
 		
 		JLabel labelOne = new JLabel("Welcome To The Initial Configuration.");
 		labelOne.setOpaque(false);
@@ -76,8 +80,13 @@ class ConfigurationPanel extends JPanel {
 
 	//-----------------------------------------------------------------------------------
 	void initialConfiguration() {
+		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_CONFIGURATIONAGREEMENTPANEL);
+		
+		/* IN WORK
 		InitialConfigurationWorker worker = new InitialConfigurationWorker(panelCentral);
+		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_CONFIGURATIONAGREEMENTPANEL);
 		worker.execute();
+		*/
 	}
 	
 	//-----------------------------------------------------------------------------------
