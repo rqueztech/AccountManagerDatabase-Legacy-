@@ -11,9 +11,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+
+import databaseproject.PanelCentral.PanelType;
 
 class InitialConfigurationAgreementPanel extends JPanel {
 	/**
@@ -25,25 +25,15 @@ class InitialConfigurationAgreementPanel extends JPanel {
 	private PanelCentral panelCentral;
 	private GridBagConstraints grid;
 	
-	private JTextField adminFirstName = new JTextField(15);
-	private JTextField adminLastName = new JTextField(15);
-	private JPasswordField adminPassword = new JPasswordField(15);
-	private JPasswordField adminPasswordReentered = new JPasswordField(15);
-	private JPasswordField adminPassphrase = new JPasswordField(15);
-	
 	// This panel will hold the GUI for the configuration operations of the program
 	InitialConfigurationAgreementPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
 		this.panelCentral = panelCentral;
 		
-		// Put the invoke GUI into the SwingUtilities lambda (previously known as runnable).
-		// This will ensure that swing components run on the EDT.
 		SwingUtilities.invokeLater(() -> {
 			this.isInvokeGUI();
 		});
 	}
 	
-	// Initial Configuration GUI. This is separated from the main constructor
-	// To avoid clutter and for easy invocation in the EDT.
 	void isInvokeGUI() {
 		this.grid = new GridBagConstraints();
 		this.setLayout(new GridBagLayout());
@@ -51,115 +41,54 @@ class InitialConfigurationAgreementPanel extends JPanel {
 		this.image = new ImageIcon("background.jpg").getImage();
 		this.setSize(600, 600);
 		
-		this.grid.gridy = 0;
-		this.grid.gridheight = 1;
-		
+		// Create the insets will allow spacing out of JSwing elements
 		Insets insets = new Insets(0, 0, 5, 0);
 		this.grid.insets = insets;
 		
-		// ---------------------------------------------------------
-		// First Name Label And TextField Pair
-		JLabel firstNameLabel = new JLabel("First Name: ");
-		firstNameLabel.setOpaque(false);
-		firstNameLabel.setForeground(Color.white);
+		
+		JLabel labelOne = new JLabel("Welcome To The Initial Configuration.");
+		labelOne.setOpaque(false);
+		labelOne.setForeground(Color.white);
 		this.grid.gridx = 0;
-		this.add(firstNameLabel, grid);
+		this.grid.gridy = 0;
+		this.grid.gridheight = 1;
+		this.add(labelOne, grid);
 		
-		adminFirstName.setOpaque(true);
-		adminFirstName.setForeground(Color.black);
-		this.grid.gridx = 1;
-		this.add(adminFirstName, grid);
-		
-		// ---------------------------------------------------------
-		// Last Name Label And TextField Pair
-		this.grid.gridy += 2;
-		JLabel lastNameLabel = new JLabel("Last Name: ");
-		lastNameLabel.setOpaque(false);
-		lastNameLabel.setForeground(Color.white);
+		JLabel labelTwo = new JLabel("You Must set an Administrative Passphrase");
+		labelTwo.setOpaque(false);
+		labelTwo.setForeground(Color.white);
 		this.grid.gridx = 0;
-		this.add(lastNameLabel, grid);
+		this.grid.gridy = 1;
+		this.grid.gridheight = 1;
+		this.add(labelTwo, grid);
 		
-		adminLastName.setOpaque(true);
-		adminLastName.setForeground(Color.black);
-		this.grid.gridx = 1;
-		this.add(adminLastName, grid);
-		
-		// ---------------------------------------------------------
-		// Password Label And TextField Pair
-		this.grid.gridy += 2;
-		JLabel passwordLabel = new JLabel("Password: ");
-		passwordLabel.setOpaque(false);
-		passwordLabel.setForeground(Color.white);
+		JLabel labelThree = new JLabel("And an Administrator Account To Begin Use.");
+		labelThree.setOpaque(false);
+		labelThree.setForeground(Color.white);
 		this.grid.gridx = 0;
-		this.add(passwordLabel, grid);
+		this.grid.gridy = 2;
+		this.grid.gridheight = 1;
+		this.add(labelThree, grid);
 		
-		adminPassword.setOpaque(true);
-		adminPassword.setForeground(Color.black);
-		this.grid.gridx = 1;
-		this.add(adminPassword, grid);
+		// Start Configuraiton Button
+		JButton addButton = new JButton("Start Configuration");
+		addButton.setBackground(Color.black);
+		addButton.setForeground(Color.white);
 		
-		// ---------------------------------------------------------
-		// Confirm Password Label And TextField Pair
-		this.grid.gridy += 2;
-		JLabel confirmPasswordLabel = new JLabel("Confirm Password: ");
-		confirmPasswordLabel.setOpaque(false);
-		confirmPasswordLabel.setForeground(Color.white);
 		this.grid.gridx = 0;
-		this.add(confirmPasswordLabel, grid);
-		
-		adminPasswordReentered.setOpaque(true);
-		adminPasswordReentered.setForeground(Color.black);
-		this.grid.gridx = 1;
-		this.add(adminPasswordReentered, grid);
-		
-		// ---------------------------------------------------------
-		// Passphrase Label And TextField Pair
-		this.grid.gridy += 2;
-		JLabel passphraseLabel = new JLabel("Passphrase: ");
-		passphraseLabel.setOpaque(false);
-		passphraseLabel.setForeground(Color.white);
-		this.grid.gridx = 0;
-		this.add(passphraseLabel, grid);
-		
-		adminPassphrase.setOpaque(true);
-		adminPassphrase.setForeground(Color.black);
-		this.grid.gridx = 1;
-		this.add(adminPassphrase, grid);
-		
-		// ---------------------------------------------------------
-		// Go Back and Submit Pair
-		this.grid.gridy += 1;
-		JButton goBackButton = new JButton("Go Back");
-		goBackButton.setBackground(Color.black);
-		goBackButton.setForeground(Color.white);
-		this.grid.gridx = 0;
-		this.add(goBackButton, grid);
-		goBackButton.addActionListener(e -> this.goBackFunction());
-		
-		JButton submitButton = new JButton("Submit");
-		submitButton.setBackground(Color.black);
-		submitButton.setForeground(Color.white);
-		this.grid.gridx = 1;
-		this.add(submitButton, grid);
-		submitButton.addActionListener(e -> this.submitFunction());
-	}
-	
-	//-----------------------------------------------------------------------------------
-	public void goBackFunction() {
-		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_INITIALCONFIGURATION);
+		this.grid.gridy = 3;
+		this.grid.gridheight = 1;
+		this.grid.gridwidth = 1;
+		this.add(addButton, grid);
+		addButton.addActionListener(e -> this.initialConfiguration());
 	}
 
 	//-----------------------------------------------------------------------------------
-	public void submitFunction() {
-		InitialConfigurationWorker initialConfigurationWorker = 
-				new InitialConfigurationWorker(panelCentral, 
-						this.adminFirstName.getText(),
-						this.adminLastName.getText(),
-						this.adminPassphrase.getPassword(),
-						this.adminPassword.getPassword(),
-						this.adminPasswordReentered.getPassword()
-				);
-		initialConfigurationWorker.execute();
+	void initialConfiguration() {
+		ProgramLogs logInitiation = ProgramLogs.ACCOUNT_CREATION_AGREEMENT;
+		logInitiation.logNewSessionInitiated();
+		
+		this.panelCentral.showCurrentSelectedPanel(PanelType.INITIAL_CONFIGURATION_AGREEMENT);
 	}
 	
 	//-----------------------------------------------------------------------------------

@@ -11,13 +11,16 @@ class PanelCentral extends JFrame {
 	 */
 	private static final long serialVersionUID = -8333046760151911094L;
 	
-	public final String PANEL_LOGIN = "PANEL_LOGIN";
-	public final String PANEL_ADMINCENTRAL = "PANEL_ADMINCENTRAL";
-	public final String PANEL_ADMINADDUSER = "PANEL_ADMINADDUSER";
-	public final String PANEL_ADMINDELETEUSER = "PANEL_ADMINDELETEUSER";
-	public final String PANEL_ADMINDISPLAYUSERS = "PANEL_ADMINDISPLAYUSERS";
-	public final String PANEL_INITIALCONFIGURATION = "PANEL_INITIALCONFIGURATION";
-	public final String PANEL_INITIALCONFIGURATIONAGREEMENT = "PANEL_INITIALCONFIGURATIONAGREEMENT";
+	public enum PanelType {
+	    LOGIN,
+	    ADMIN_CENTRAL,
+	    ADMIN_ADD_USER,
+	    ADMIN_DELETE_USER,
+	    ADMIN_DISPLAY_USERS,
+	    INITIAL_CONFIGURATION,
+	    INITIAL_CONFIGURATION_AGREEMENT
+	}
+
 	
 	public static final int WIDTH = 600;
 	public static final int HEIGHT = 600;
@@ -39,9 +42,9 @@ class PanelCentral extends JFrame {
 	public AdminCentralPanel adminCentralPanel;
 	public AdminAddUserPanel panelAdminAddUser;
 	public AdminDisplayUsersPanel panelAdminDisplayUsers;
-	public ConfigurationPanel panelInitialConfiguration;
-	public ProgramLogs programLogs;
-	public InitialConfigurationAgreementPanel initialConfigurationAgreementPanel;
+	public InitialConfigurationAgreementPanel panelInitialConfiguration;
+	
+	public InitialConfigurationPanel initialConfigurationAgreementPanel;
 	
 	//-----------------------------------------------------------------------------------
 	// Declare the public AdminOperations class here. This will ensure that every
@@ -49,7 +52,7 @@ class PanelCentral extends JFrame {
 	
 	PanelCentral() {
 		// Initialize all classes used in the program
-		this.programLogs = new ProgramLogs();
+
 		this.administratorFunctions = new AdministratorFunctions(this);
 		this.passwordEncryption = new PasswordEncryption();
 		
@@ -63,11 +66,11 @@ class PanelCentral extends JFrame {
 		this.adminCentralPanel = new AdminCentralPanel(this);
 		this.panelAdminAddUser = new AdminAddUserPanel(this.administratorFunctions, this);
 		this.panelAdminDisplayUsers = new AdminDisplayUsersPanel(this.administratorFunctions, this);
-		this.panelInitialConfiguration = new ConfigurationPanel(this.administratorFunctions, this);
-		this.initialConfigurationAgreementPanel = new InitialConfigurationAgreementPanel(administratorFunctions, this);
+		this.panelInitialConfiguration = new InitialConfigurationAgreementPanel(this.administratorFunctions, this);
+		this.initialConfigurationAgreementPanel = new InitialConfigurationPanel(administratorFunctions, this);
 		
-		// Setting up all of the attributes for the frame in the file
-		
+		// Invoke the GUI on the SwingUtilities thread to prevent performance issues with the Swing
+		// Class interfering with current threads. Put it on the EDT (Event Dispatch Thread)
 		SwingUtilities.invokeLater(() -> {;
 			this.isInvokeGUI();
 		});
@@ -81,7 +84,8 @@ class PanelCentral extends JFrame {
 		this.setResizable(false);
 		this.icon = new ImageIcon("SELF_PUNCH.jpg");
 	
-		// Add panels to the current frame
+		// Add every panel to the frame. This will allow us to use the panels
+		// Individually in the program
 		this.add(this.mainLoginPanel);
 		this.add(this.adminCentralPanel);
 		this.add(this.panelAdminAddUser);
@@ -89,41 +93,54 @@ class PanelCentral extends JFrame {
 		this.add(this.panelInitialConfiguration);
 		this.add(this.initialConfigurationAgreementPanel);
 		
-		this.checkDefaultConfiguration();
-		this.showCurrentSelectedPanel();
+		this.setFirstPanel();
 	}
 	
 	//-----------------------------------------------------------------------------------	
-	private void showCurrentSelectedPanel() {
+	public void showCurrentSelectedPanel(PanelType selectedPanel) {
 		this.clearPanels();
 		
-		if(this.currentPanelString.equals(PANEL_LOGIN)) {
-			this.mainLoginPanel.setVisible(true);
-			this.setVisible(true);
-		}
-		
-		else if(this.currentPanelString.equals(PANEL_ADMINCENTRAL)) {
-			this.adminCentralPanel.setVisible(true);
-		}
-		
-		else if(this.currentPanelString.equals(PANEL_ADMINADDUSER)) {
-			this.panelAdminAddUser.setVisible(true);
-		}
-		
-		else if(this.currentPanelString.equals(PANEL_ADMINDISPLAYUSERS)) {
-			this.panelAdminDisplayUsers.setVisible(true);
-		}
-		
-		else if(this.currentPanelString.equals(PANEL_ADMINDELETEUSER)) {
-			this.panelAdminDisplayUsers.setVisible(true);
-		}
-		
-		else if(this.currentPanelString.equals(PANEL_INITIALCONFIGURATION)) {
-			this.panelInitialConfiguration.setVisible(true);
-		}
-		
-		else if(this.currentPanelString.equals(PANEL_INITIALCONFIGURATIONAGREEMENT)) {
-			this.initialConfigurationAgreementPanel.setVisible(true);
+		// Display the current panel. This will all be dictated by what the end-user
+		// Is doing in the system
+		switch (selectedPanel) {
+		    case LOGIN:
+		        this.mainLoginPanel.setVisible(true);
+		        setVisible(true);
+		        break;
+
+		    case ADMIN_CENTRAL:
+		        this.adminCentralPanel.setVisible(true);
+		        setVisible(true);
+		        break;
+
+		    case ADMIN_ADD_USER:
+		        this.panelAdminAddUser.setVisible(true);
+		        setVisible(true);
+		        break;
+
+		    case ADMIN_DELETE_USER:
+		        this.panelAdminDisplayUsers.setVisible(true);
+		        setVisible(true);
+		        break;
+
+		    case ADMIN_DISPLAY_USERS:
+		        this.panelAdminDisplayUsers.setVisible(true);
+		        setVisible(true);
+		        break;
+
+		    case INITIAL_CONFIGURATION:
+		        this.panelInitialConfiguration.setVisible(true);
+		        setVisible(true);
+		    	break;
+
+		    case INITIAL_CONFIGURATION_AGREEMENT:
+		    	this.initialConfigurationAgreementPanel.setVisible(true);
+		    	setVisible(true);
+		    	break;
+
+		    default:
+		    	System.out.println("ERROR");
+		        break;
 		}
 	}
 	
@@ -140,24 +157,22 @@ class PanelCentral extends JFrame {
 		this.initialConfigurationAgreementPanel.setVisible(false);
 	}
 	
+	// Set the first panel that will be displayed in the program. Will either be:
+	// 1. INITIAL_CONFIGURATION if NO admin exists, meaning it was already configured
+	// 2. LOGIN if an admin exists, meaning configuration was previously complied with
 	//-----------------------------------------------------------------------------------
-	void setCurrentPanelString(String currentPanelString) {
-		this.currentPanelString = currentPanelString;
-		this.showCurrentSelectedPanel();
-	}
-	
-	//-----------------------------------------------------------------------------------
-	private void checkDefaultConfiguration() {
+	private void setFirstPanel() {
+		// Needs initial configuration, send to default configuration screen
 		if(this.administratorFunctions.configurationOperations.getAdminPassphrase() == null) {
-			this.setCurrentPanelString(PANEL_INITIALCONFIGURATION);
-			this.showCurrentSelectedPanel();
+			this.showCurrentSelectedPanel(PanelType.INITIAL_CONFIGURATION);
 			this.setVisible(true);
 		}
 		
+		// No need for an initial configuration, already configured
 		else {
 			// Set the initial panel to the "mainLoginPanel". These strings will dictate
 			// Which panel will be displayed at any given time.
-			this.setCurrentPanelString(PANEL_LOGIN);
+			this.showCurrentSelectedPanel(PanelType.LOGIN);
 		}
 	}
 }

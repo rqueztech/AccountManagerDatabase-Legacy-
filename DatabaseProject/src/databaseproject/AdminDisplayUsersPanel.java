@@ -25,6 +25,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
+import databaseproject.PanelCentral.PanelType;
+
 class AdminDisplayUsersPanel extends JPanel implements ActionListener {
 	/**
 	 * 
@@ -352,7 +354,7 @@ class AdminDisplayUsersPanel extends JPanel implements ActionListener {
 	// -----------------------------------------------------------------------------------
 	void addUser() {
 		this.clearPanels();
-		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_ADMINADDUSER);
+		this.panelCentral.showCurrentSelectedPanel(PanelType.ADMIN_ADD_USER);
 	}
 	
 	// -----------------------------------------------------------------------------------
@@ -365,18 +367,20 @@ class AdminDisplayUsersPanel extends JPanel implements ActionListener {
 	
 	// -----------------------------------------------------------------------------------
 	void goBack() {
-		this.panelCentral.setCurrentPanelString(
-				this.panelCentral.PANEL_ADMINCENTRAL);
+		this.panelCentral.showCurrentSelectedPanel(
+				PanelType.ADMIN_CENTRAL);
 	}
 
 	// -----------------------------------------------------------------------------------
 	void logoutAdmin() {
+		ProgramLogs event = ProgramLogs.ACCOUNT_ADD_SUCCESS;
+		System.out.println(event.getLogMessage());
+		event.logCurrentEvent(TOOL_TIP_TEXT_KEY, TOOL_TIP_TEXT_KEY, event);
+		
 		this.loginOperations.logOutuser();
-		this.panelCentral.programLogs.logCurrentEvent(this.panelCentral.ADMIN, 
-				this.loginOperations.getCurrentUser(), this.panelCentral.programLogs.getLOGOUT_SUCCESS());
 		
 		JOptionPane.showMessageDialog(null, "Log out successful");
-		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_LOGIN);
+		this.panelCentral.showCurrentSelectedPanel(PanelType.LOGIN);
 	}
 	
 	

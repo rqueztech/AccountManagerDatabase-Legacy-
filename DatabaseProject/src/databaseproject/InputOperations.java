@@ -56,7 +56,7 @@ class InputOperations {
 		String message = "";
 		
 		if(!matchRegex(loginString, ONLY_LETTERS_AND_NUMBERS_REGEX)) {
-			message += "Error: Only Letters And Numbers Allowed";
+			message += "Error: No Symbols Allowed";
 		}
 
 		return message;
@@ -69,7 +69,7 @@ class InputOperations {
 		String message = "";
 		
 		if(!matchRegex(loginString, ONLY_LETTER_CHARACTERS_REGEX)) {
-			message += "Error: Illegal Characters Detected";
+			message += "Error: No Numbers And Symbols Allowed";
 		}
 
 		return message;
@@ -80,7 +80,7 @@ class InputOperations {
 		String message = "";
 		
 		if(matchRegex(input, NO_UPPERCASE_CHARACTERS_REGEX)) {
-			message += "Error: Upper Case Characters Required";
+			message += "Error: Please Enter UpperCase Character";
 		}
 
 		return message;
@@ -91,7 +91,7 @@ class InputOperations {
 		String message = "";
 		
 		if(matchRegex(input, NO_LOWERCASE_CHARACTERS_REGEX)) {
-			message += "Error: Lower Case Characters Required";
+			message += "Error: Please Enter LowerCase Character";
 		}
 
 		return message;
@@ -102,7 +102,7 @@ class InputOperations {
 		String message = "";
 		
 		if(matchRegex(input, NO_SPECIAL_CHARACTERS_REGEX)) {
-			message += "Error: Special Characters Required";
+			message += "Error: Please Enter Special Character";
 		}
 
 		return message;
@@ -113,7 +113,7 @@ class InputOperations {
 		String message = "";
 		
 		if(matchRegex(input, NO_NUMBERS_REGEX)) {
-			message += "Error: Numbers Required";
+			message += "Error: Please Enter Number";
 		}
 
 		return message;

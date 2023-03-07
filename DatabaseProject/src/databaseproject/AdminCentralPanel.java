@@ -13,6 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import databaseproject.PanelCentral.PanelType;
+
 class AdminCentralPanel extends JPanel implements ActionListener {
 	/**
 	 * 
@@ -68,7 +70,7 @@ class AdminCentralPanel extends JPanel implements ActionListener {
 		SwingUtilities.invokeLater(() -> {
 			this.panelCentral.panelAdminDisplayUsers.updateTable();
 		});
-		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_ADMINADDUSER);
+		this.panelCentral.showCurrentSelectedPanel(PanelType.ADMIN_ADD_USER);
 	}
 	
 	//-----------------------------------------------------------------------------------
@@ -78,14 +80,14 @@ class AdminCentralPanel extends JPanel implements ActionListener {
 	
 	//-----------------------------------------------------------------------------------
 	private void editUsers() {
-		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_ADMINDISPLAYUSERS);
+		this.panelCentral.showCurrentSelectedPanel(PanelType.ADMIN_DISPLAY_USERS);
 	}
 	
 	//-----------------------------------------------------------------------------------
 	void logoutAdmin() {
 		this.panelCentral.administratorFunctions.loginOperations.logOutuser();
 		// CREATE SOMETHING TO LOG USER OUT
-		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_LOGIN);
+		this.panelCentral.showCurrentSelectedPanel(PanelType.LOGIN);
 	}
 	
 	//-----------------------------------------------------------------------------------

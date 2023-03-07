@@ -12,7 +12,7 @@ class AdministratorFunctions {
 	public ConfigurationOperations configurationOperations;
 	public LoginOperations loginOperations;
 	public PanelCentral panelCentral;
-	public ConfigurationPanel panelInitialConfiguration;
+	public InitialConfigurationAgreementPanel panelInitialConfiguration;
 	public PasswordEncryption passwordEncryption;
 	public DatabaseHashMaps databaseHashMaps;
 	

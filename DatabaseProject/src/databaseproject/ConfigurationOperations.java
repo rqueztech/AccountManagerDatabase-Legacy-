@@ -4,6 +4,7 @@ class ConfigurationOperations {
 	
 	public AdministratorFunctions administratorFunctions;
 	//public ConfigurationOperations configurationOperations;
+	public ConfigurationNode configurationNode;
 	
 	public String configHeader;
 	
@@ -40,6 +41,8 @@ class ConfigurationOperations {
 		
 		this.setAdministrativePassphrase(encryptedPassphrase);
 		this.setSalt(salt);
+		this.admNo = 0;
+		this.userNo = 0;
 		
 		this.administratorFunctions.csvOperations.configurationCSVOperations.overwriteConfigFile();
 	}

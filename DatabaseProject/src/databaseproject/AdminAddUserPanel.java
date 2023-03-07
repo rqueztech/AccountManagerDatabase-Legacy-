@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import databaseproject.PanelCentral.PanelType;
+
 class AdminAddUserPanel extends JPanel implements ActionListener {
 	/**
 	 * 
@@ -180,15 +182,15 @@ class AdminAddUserPanel extends JPanel implements ActionListener {
 	
 	// -----------------------------------------------------------------------------------
 	private void goBack() {
-		this.panelCentral.setCurrentPanelString(
-				this.panelCentral.PANEL_ADMINDISPLAYUSERS);
+		this.panelCentral.showCurrentSelectedPanel(
+				PanelType.ADMIN_DISPLAY_USERS);
 	}
 	
 	// -----------------------------------------------------------------------------------
 	void logoutAdmin() {
 		this.loginOperations.logOutuser();
 		JOptionPane.showMessageDialog(null, "Log out successful");
-		this.panelCentral.setCurrentPanelString(this.panelCentral.PANEL_LOGIN);
+		this.panelCentral.showCurrentSelectedPanel(PanelType.LOGIN);
 	}
 	
 	// -----------------------------------------------------------------------------------

@@ -14,6 +14,8 @@ import javax.swing.JPasswordField;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
+import databaseproject.PanelCentral.PanelType;
+
 // This entire class creates the login panel. The login panel will prompt
 // the user for the username and password.
 
@@ -201,9 +203,8 @@ class UserLoginWorker extends SwingWorker<Boolean, Void> {
          boolean success = get();
          
          if (success) {
-         	JOptionPane.showMessageDialog(null, "User Creation Successful", "Creation Successful", JOptionPane.INFORMATION_MESSAGE);
          	this.administratorFunctions.loginOperations.setLogUserIn(this.userName, true, "ADMIN");
-         	this.administratorFunctions.panelCentral.setCurrentPanelString(this.administratorFunctions.panelCentral.PANEL_ADMINCENTRAL);
+         	this.administratorFunctions.panelCentral.showCurrentSelectedPanel(PanelType.ADMIN_CENTRAL);
          } else {
          	JOptionPane.showMessageDialog(null, this.performUserLoginValidations(), "Creation Failed", JOptionPane.ERROR_MESSAGE);
          }

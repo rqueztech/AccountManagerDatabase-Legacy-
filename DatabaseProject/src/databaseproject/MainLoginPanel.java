@@ -23,13 +23,13 @@ class MainLoginPanel extends JPanel {
 	private Image image;
 	private GridBagConstraints grid;
 	private JPanel pwdInput;
-	private ProgramLogs pgmLogs;
+	
 	
 	// This instance does not rely on other instances
 	private AdministratorFunctions administratorFunctions;
 	private CSVOperations csvOperations;
 	private PanelCentral panelCentral;
-	private ProgramLogs programLogs;
+	
 	
 	private int numberOfAttemptsAdminPassphrase;
 	
@@ -53,11 +53,10 @@ class MainLoginPanel extends JPanel {
 	MainLoginPanel(AdministratorFunctions administratorFunctions, PanelCentral panelCentral) {
 		// Potentially remove login Ops and CSV OPS 
 		// class
-		System.out.println("MainLoginPanel -> " + SwingUtilities.isEventDispatchThread());
 		this.administratorFunctions = administratorFunctions;
 		this.csvOperations = this.administratorFunctions.csvOperations;
 		this.panelCentral = panelCentral;
-		this.programLogs = this.panelCentral.programLogs;
+
 		this.numberOfAttemptsAdminPassphrase = 3;
 		
 		SwingUtilities.invokeLater(() -> {

@@ -6,7 +6,6 @@ class LoginOperations {
 	private boolean loggedInStatus;
 	
 	private PanelCentral panelCentral;
-	private ProgramLogs programLogs;
 	
 	public UserFunctions userFunctions;
 	
@@ -16,7 +15,7 @@ class LoginOperations {
 	// -----------------------------------------------------------------------------------
 	LoginOperations(PanelCentral panelCentral, AdministratorFunctions administratorFunctions) {
 		this.panelCentral = panelCentral;
-		this.programLogs = this.panelCentral.programLogs;
+
 		this.userLoginOperations = new UserLoginOperations(administratorFunctions);
 		this.adminLoginOperations = new AdminLoginOperations(administratorFunctions);
 		this.userFunctions = new UserFunctions(administratorFunctions);
@@ -56,7 +55,6 @@ class LoginOperations {
 		String currentUserForLog = this.currentUser;
 		this.currentUser = "";
 		this.loggedInStatus = false;
-		this.panelCentral.programLogs.logCurrentEvent(this.userType, currentUserForLog, this.programLogs.getLOGOUT_SUCCESS());
 	}
 	
 	// -----------------------------------------------------------------------------------

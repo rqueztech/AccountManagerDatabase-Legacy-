@@ -91,11 +91,12 @@ class AdminLoginOperations {
 	
 	// -----------------------------------------------------------------------------------
 	boolean searchAdmin(String userName) {
-		boolean result = false;
+		boolean result = this.administratorFunctions.databaseHashMaps.getAdminHashMap().containsKey(userName);
+		
+		System.out.println(this.administratorFunctions.databaseHashMaps.getAdminHashMap());
 		
 		// **LOG WILL BE PUT IN THIS FUNCTION
-		if(this.administratorFunctions.databaseHashMaps.getAdminHashMap() != null 
-		&& this.administratorFunctions.databaseHashMaps.getAdminHashMap().get(userName) != null) {
+		if(result) {
 			result = true;
 		}
 	
